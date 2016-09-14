@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{b1c3b304-e868-4b07-988c-36ad7bc57300}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\x64">
+      <UniqueIdentifier>{c0cf8092-45d2-4c79-9443-e6e735dd10fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ia32">
+      <UniqueIdentifier>{8892a979-75a6-4ceb-b851-84505272bbd5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\debug.vbs">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\EbcDebugger\Edb.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCmdBranch.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCmdBreak.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCmdBreakpoint.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCmdExtIo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCmdExtPci.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCmdGo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCmdHelp.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCmdMemory.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCmdQuit.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCmdRegister.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCmdScope.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCmdStep.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCmdSymbol.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbCommand.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbDisasm.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbDisasmSupport.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbHook.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbSupportFile.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbSupportString.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbSupportUI.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcDebugger\EdbSymbol.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcExecute.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\EbcInt.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\x64\EbcSupport.c">
+      <Filter>Source Files\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\x64\x64Math.c">
+      <Filter>Source Files\x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Ia32\EbcSupport.c">
+      <Filter>Source Files\ia32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Protocol\DebuggerConfiguration\DebuggerConfiguration.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\EbcDebugger\Edb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EbcDebugger\EdbCommand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EbcDebugger\EdbCommon.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EbcDebugger\EdbDisasm.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EbcDebugger\EdbDisasmSupport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EbcDebugger\EdbHook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EbcDebugger\EdbSupport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EbcDebugger\EdbSymbol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EbcDebuggerHook.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EbcExecute.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\EbcInt.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Protocol\DebuggerConfiguration\DebuggerConfiguration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="..\x64\EbcLowLevel.asm">
+      <Filter>Source Files\x64</Filter>
+    </MASM>
+    <MASM Include="..\Ia32\EbcLowLevel.asm">
+      <Filter>Source Files\ia32</Filter>
+    </MASM>
+    <MASM Include="..\Ia32\Ia32Math.asm">
+      <Filter>Source Files\ia32</Filter>
+    </MASM>
+  </ItemGroup>
+</Project>
