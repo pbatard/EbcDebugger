@@ -188,7 +188,7 @@ Returns:
 
   Sign = (BOOLEAN)(Data32 >> 31);
   NaturalUnitBit = (UINTN)((Data32 >> 28) & 0x7);
-  NaturalUnitBit *= 2;
+  NaturalUnitBit *= 4;
   Data32 = Data32 & 0xFFFFFFF;
   *NaturalUnits = (UINTN)(Data32 & ((1 << NaturalUnitBit) - 1));
   *ConstantUnits = (UINTN)((Data32 >> NaturalUnitBit) & ((1 << (28 - NaturalUnitBit)) - 1));
@@ -225,7 +225,7 @@ Returns:
 
   Sign = (BOOLEAN)RShiftU64 (Data64, 63);
   NaturalUnitBit = (UINTN)(RShiftU64 (Data64, 60) & 0x7);
-  NaturalUnitBit *= 2;
+  NaturalUnitBit *= 8;
   Data64 = RShiftU64 (LShiftU64 (Data64, 4), 4);
   *NaturalUnits = (UINT64)(Data64 & (LShiftU64 (1, NaturalUnitBit) - 1));
   *ConstantUnits = (UINT64)(RShiftU64 (Data64, NaturalUnitBit) & (LShiftU64 (1, (60 - NaturalUnitBit)) - 1));
