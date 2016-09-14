@@ -324,6 +324,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</UseSafeExceptionHandlers>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</UseSafeExceptionHandlers>
     </MASM>
     <MASM Include="..\Ia32\Ia32Math.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
@@ -332,6 +334,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</UseSafeExceptionHandlers>
+      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</UseSafeExceptionHandlers>
     </MASM>
     <MASM Include="..\x64\EbcLowLevel.asm">
       <FileType>Document</FileType>
@@ -376,6 +380,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Missing\EfiCommonLib.c" />
+    <ClCompile Include="..\Missing\EfiLibAllocate.c" />
+    <ClCompile Include="..\Missing\String.c" />
     <ClCompile Include="..\Protocol\DebuggerConfiguration\DebuggerConfiguration.c" />
     <ClCompile Include="..\x64\EbcSupport.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -406,6 +413,12 @@
     <ClInclude Include="..\EbcDebugger\EdbHook.h" />
     <ClInclude Include="..\EbcDebugger\EdbSupport.h" />
     <ClInclude Include="..\EbcDebugger\EdbSymbol.h" />
+    <ClInclude Include="..\Missing\EfiCommonLib.h" />
+    <ClInclude Include="..\Missing\EfiImage.h" />
+    <ClInclude Include="..\Missing\EfiPeOptionalHeader.h" />
+    <ClInclude Include="..\Missing\EfiPrintLib.h" />
+    <ClInclude Include="..\Missing\includes.h" />
+    <ClInclude Include="..\Missing\Tiano.h" />
     <ClInclude Include="..\Protocol\DebuggerConfiguration\DebuggerConfiguration.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

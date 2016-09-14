@@ -1,5 +1,8 @@
+*.db
+*.config
 *.o
 *.efi
+!EbcDemo.efi
 *.sdf
 *.suo
 *.opensdf

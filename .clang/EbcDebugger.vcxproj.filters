@@ -18,6 +18,9 @@
     <Filter Include="Source Files\ia32">
       <UniqueIdentifier>{8892a979-75a6-4ceb-b851-84505272bbd5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Missing">
+      <UniqueIdentifier>{8a26e0ad-df2e-4ef6-ab5e-4f6d5e7a4bb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\debug.vbs">
@@ -109,6 +112,15 @@
     <ClCompile Include="..\Protocol\DebuggerConfiguration\DebuggerConfiguration.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Missing\EfiCommonLib.c">
+      <Filter>Source Files\Missing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Missing\String.c">
+      <Filter>Source Files\Missing</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Missing\EfiLibAllocate.c">
+      <Filter>Source Files\Missing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\EbcDebugger\Edb.h">
@@ -146,6 +158,24 @@
     </ClInclude>
     <ClInclude Include="..\Protocol\DebuggerConfiguration\DebuggerConfiguration.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Missing\EfiCommonLib.h">
+      <Filter>Source Files\Missing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Missing\EfiImage.h">
+      <Filter>Source Files\Missing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Missing\EfiPrintLib.h">
+      <Filter>Source Files\Missing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Missing\includes.h">
+      <Filter>Source Files\Missing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Missing\Tiano.h">
+      <Filter>Source Files\Missing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Missing\EfiPeOptionalHeader.h">
+      <Filter>Source Files\Missing</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
