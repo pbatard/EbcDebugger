@@ -160,7 +160,7 @@ Returns:
 }
 
 UINTN
-Atoi (
+_Atoi (
   CHAR16  *str
   )
 /*++
@@ -536,7 +536,7 @@ Routine Description:
 }
 
 CHAR16 *
-StrDuplicate (
+_StrDuplicate (
   IN CHAR16   *Src
   )
 // duplicate a string

@@ -42,7 +42,7 @@ LXtoi (
   );
 
 UINTN
-Atoi (
+_Atoi (
   CHAR16  *str
   );
 
@@ -94,7 +94,7 @@ StrEndWith (
   );
 
 CHAR16 *
-StrDuplicate (
+_StrDuplicate (
   IN CHAR16   *Src
   );
 
