@@ -26,4 +26,18 @@ EfiStrnCat(
 	IN UINTN    Length
 );
 
+VOID
+EfiStrnCpy(
+	OUT CHAR16  *Dst,
+	IN  CHAR16  *Src,
+	IN  UINTN   Length
+);
+
+VOID
+EfiAsciiStrnCpy(
+	OUT CHAR8    *Dst,
+	IN  CHAR8    *Src,
+	IN  UINTN    Length
+);
+
 #endif

@@ -147,7 +147,7 @@
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>Disabled</ExceptionHandling>
-      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -fno-builtin</AdditionalOptions>
+      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -Wno-pointer-sign -Wno-missing-braces -Wno-incompatible-pointer-types-discards-qualifiers -fno-builtin</AdditionalOptions>
       <MSExtensions>false</MSExtensions>
     </ClCompile>
     <Lib>
@@ -176,7 +176,7 @@
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>Disabled</ExceptionHandling>
-      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -fno-builtin</AdditionalOptions>
+      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -Wno-pointer-sign -Wno-missing-braces -Wno-incompatible-pointer-types-discards-qualifiers -fno-builtin</AdditionalOptions>
       <MSExtensions>false</MSExtensions>
     </ClCompile>
     <Lib>
@@ -206,7 +206,7 @@
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>Disabled</ExceptionHandling>
-      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -fno-builtin</AdditionalOptions>
+      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -Wno-pointer-sign -Wno-missing-braces -Wno-incompatible-pointer-types-discards-qualifiers -fno-builtin</AdditionalOptions>
       <MSExtensions>false</MSExtensions>
     </ClCompile>
     <Lib>
@@ -234,7 +234,7 @@
       <DisableSpecificWarnings>4091</DisableSpecificWarnings>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>Disabled</ExceptionHandling>
-      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -fno-builtin</AdditionalOptions>
+      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -Wno-pointer-sign -Wno-missing-braces -Wno-incompatible-pointer-types-discards-qualifiers -fno-builtin</AdditionalOptions>
       <MSExtensions>false</MSExtensions>
     </ClCompile>
     <Lib>
@@ -264,7 +264,7 @@
       <DisableSpecificWarnings>4091</DisableSpecificWarnings>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>Disabled</ExceptionHandling>
-      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -fno-builtin</AdditionalOptions>
+      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -Wno-pointer-sign -Wno-missing-braces -Wno-incompatible-pointer-types-discards-qualifiers -fno-builtin</AdditionalOptions>
       <MSExtensions>false</MSExtensions>
     </ClCompile>
     <Lib>
@@ -294,7 +294,7 @@
       <DisableSpecificWarnings>4091</DisableSpecificWarnings>
       <BufferSecurityCheck>false</BufferSecurityCheck>
       <ExceptionHandling>Disabled</ExceptionHandling>
-      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -fno-builtin</AdditionalOptions>
+      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -Wno-pointer-sign -Wno-missing-braces -Wno-incompatible-pointer-types-discards-qualifiers -fno-builtin</AdditionalOptions>
       <MSExtensions>false</MSExtensions>
     </ClCompile>
     <Lib>
@@ -414,6 +414,7 @@
     <ClInclude Include="..\EbcDebugger\EdbSupport.h" />
     <ClInclude Include="..\EbcDebugger\EdbSymbol.h" />
     <ClInclude Include="..\Missing\EfiCommonLib.h" />
+    <ClInclude Include="..\Missing\EfiDriverLib.h" />
     <ClInclude Include="..\Missing\EfiImage.h" />
     <ClInclude Include="..\Missing\EfiPeOptionalHeader.h" />
     <ClInclude Include="..\Missing\EfiPrintLib.h" />

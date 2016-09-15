@@ -177,6 +177,9 @@
     <ClInclude Include="..\Missing\EfiPeOptionalHeader.h">
       <Filter>Source Files\Missing</Filter>
     </ClInclude>
+    <ClInclude Include="..\Missing\EfiDriverLib.h">
+      <Filter>Source Files\Missing</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="..\x64\EbcLowLevel.asm">
