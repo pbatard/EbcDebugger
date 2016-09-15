@@ -5,10 +5,10 @@ This is an updated version of the original [EDK EBC Debugger](https://github.com
 that:
 * Can be compiled without the cumbersome annoyance of having to use the EDK/EDK2, through the convenience of
   a Visual Studio 2015 project and [gnu-efi](https://sourceforge.net/projects/gnu-efi/)
-* Can be compiled for x86_32, x86_64 and __ARM__ targets
+* Can be compiled for x86_32, x86_64 and __ARM__ (planned) targets
 * Can be tested on the fly, through a [QEMU](http://www.qemu.org)+[OVMF](http://tianocore.github.io/ovmf/)
   UEFI virtual machine.
-* Fixes some notorious __bugs__ with the original EDK debugger, such as not displaying 31 or 64 bit indexes properly.
+* Fixes some notorious __bugs__ with the original EDK debugger, such as not displaying 32/64 bit indexes properly.
 
 ## Prerequisites
 
