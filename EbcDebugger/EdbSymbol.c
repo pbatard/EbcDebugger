@@ -75,9 +75,9 @@ Returns:
   //
   // Fill the entry - name, RVA, type
   //
-  EfiAsciiStrnCpy (Entry->Name, Name, sizeof(Entry->Name) - 1);
+  AsciiStrnCpyS (Entry->Name, sizeof(Entry->Name), Name, sizeof(Entry->Name) - 1);
   if (ObjName != NULL) {
-    EfiAsciiStrnCpy (Entry->ObjName, ObjName, sizeof(Entry->ObjName) - 1);
+    AsciiStrnCpyS (Entry->ObjName, sizeof(Entry->ObjName), ObjName, sizeof(Entry->ObjName) - 1);
   }
   Entry->RVA = Address % EFI_DEBUGGER_DEFAULT_LINK_IMAGEBASE;
   Entry->Type = Type;
@@ -225,21 +225,21 @@ Returns:
     // Check each field
     //
     while (FieldBuffer != NULL) {
-      if (EfiAsciiStrCmp (FieldBuffer, "") == 0) {
+      if (AsciiStrCmp (FieldBuffer, "") == 0) {
         FieldBuffer = AsciiStrGetNextTokenField (" ");
         continue;
       }
       //
       // check "Address"
       //
-      if (EfiAsciiStrCmp (FieldBuffer, "Address") == 0) {
+      if (AsciiStrCmp (FieldBuffer, "Address") == 0) {
         MapParseState = EdbEbcMapParseStateSymbolStart;
         break;
       }
       //
       // check "Static"
       //
-      if (EfiAsciiStrCmp (FieldBuffer, "Static") == 0) {
+      if (AsciiStrCmp (FieldBuffer, "Static") == 0) {
         MapParseState = EdbEbcMapParseStateStaticFunctionSymbol;
         break;
       }
@@ -250,7 +250,7 @@ Returns:
         //
         break;
       }
-      if (EfiAsciiStrCmp (FieldBuffer, "entry") == 0) {
+      if (AsciiStrCmp (FieldBuffer, "entry") == 0) {
         //
         // Skip entry point
         //
@@ -271,13 +271,13 @@ Returns:
         //
         // Get the Name
         //
-        if (AsciiStrnCmp (FieldBuffer, "___safe_se_handler", EfiAsciiStrLen ("___safe_se_handler")) == 0) {
+        if (AsciiStrnCmp (FieldBuffer, "___safe_se_handler", AsciiStrLen ("___safe_se_handler")) == 0) {
           //
           // skip SeHandler
           //
           MapParseState = EdbEbcMapParseStateSeHandlerSymbol;
           goto ExitFieldParse;
-        } else if (AsciiStrnCmp (FieldBuffer, "varbss_init", EfiAsciiStrLen ("varbss_init")) == 0) {
+        } else if (AsciiStrnCmp (FieldBuffer, "varbss_init", AsciiStrLen ("varbss_init")) == 0) {
           //
           // check VarbssInit
           //
@@ -285,7 +285,7 @@ Returns:
 //          goto ExitFieldParse;
           Name = FieldBuffer;
           SymbolParseState = EdbEbcSymbolParseStateReadyForRVA;
-        } else if (AsciiStrnCmp (FieldBuffer, "Crt", EfiAsciiStrLen ("Crt")) == 0) {
+        } else if (AsciiStrnCmp (FieldBuffer, "Crt", AsciiStrLen ("Crt")) == 0) {
           //
           // check Crt
           //
@@ -327,7 +327,7 @@ Returns:
         //
         // Get the Type. This is optional, only for "f".
         //
-        if (EfiAsciiStrCmp (FieldBuffer, "f") == 0) {
+        if (AsciiStrCmp (FieldBuffer, "f") == 0) {
           SymbolParseState = EdbEbcSymbolParseStateReadyForObject;
           switch (MapParseState) {
           case EdbEbcMapParseStateFunctionSymbol:
@@ -472,7 +472,7 @@ Returns:
   // Check each Object
   //
   for (ObjectIndex = 0; ObjectIndex < DebuggerPrivate->DebuggerSymbolContext.ObjectCount; ObjectIndex++) {
-    if (EfiStrCmp (FileName, DebuggerPrivate->DebuggerSymbolContext.Object[ObjectIndex].Name) == 0) {
+    if (StrCmp (FileName, DebuggerPrivate->DebuggerSymbolContext.Object[ObjectIndex].Name) == 0) {
       //
       // Name match, found it
       //
@@ -683,7 +683,7 @@ Returns:
   for (Index = ObjectIndex; Index < DebuggerPrivate->DebuggerSymbolContext.ObjectCount - 1; Index++) {
     Object[Index] = Object[Index + 1];
   }
-  EfiZeroMem (&Object[Index], sizeof(Object[Index]));
+  ZeroMem (&Object[Index], sizeof(Object[Index]));
 
   //
   // Move old data to new place
@@ -697,7 +697,7 @@ Returns:
   // Clean old entry data
   //
   for (Index = 0; Index < OldEntryCount; Index++) {
-    EfiZeroMem (&OldEntry[Index], sizeof(OldEntry[Index]));
+    ZeroMem (&OldEntry[Index], sizeof(OldEntry[Index]));
   }
 
   //
@@ -783,7 +783,8 @@ Returns:
   //
   // Fill Object value
   //
-  EfiStrnCpy (Object->Name, FileName, (sizeof(Object->Name) / sizeof(CHAR16)) - 1);
+  StrnCpyS (Object->Name, sizeof(Object->Name) / sizeof(CHAR16),
+            FileName, (sizeof(Object->Name) / sizeof(CHAR16)) - 1);
   Object->BaseAddress = 0;
 
   //
@@ -939,8 +940,8 @@ Returns:
   //
   // get size
   //
-  PdbNameSize = EfiAsciiStrLen (PdbFileName);
-  MapNameSize = EfiStrLen (MapFileName);
+  PdbNameSize = AsciiStrLen (PdbFileName);
+  MapNameSize = StrLen (MapFileName);
   
   if (PdbNameSize != MapNameSize) {
     return FALSE;
@@ -1193,8 +1194,8 @@ Returns:
   //
   // get size
   //
-  ObjNameSize = EfiAsciiStrLen (ObjFileName);
-  CodNameSize = EfiStrLen (CodFileName);
+  ObjNameSize = AsciiStrLen (ObjFileName);
+  CodNameSize = StrLen (CodFileName);
   
   if (ObjNameSize != CodNameSize) {
     return FALSE;
@@ -1552,7 +1553,7 @@ Returns:
       //
       // check mark_begin, begin to check line after this match
       //
-      if (EfiAsciiStrCmp (LineBuffer, "; mark_begin;") == 0) {
+      if (AsciiStrCmp (LineBuffer, "; mark_begin;") == 0) {
         CodParseState = EdbEbcCodParseStateSymbolInitialized;
       }
       LineBuffer = AsciiStrGetNextTokenLine ("\n\r");
@@ -1563,7 +1564,7 @@ Returns:
       //
       // check mark_end, not check line after this match
       //
-      if (EfiAsciiStrCmp (LineBuffer, "; mark_end;") == 0) {
+      if (AsciiStrCmp (LineBuffer, "; mark_end;") == 0) {
         CodParseState = EdbEbcCodParseStateUninitialized;
         LineBuffer = AsciiStrGetNextTokenLine ("\n\r");
         PatchForAsciiStrTokenBefore (LineBuffer, '\n');
@@ -1587,7 +1588,7 @@ Returns:
       // get function name, function name is followed by char 0x09.
       //
       FieldBuffer = AsciiStrGetNewTokenField (LineBuffer, Char);
-      if (EfiAsciiStriCmp (FieldBuffer, Name) == 0) {
+      if (AsciiStriCmp (FieldBuffer, Name) == 0) {
         BufferStart = FieldBuffer;
         CodParseState = EdbEbcCodParseStateSymbolStart;
       }
@@ -1604,7 +1605,7 @@ Returns:
       //
       // check mark_end, if this match, means the function is found successfully.
       //
-      if (EfiAsciiStrCmp (LineBuffer, "; mark_end;") == 0) {
+      if (AsciiStrCmp (LineBuffer, "; mark_end;") == 0) {
         CodParseState = EdbEbcCodParseStateSymbolEnd;
         //
         // prepare CodeBufferSize, FuncOffset, and FuncStart to return
@@ -2522,7 +2523,7 @@ Returns:
         BufferSize = EFI_DEBUG_MAX_PRINT_BUFFER - 3;
       }
       if (BufferSize != 0) {
-        EfiCopyMem (Buffer, FuncStart, BufferSize);
+        CopyMem (Buffer, FuncStart, BufferSize);
       }
       Buffer[BufferSize] = 0;
       EDBPrint (L"%a\n", Buffer);
@@ -2630,7 +2631,7 @@ Returns:
     //
     // Check MapfileName
     //
-    if ((MapfileName != NULL) && (EfiStriCmp (Object[ObjectIndex].Name, MapfileName) != 0)) {
+    if ((MapfileName != NULL) && (StriCmp (Object[ObjectIndex].Name, MapfileName) != 0)) {
       continue;
     }
     //
@@ -2641,7 +2642,7 @@ Returns:
       //
       // Check SymbolName (case sensitive)
       //
-      if (EfiStrCmpUnicodeAndAscii (SymbolName, Entry[EntryIndex].Name) == 0) {
+      if (StrCmpUnicodeAndAscii (SymbolName, Entry[EntryIndex].Name) == 0) {
         if ((*Address != 0) && (MapfileName == NULL)) {
           //
           // Find the duplicated symbol

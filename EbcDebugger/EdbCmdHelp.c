@@ -54,7 +54,7 @@ Returns:
   if (CommandArg == NULL) {
     for (Index = 0; DebuggerPrivate->DebuggerCommandSet[Index].CommandName != NULL; Index++) {
       EDBPrint (DebuggerPrivate->DebuggerCommandSet[Index].ClassName);
-      if (EfiStrCmp (DebuggerPrivate->DebuggerCommandSet[Index].CommandTitle, L"") != 0) {
+      if (StrCmp (DebuggerPrivate->DebuggerCommandSet[Index].CommandTitle, L"") != 0) {
         EDBPrint (L"  ");
         EDBPrint (DebuggerPrivate->DebuggerCommandSet[Index].CommandTitle);
       }
@@ -67,7 +67,7 @@ Returns:
   // Find the command and print the detail information.
   //
   for (Index = 0; DebuggerPrivate->DebuggerCommandSet[Index].CommandName != NULL; Index++) {
-    if (EfiStriCmp (CommandArg, DebuggerPrivate->DebuggerCommandSet[Index].CommandName) == 0) {
+    if (StriCmp (CommandArg, DebuggerPrivate->DebuggerCommandSet[Index].CommandName) == 0) {
       EDBPrint (DebuggerPrivate->DebuggerCommandSet[Index].CommandHelp);
       EDBPrint (DebuggerPrivate->DebuggerCommandSet[Index].CommandSyntax);
       return EFI_DEBUG_CONTINUE;

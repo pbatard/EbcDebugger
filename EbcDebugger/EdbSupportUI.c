@@ -249,7 +249,7 @@ Input (
     return ;
   }
 
-  EfiSetMem (InStr, StrLength * sizeof (CHAR16), 0);
+  SetMem (InStr, StrLength * sizeof (CHAR16), 0);
   Done = FALSE;
   do {
     //
@@ -277,7 +277,7 @@ Input (
         StrPos -= 1;
         Update  = StrPos;
         Delete  = 1;
-        EfiCopyMem (InStr + StrPos, InStr + StrPos + 1, sizeof (CHAR16) * (Len - StrPos));
+        CopyMem (InStr + StrPos, InStr + StrPos + 1, sizeof (CHAR16) * (Len - StrPos));
 
         //
         // Adjust the current column and row
@@ -324,7 +324,7 @@ Input (
         if (Len) {
           Update  = StrPos;
           Delete  = 1;
-          EfiCopyMem (InStr + StrPos, InStr + StrPos + 1, sizeof (CHAR16) * (Len - StrPos));
+          CopyMem (InStr + StrPos, InStr + StrPos + 1, sizeof (CHAR16) * (Len - StrPos));
 
           NeedAdjust = TRUE;
         }
@@ -396,8 +396,8 @@ Input (
         //
         // show history
         //
-        EfiCopyMem (InStr, mInputBufferHistory, StrLength * sizeof(CHAR16));
-        StrPos       = EfiStrLen (mInputBufferHistory);
+        CopyMem (InStr, mInputBufferHistory, StrLength * sizeof(CHAR16));
+        StrPos       = StrLen (mInputBufferHistory);
         Update       = 0;
         Delete       = 0;
         OutputLength = 0;
@@ -413,7 +413,7 @@ Input (
           mBackupSpace[SubIndex] = L' ';
         }
         EDBPrint (mBackupSpace);
-        EfiSetMem (mBackupSpace, (EFI_DEBUG_INPUS_BUFFER_SIZE - (StartColumn - EFI_DEBUG_PROMPT_COLUMN)) * sizeof(CHAR16), 0);
+        SetMem (mBackupSpace, (EFI_DEBUG_INPUS_BUFFER_SIZE - (StartColumn - EFI_DEBUG_PROMPT_COLUMN)) * sizeof(CHAR16), 0);
 
         ConOut->SetCursorPosition (ConOut, StartColumn, Row);
         Len = StrPos;
@@ -434,7 +434,7 @@ Input (
       case SCAN_F12:
         CommandStr = GetCommandNameByKey (Key);
         if (CommandStr != NULL) {
-          EfiStrnCpy (InStr, CommandStr, StrLength - 1);
+          StrnCpyS (InStr, StrLength, CommandStr, StrLength - 1);
           return ;
         }
         break;
@@ -454,15 +454,15 @@ Input (
           mBackupSpace[SubIndex] = L' ';
         }
         EDBPrint (mBackupSpace);
-        EfiSetMem (mBackupSpace, (EFI_DEBUG_INPUS_BUFFER_SIZE - (Column - EFI_DEBUG_PROMPT_COLUMN)) * sizeof(CHAR16), 0);
+        SetMem (mBackupSpace, (EFI_DEBUG_INPUS_BUFFER_SIZE - (Column - EFI_DEBUG_PROMPT_COLUMN)) * sizeof(CHAR16), 0);
         ConOut->SetCursorPosition (ConOut, Column, Row);
         NeedAdjust = FALSE;
       }
       EDBPrint (InStr + Update);
-      Len = EfiStrLen (InStr);
+      Len = StrLen (InStr);
 
       if (Delete) {
-        EfiSetMem (InStr + Len, Delete * sizeof (CHAR16), 0x00);
+        SetMem (InStr + Len, Delete * sizeof (CHAR16), 0x00);
       }
 
       if (StrPos > Len) {
@@ -520,7 +520,7 @@ Input (
     SetCursorPosition (ConOut, Column, Row, LineLength, TotalRow, InStr, StrPos, Len);
   } while (!Done);
 
-  EfiCopyMem (mInputBufferHistory, InStr, StrLength * sizeof(CHAR16));
+  CopyMem (mInputBufferHistory, InStr, StrLength * sizeof(CHAR16));
 
   //
   // Return the data to the caller

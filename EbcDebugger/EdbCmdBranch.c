@@ -95,15 +95,15 @@ Returns:
   // Check argument
   //
   if (CommandArg != NULL) {
-    if (EfiStriCmp (CommandArg, L"c") == 0) {
+    if (StriCmp (CommandArg, L"c") == 0) {
       //
       // Clear Call-Stack
       //
       DebuggerPrivate->CallStackEntryCount = 0;
-      EfiZeroMem (DebuggerPrivate->CallStackEntry, sizeof(DebuggerPrivate->CallStackEntry));
+      ZeroMem (DebuggerPrivate->CallStackEntry, sizeof(DebuggerPrivate->CallStackEntry));
       EDBPrint (L"Call-Stack is cleared\n");
       return EFI_DEBUG_CONTINUE;
-    } else if (EfiStriCmp (CommandArg, L"p") == 0) {
+    } else if (StriCmp (CommandArg, L"p") == 0) {
       //
       // Print Call-Stack with parameter
       //
@@ -288,12 +288,12 @@ Returns:
   // Check argument
   //
   if (CommandArg != NULL) {
-    if (EfiStriCmp (CommandArg, L"c") == 0) {
+    if (StriCmp (CommandArg, L"c") == 0) {
       //
       // Clear Trace
       //
       DebuggerPrivate->TraceEntryCount = 0;
-      EfiZeroMem (DebuggerPrivate->TraceEntry, sizeof(DebuggerPrivate->TraceEntry));
+      ZeroMem (DebuggerPrivate->TraceEntry, sizeof(DebuggerPrivate->TraceEntry));
       EDBPrint (L"Instruction Trace is cleared\n");
     } else {
       EDBPrint (L"Trace argument Invalid\n");

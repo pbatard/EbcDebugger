@@ -122,7 +122,7 @@ Returns:
   // Record the new callstack parameter
   //
   mDebuggerPrivate.CallStackEntry[mDebuggerPrivate.CallStackEntryCount].ParameterAddr = (UINTN)ParameterAddress;
-  EfiCopyMem (
+  CopyMem (
     mDebuggerPrivate.CallStackEntry[mDebuggerPrivate.CallStackEntryCount].Parameter,
     (VOID *)(UINTN)ParameterAddress,
     sizeof(mDebuggerPrivate.CallStackEntry[mDebuggerPrivate.CallStackEntryCount].Parameter)
@@ -416,17 +416,17 @@ Returns:
   //
   // Init Symbol
   //
-  Object = EfiLibAllocateZeroPool (sizeof(EFI_DEBUGGER_SYMBOL_OBJECT) * EFI_DEBUGGER_SYMBOL_OBJECT_MAX);
+  Object = AllocateZeroPool (sizeof(EFI_DEBUGGER_SYMBOL_OBJECT) * EFI_DEBUGGER_SYMBOL_OBJECT_MAX);
   EFI_DEBUGGER_ASSERT (Object != NULL);
   mDebuggerPrivate.DebuggerSymbolContext.Object = Object;
   mDebuggerPrivate.DebuggerSymbolContext.ObjectCount = 0;
   mDebuggerPrivate.DebuggerSymbolContext.MaxObjectCount = EFI_DEBUGGER_SYMBOL_OBJECT_MAX;
   for (Index = 0; Index < EFI_DEBUGGER_SYMBOL_OBJECT_MAX; Index++) {
-    Entry = EfiLibAllocateZeroPool (sizeof(EFI_DEBUGGER_SYMBOL_ENTRY) * EFI_DEBUGGER_SYMBOL_ENTRY_MAX);
+    Entry = AllocateZeroPool (sizeof(EFI_DEBUGGER_SYMBOL_ENTRY) * EFI_DEBUGGER_SYMBOL_ENTRY_MAX);
     EFI_DEBUGGER_ASSERT (Entry != NULL);
     Object[Index].Entry = Entry;
     Object[Index].MaxEntryCount = EFI_DEBUGGER_SYMBOL_ENTRY_MAX;
-    Object[Index].SourceBuffer = EfiLibAllocateZeroPool (sizeof(VOID *) * (EFI_DEBUGGER_SYMBOL_ENTRY_MAX + 1));
+    Object[Index].SourceBuffer = AllocateZeroPool (sizeof(VOID *) * (EFI_DEBUGGER_SYMBOL_ENTRY_MAX + 1));
     EFI_DEBUGGER_ASSERT (Object[Index].SourceBuffer != NULL);
   }
 
@@ -730,7 +730,7 @@ Returns:
   //
   // Use FramePtr as checkpoint for StepOut
   //
-  EfiCopyMem (&Address, (VOID *)((UINTN)VmPtr->FramePtr), sizeof(Address));
+  CopyMem (&Address, (VOID *)((UINTN)VmPtr->FramePtr), sizeof(Address));
   EbcDebuggerPushStepEntry (Address, (UINT64)(UINTN)VmPtr->FramePtr, EFI_DEBUG_FLAG_EBC_STEPOUT);
 
   return ;
@@ -794,19 +794,19 @@ Returns:
   //
   // Get Old FramePtr
   //
-  EfiCopyMem (&FramePtr, (VOID *)((UINTN)VmPtr->FramePtr), sizeof(FramePtr));
+  CopyMem (&FramePtr, (VOID *)((UINTN)VmPtr->FramePtr), sizeof(FramePtr));
 
   //
   // Use ReturnAddress as checkpoint for StepOver
   //
-  EfiCopyMem (&Address, (VOID *)(UINTN)VmPtr->Gpr[0], sizeof(Address));
+  CopyMem (&Address, (VOID *)(UINTN)VmPtr->Gpr[0], sizeof(Address));
   EbcDebuggerPushStepEntry (Address, FramePtr, EFI_DEBUG_FLAG_EBC_STEPOVER);
 
   //
   // Use FramePtr as checkpoint for StepOut
   //
   Address = 0;
-  EfiCopyMem (&Address, (VOID *)(FramePtr), sizeof(UINTN));
+  CopyMem (&Address, (VOID *)(FramePtr), sizeof(UINTN));
   EbcDebuggerPushStepEntry (Address, FramePtr, EFI_DEBUG_FLAG_EBC_STEPOUT);
 
   return ;

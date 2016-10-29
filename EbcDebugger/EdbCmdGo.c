@@ -55,7 +55,7 @@ Returns:
   // Check argument
   //
   if (CommandArg != NULL) {
-    if (EfiStriCmp (CommandArg, L"til") == 0) {
+    if (StriCmp (CommandArg, L"til") == 0) {
       CommandStr = StrGetNextTokenLine (L" ");
       if (CommandStr != NULL) {
         //

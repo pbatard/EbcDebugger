@@ -57,25 +57,19 @@ AsciiAtoi (
   );
 
 INTN
-EfiStriCmp (
-  IN CHAR16   *String,
-  IN CHAR16   *String2
-  );
-
-INTN
-EfiAsciiStriCmp (
+AsciiStriCmp (
   IN CHAR8   *String,
   IN CHAR8   *String2
   );
 
 INTN
-EfiStrCmpUnicodeAndAscii (
+StrCmpUnicodeAndAscii (
   IN CHAR16   *String,
   IN CHAR8    *String2
   );
 
 INTN
-EfiStriCmpUnicodeAndAscii (
+StriCmpUnicodeAndAscii (
   IN CHAR16   *String,
   IN CHAR8    *String2
   );

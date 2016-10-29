@@ -85,7 +85,7 @@ Returns:
   //
   FileInfoSize = sizeof(EFI_FILE_INFO) + 1024;
 
-  FileInfo = EfiLibAllocateZeroPool (FileInfoSize);
+  FileInfo = AllocateZeroPool (FileInfoSize);
   if (FileInfo == NULL) {
     Handle->Close (Handle);
     return Status;
@@ -107,7 +107,7 @@ Returns:
   // Allocate buffer for the file data. The last CHAR16 is for L'\0'
   //
   TempBufferSize = (UINTN) FileInfo->FileSize + sizeof(CHAR16);
-  TempBuffer = EfiLibAllocateZeroPool (TempBufferSize);
+  TempBuffer = AllocateZeroPool (TempBufferSize);
   if (TempBuffer == NULL) {
     Handle->Close (Handle);
     gBS->FreePool (FileInfo);
@@ -355,7 +355,7 @@ Returns:
   //
   FileInfoSize = sizeof(EFI_FILE_INFO) + 1024;
 
-  FileInfo = EfiLibAllocateZeroPool (FileInfoSize);
+  FileInfo = AllocateZeroPool (FileInfoSize);
   if (FileInfo == NULL) {
     Handle->Close (Handle);
     return NULL;

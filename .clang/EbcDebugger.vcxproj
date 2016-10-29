@@ -380,8 +380,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="..\Missing\EfiCommonLib.c" />
-    <ClCompile Include="..\Missing\EfiLibAllocate.c" />
     <ClCompile Include="..\Missing\String.c" />
     <ClCompile Include="..\Protocol\DebuggerConfiguration\DebuggerConfiguration.c" />
     <ClCompile Include="..\x64\EbcSupport.c">
@@ -413,8 +411,6 @@
     <ClInclude Include="..\EbcDebugger\EdbHook.h" />
     <ClInclude Include="..\EbcDebugger\EdbSupport.h" />
     <ClInclude Include="..\EbcDebugger\EdbSymbol.h" />
-    <ClInclude Include="..\Missing\EfiCommonLib.h" />
-    <ClInclude Include="..\Missing\EfiDriverLib.h" />
     <ClInclude Include="..\Missing\EfiImage.h" />
     <ClInclude Include="..\Missing\EfiPeOptionalHeader.h" />
     <ClInclude Include="..\Missing\EfiPrintLib.h" />

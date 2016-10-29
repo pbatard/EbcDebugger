@@ -146,7 +146,7 @@ Returns:
   DebuggerPrivate->DebuggerBreakpointContext[DebuggerPrivate->DebuggerBreakpointCount].BreakpointAddress = Address;
   DebuggerPrivate->DebuggerBreakpointContext[DebuggerPrivate->DebuggerBreakpointCount].State = TRUE;
   DebuggerPrivate->DebuggerBreakpointContext[DebuggerPrivate->DebuggerBreakpointCount].OldInstruction = 0;
-  EfiCopyMem (
+  CopyMem (
     &DebuggerPrivate->DebuggerBreakpointContext[DebuggerPrivate->DebuggerBreakpointCount].OldInstruction,
     (VOID *)Address,
     sizeof(UINT16)
@@ -196,7 +196,7 @@ Returns:
   for (BpIndex = Index; BpIndex < DebuggerPrivate->DebuggerBreakpointCount - 1; BpIndex++) {
     DebuggerPrivate->DebuggerBreakpointContext[BpIndex] = DebuggerPrivate->DebuggerBreakpointContext[BpIndex + 1];
   }
-  EfiZeroMem (
+  ZeroMem (
     &DebuggerPrivate->DebuggerBreakpointContext[BpIndex],
     sizeof(DebuggerPrivate->DebuggerBreakpointContext[BpIndex])
     );
@@ -447,12 +447,12 @@ Returns:
     return EFI_DEBUG_CONTINUE;
   }
 
-  if (EfiStriCmp (CommandArg, L"*") == 0) {
+  if (StriCmp (CommandArg, L"*") == 0) {
     //
     // delete all breakpoint
     //
     DebuggerPrivate->DebuggerBreakpointCount = 0;
-    EfiZeroMem (DebuggerPrivate->DebuggerBreakpointContext, sizeof(DebuggerPrivate->DebuggerBreakpointContext));
+    ZeroMem (DebuggerPrivate->DebuggerBreakpointContext, sizeof(DebuggerPrivate->DebuggerBreakpointContext));
     EDBPrint (L"All the Breakpoint is cleared\n");
     return EFI_DEBUG_CONTINUE;
   }
@@ -519,7 +519,7 @@ Returns:
     return EFI_DEBUG_CONTINUE;
   }
 
-  if (EfiStriCmp (CommandArg, L"*") == 0) {
+  if (StriCmp (CommandArg, L"*") == 0) {
     //
     // disable all breakpoint
     //
@@ -583,7 +583,7 @@ Returns:
     return EFI_DEBUG_CONTINUE;
   }
 
-  if (EfiStriCmp (CommandArg, L"*") == 0) {
+  if (StriCmp (CommandArg, L"*") == 0) {
     //
     // enable all breakpoint
     //

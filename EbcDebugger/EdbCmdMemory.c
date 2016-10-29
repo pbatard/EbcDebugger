@@ -52,19 +52,19 @@ Returns:
   //
   switch (Width) {
   case EdbWidthUint8:
-    EfiCopyMem (&Data8, (VOID *)Address, sizeof(UINT8));
+    CopyMem (&Data8, (VOID *)Address, sizeof(UINT8));
     EDBPrint (L"%02x ", Data8);
     return sizeof(UINT8);
   case EdbWidthUint16:
-    EfiCopyMem (&Data16, (VOID *)Address, sizeof(UINT16));
+    CopyMem (&Data16, (VOID *)Address, sizeof(UINT16));
     EDBPrint (L"%04x ", Data16);
     return sizeof(UINT16);
   case EdbWidthUint32:
-    EfiCopyMem (&Data32, (VOID *)Address, sizeof(UINT32));
+    CopyMem (&Data32, (VOID *)Address, sizeof(UINT32));
     EDBPrint (L"%08x ", Data32);
     return sizeof(UINT32);
   case EdbWidthUint64:
-    EfiCopyMem (&Data64, (VOID *)Address, sizeof(UINT64));
+    CopyMem (&Data64, (VOID *)Address, sizeof(UINT64));
     EDBPrint (L"%016lx ", Data64);
     return sizeof(UINT64);
   }
@@ -205,16 +205,16 @@ Returns:
 {
   switch (Width) {
   case EdbWidthUint8:
-    EfiCopyMem ((VOID *)Address, Value, sizeof(UINT8));
+    CopyMem ((VOID *)Address, Value, sizeof(UINT8));
     break;
   case EdbWidthUint16:
-    EfiCopyMem ((VOID *)Address, Value, sizeof(UINT16));
+    CopyMem ((VOID *)Address, Value, sizeof(UINT16));
     break;
   case EdbWidthUint32:
-    EfiCopyMem ((VOID *)Address, Value, sizeof(UINT32));
+    CopyMem ((VOID *)Address, Value, sizeof(UINT32));
     break;
   case EdbWidthUint64:
-    EfiCopyMem ((VOID *)Address, Value, sizeof(UINT64));
+    CopyMem ((VOID *)Address, Value, sizeof(UINT64));
     break;
   default:
     break;

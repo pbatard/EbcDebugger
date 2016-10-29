@@ -623,7 +623,7 @@ Returns:
   // Go through each command, check the CommandName
   //
   for (Index = 0; mDebuggerCommandSet[Index].CommandName != NULL; Index++) {
-    if (EfiStriCmp (CommandName, mDebuggerCommandSet[Index].CommandName) == 0) {
+    if (StriCmp (CommandName, mDebuggerCommandSet[Index].CommandName) == 0) {
       //
       // Found
       //

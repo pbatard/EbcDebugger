@@ -20,14 +20,14 @@ Unicode string primitives
 --*/
 
 #include "Tiano.h"
-#include "EfiDriverLib.h"
-#include "EfiCommonLib.h"
 
 VOID
-EfiStrnCpy(
-	OUT CHAR16  *Dst,
-	IN  CHAR16  *Src,
-	IN  UINTN   Length
+EFIAPI
+StrnCpyS(
+	OUT CHAR16       *Dst,
+	IN  UINTN        DstMax,
+	IN  CONST CHAR16 *Src,
+	IN  UINTN        Length
 )
 /*++
 Routine Description:
@@ -42,7 +42,7 @@ Returns:
 	UINTN Index;
 	UINTN SrcLen;
 
-	SrcLen = EfiStrLen(Src);
+	SrcLen = StrLen(Src);
 
 	Index = 0;
 	while (Index < Length && Index < SrcLen) {
@@ -55,10 +55,12 @@ Returns:
 }
 
 VOID
-EfiStrnCat(
-	IN CHAR16   *Dest,
-	IN CHAR16   *Src,
-	IN UINTN    Length
+EFIAPI
+StrnCatS(
+	IN OUT CHAR16       *Dest,
+	IN     UINTN        DestMax,
+	IN     CONST CHAR16 *Src,
+	IN     UINTN        Length
 )
 /*++
 Routine Description:
@@ -70,12 +72,14 @@ Length           Length of destination string
 Returns:
 --*/
 {
-	EfiStrnCpy(Dest + EfiStrLen(Dest), Src, Length);
+	StrnCpyS(Dest + StrLen(Dest), DestMax, Src, Length);
 }
 
 VOID
-EfiAsciiStrnCpy(
+EFIAPI
+AsciiStrnCpyS(
 	OUT CHAR8    *Dst,
+	IN  UINTN    DstMax,
 	IN  CHAR8    *Src,
 	IN  UINTN    Length
 )
@@ -92,7 +96,7 @@ Returns:
 	UINTN Index;
 	UINTN SrcLen;
 
-	SrcLen = EfiAsciiStrLen(Src);
+	SrcLen = AsciiStrLen(Src);
 
 	Index = 0;
 	while (Index < Length && Index < SrcLen) {
@@ -103,3 +107,6 @@ Returns:
 		Dst[Index] = 0;
 	}
 }
+
+#include <Protocol/EbcVmTest.h>
+EFI_GUID gEfiEbcVmTestProtocolGuid = EFI_EBC_VM_TEST_PROTOCOL_GUID;

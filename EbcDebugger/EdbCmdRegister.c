@@ -103,27 +103,27 @@ Returns:
   //
   // Assign register value
   //
-  if (EfiStriCmp (RegName, L"R0") == 0) {
+  if (StriCmp (RegName, L"R0") == 0) {
     SystemContext.SystemContextEbc->R0 = RegVal;
-  } else if (EfiStriCmp (RegName, L"R1") == 0) {
+  } else if (StriCmp (RegName, L"R1") == 0) {
     SystemContext.SystemContextEbc->R1 = RegVal;
-  } else if (EfiStriCmp (RegName, L"R2") == 0) {
+  } else if (StriCmp (RegName, L"R2") == 0) {
     SystemContext.SystemContextEbc->R2 = RegVal;
-  } else if (EfiStriCmp (RegName, L"R3") == 0) {
+  } else if (StriCmp (RegName, L"R3") == 0) {
     SystemContext.SystemContextEbc->R3 = RegVal;
-  } else if (EfiStriCmp (RegName, L"R4") == 0) {
+  } else if (StriCmp (RegName, L"R4") == 0) {
     SystemContext.SystemContextEbc->R4 = RegVal;
-  } else if (EfiStriCmp (RegName, L"R5") == 0) {
+  } else if (StriCmp (RegName, L"R5") == 0) {
     SystemContext.SystemContextEbc->R5 = RegVal;
-  } else if (EfiStriCmp (RegName, L"R6") == 0) {
+  } else if (StriCmp (RegName, L"R6") == 0) {
     SystemContext.SystemContextEbc->R6 = RegVal;
-  } else if (EfiStriCmp (RegName, L"R7") == 0) {
+  } else if (StriCmp (RegName, L"R7") == 0) {
     SystemContext.SystemContextEbc->R7 = RegVal;
-  } else if (EfiStriCmp (RegName, L"Flags") == 0) {
+  } else if (StriCmp (RegName, L"Flags") == 0) {
     SystemContext.SystemContextEbc->Flags = RegVal;
-  } else if (EfiStriCmp (RegName, L"ControlFlags") == 0) {
+  } else if (StriCmp (RegName, L"ControlFlags") == 0) {
     SystemContext.SystemContextEbc->ControlFlags = RegVal;
-  } else if (EfiStriCmp (RegName, L"Ip") == 0) {
+  } else if (StriCmp (RegName, L"Ip") == 0) {
     SystemContext.SystemContextEbc->Ip = RegVal;
   } else {
     EDBPrint (L"Invalid Register - %s\n", RegName);

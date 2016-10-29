@@ -347,37 +347,6 @@ UnicodeToUpper (
   return (Chr >= L'a' && Chr <= L'z') ? Chr - (L'a' - L'A') : Chr;
 }
 
-INTN
-EfiStriCmp (
-  IN CHAR16   *String,
-  IN CHAR16   *String2
-  )
-/*++
-
-Routine Description:
-  Compare the Unicode string pointed by String to the string pointed by String2.
-
-Arguments:
-  String - String to process
-
-  String2 - The other string to process
-
-Returns:
-  Return a positive integer if String is lexicall greater than String2; Zero if 
-  the two strings are identical; and a negative interger if String is lexically 
-  less than String2.
-
---*/
-{
-  while ((*String != L'\0') &&
-         (UnicodeToUpper (*String) == UnicodeToUpper (*String2))) {
-    String++;
-    String2++;
-  }
-
-  return UnicodeToUpper (*String) - UnicodeToUpper (*String2);
-}
-
 STATIC
 CHAR8
 AsciiToUpper (
@@ -388,7 +357,7 @@ AsciiToUpper (
 }
 
 INTN
-EfiAsciiStriCmp (
+AsciiStriCmp (
   IN CHAR8   *String,
   IN CHAR8   *String2
   )
@@ -419,7 +388,7 @@ Returns:
 }
 
 INTN
-EfiStrCmpUnicodeAndAscii (
+StrCmpUnicodeAndAscii (
   IN CHAR16   *String,
   IN CHAR8    *String2
   )
@@ -453,7 +422,7 @@ Returns:
 }
 
 INTN
-EfiStriCmpUnicodeAndAscii (
+StriCmpUnicodeAndAscii (
   IN CHAR16   *String,
   IN CHAR8    *String2
   )
@@ -519,16 +488,16 @@ Routine Description:
 {
   CHAR16  *Temp;
 
-  if ((Str == NULL) || (SubStr == NULL) || (EfiStrLen(Str) < EfiStrLen(SubStr))) {
+  if ((Str == NULL) || (SubStr == NULL) || (StrLen(Str) < StrLen(SubStr))) {
     return FALSE;
   }
 
-  Temp = Str + EfiStrLen(Str) - EfiStrLen(SubStr);
+  Temp = Str + StrLen(Str) - StrLen(SubStr);
 
   //
   // Compare
   //
-  if (EfiStriCmp (Temp, SubStr) == 0) {
+  if (StriCmp (Temp, SubStr) == 0) {
     return TRUE;
   } else {
     return FALSE;
@@ -544,10 +513,10 @@ _StrDuplicate (
   CHAR16      *Dest;
   UINTN       Size;
 
-  Size = (EfiStrLen(Src) + 1) * sizeof(CHAR16);
-  Dest = EfiLibAllocateZeroPool (Size);
+  Size = (StrLen(Src) + 1) * sizeof(CHAR16);
+  Dest = AllocateZeroPool (Size);
   if (Dest) {
-    EfiCopyMem (Dest, Src, Size);
+    CopyMem (Dest, Src, Size);
   }
   return Dest;
 }

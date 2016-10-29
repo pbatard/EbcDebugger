@@ -22,14 +22,8 @@ Abstract:
 #define _EFI_EDB_H_
 
 #include "Tiano.h"
-#include "EfiCommonLib.h"
-#include "EfiDriverLib.h"
 #include "EfiPrintLib.h"
 #include "EdbCommon.h"
-
-#include EFI_PROTOCOL_DEFINITION (Ebc)
-#include EFI_PROTOCOL_DEFINITION (DebugPort)
-#include EFI_PROTOCOL_DEFINITION (SimpleTextIn)
 
 #include "EbcInt.h"
 #include "EbcExecute.h"

@@ -112,9 +112,9 @@ Returns:
 {
   UINTN DirPathSize;
 
-  DirPathSize = EfiStrLen(DirPath);
+  DirPathSize = StrLen(DirPath);
   *(DirPath + DirPathSize) = L'\\';
-  EfiStrnCat (DirPath, FilePath, Size);
+  StrnCatS (DirPath, DirPathSize + Size + 1, FilePath, Size);
 
   *(DirPath + DirPathSize + Size + 1) = 0;
 
@@ -264,7 +264,7 @@ Returns:
   Object = DebuggerPrivate->DebuggerSymbolContext.Object;
   for (Index = 0; Index < DebuggerPrivate->DebuggerSymbolContext.ObjectCount; Index++, Object++) {
     if ((SymbolFileName != NULL) &&
-        (EfiStriCmp (SymbolFileName, Object->Name) != 0)) {
+        (StriCmp (SymbolFileName, Object->Name) != 0)) {
       continue;
     }
 
@@ -298,7 +298,7 @@ Returns:
     //
     for (SubIndex = 0; SubIndex < Object->EntryCount; SubIndex++, Entry++) {
       if ((SymbolName != NULL) &&
-          (EfiStrCmpUnicodeAndAscii (SymbolName, Entry->Name) != 0)) {
+          (StrCmpUnicodeAndAscii (SymbolName, Entry->Name) != 0)) {
         continue;
       }
 
@@ -377,8 +377,8 @@ Returns:
   // display symbol according to address
   //
   if (CommandStr != NULL) {
-    if ((EfiStriCmp (CommandStr, L"F") != 0) &&
-        (EfiStriCmp (CommandStr, L"S") != 0)) {
+    if ((StriCmp (CommandStr, L"F") != 0) &&
+        (StriCmp (CommandStr, L"S") != 0)) {
       Address = Xtoi (CommandStr);
       return DebuggerDisplaySymbolAccrodingToAddress (Address, DebuggerPrivate);
     }
@@ -388,7 +388,7 @@ Returns:
   // Get SymbolFileName
   //
   if (CommandStr != NULL) {
-    if (EfiStriCmp (CommandStr, L"F") == 0) {
+    if (StriCmp (CommandStr, L"F") == 0) {
       CommandStr = StrGetNextTokenLine (L" ");
       if (CommandStr == NULL) {
         EDBPrint (L"Symbol File Name missing!\n");
@@ -403,7 +403,7 @@ Returns:
   // Get SymbolName
   //
   if (CommandStr != NULL) {
-    if (EfiStriCmp (CommandStr, L"S") == 0) {
+    if (StriCmp (CommandStr, L"S") == 0) {
       CommandStr = StrGetNextTokenLine (L" ");
       if (CommandStr == NULL) {
         EDBPrint (L"Symbol Name missing!\n");
@@ -472,7 +472,7 @@ Returns:
   IsLoadCode = FALSE;
   CommandArg2 = StrGetNextTokenLine (L" ");
   if (CommandArg2 != NULL) {
-    if (EfiStriCmp (CommandArg2, L"a") == 0) {
+    if (StriCmp (CommandArg2, L"a") == 0) {
       IsLoadCode = TRUE;
     } else {
       EDBPrint (L"Argument error!\n");
@@ -480,11 +480,11 @@ Returns:
     }
   }
 
-  if (EfiStrLen (CommandArg) <= 4) {
+  if (StrLen (CommandArg) <= 4) {
     EDBPrint (L"SymbolFile name error!\n");
     return EFI_DEBUG_CONTINUE;
   }
-  if (EfiStriCmp (CommandArg + (EfiStrLen (CommandArg) - 4), L".map") != 0) {
+  if (StriCmp (CommandArg + (StrLen (CommandArg) - 4), L".map") != 0) {
     EDBPrint (L"SymbolFile name error!\n");
     return EFI_DEBUG_CONTINUE;
   }
@@ -528,9 +528,9 @@ Returns:
   // load each cod file
   //
   DirName = GetDirNameFromFullPath (CommandArg);
-  EfiZeroMem (CodFile, sizeof(CodFile));
-  if (EfiStrCmp (DirName, L"") != 0) {
-    EfiStrCpy (CodFile, DirName);
+  ZeroMem (CodFile, sizeof(CodFile));
+  if (StrCmp (DirName, L"") != 0) {
+    StrCpy (CodFile, DirName);
   } else {
     DirName = L"\\";
   }
@@ -541,15 +541,15 @@ Returns:
   Index = 0;
   CodFileName = GetFileNameUnderDir (DebuggerPrivate, DirName, L".cod", &Index);
   while (CodFileName != NULL) {
-    EfiZeroMem (CodFile, sizeof(CodFile));
-    if (EfiStrCmp (DirName, L"\\") != 0) {
-      EfiStrCpy (CodFile, DirName);
+    ZeroMem (CodFile, sizeof(CodFile));
+    if (StrCmp (DirName, L"\\") != 0) {
+      StrCpy (CodFile, DirName);
     }
 
     //
     // read cod file to memory
     //
-    Status = ReadFileToBuffer (DebuggerPrivate, ConstructFullPath (CodFile, CodFileName, EFI_DEBUGGER_SYMBOL_NAME_MAX - EfiStrLen (CodFile) - 2), &BufferSize, &Buffer, FALSE);
+    Status = ReadFileToBuffer (DebuggerPrivate, ConstructFullPath (CodFile, CodFileName, EFI_DEBUGGER_SYMBOL_NAME_MAX - StrLen (CodFile) - 2), &BufferSize, &Buffer, FALSE);
     if (EFI_ERROR(Status)) {
       EDBPrint (L"CodeFile read error!\n");
       CodFileName = GetFileNameUnderDir (DebuggerPrivate, DirName, L".cod", &Index);
@@ -638,9 +638,9 @@ Returns:
   // Unload Code
   //
   DirName = GetDirNameFromFullPath (CommandArg);
-  EfiZeroMem (CodFile, sizeof(CodFile));
-  if (EfiStrCmp (DirName, L"") != 0) {
-    EfiStrCpy (CodFile, DirName);
+  ZeroMem (CodFile, sizeof(CodFile));
+  if (StrCmp (DirName, L"") != 0) {
+    StrCpy (CodFile, DirName);
   } else {
     DirName = L"\\";
   }
@@ -651,9 +651,9 @@ Returns:
   Index = 0;
   CodFileName = GetFileNameUnderDir (DebuggerPrivate, DirName, L".cod", &Index);
   while (CodFileName != NULL) {
-    EfiZeroMem (CodFile, sizeof(CodFile));
-    if (EfiStrCmp (DirName, L"\\") != 0) {
-      EfiStrCpy (CodFile, DirName);
+    ZeroMem (CodFile, sizeof(CodFile));
+    if (StrCmp (DirName, L"\\") != 0) {
+      StrCpy (CodFile, DirName);
     }
 
     //
@@ -725,10 +725,10 @@ Returns:
   if (CommandArg == NULL) {
     DebuggerPrivate->DebuggerSymbolContext.DisplaySymbol = !DebuggerPrivate->DebuggerSymbolContext.DisplaySymbol;
     EdbShowDisasm (DebuggerPrivate, SystemContext);
-  } else if (EfiStriCmp (CommandArg, L"on") == 0) {
+  } else if (StriCmp (CommandArg, L"on") == 0) {
     DebuggerPrivate->DebuggerSymbolContext.DisplaySymbol = TRUE;
     EdbShowDisasm (DebuggerPrivate, SystemContext);
-  } else if (EfiStriCmp (CommandArg, L"off") == 0) {
+  } else if (StriCmp (CommandArg, L"off") == 0) {
     DebuggerPrivate->DebuggerSymbolContext.DisplaySymbol = FALSE;
     EdbShowDisasm (DebuggerPrivate, SystemContext);
   } else {
@@ -784,19 +784,19 @@ Returns:
     return EFI_DEBUG_CONTINUE;
   }
 
-  if (EfiStrLen (CommandArg) <= 4) {
+  if (StrLen (CommandArg) <= 4) {
     EDBPrint (L"CodeFile name error!\n");
     return EFI_DEBUG_CONTINUE;
   }
-  if (EfiStriCmp (CommandArg + (EfiStrLen (CommandArg) - 4), L".cod") != 0) {
+  if (StriCmp (CommandArg + (StrLen (CommandArg) - 4), L".cod") != 0) {
     EDBPrint (L"CodeFile name error!\n");
     return EFI_DEBUG_CONTINUE;
   }
-  if (EfiStrLen (CommandArg2) <= 4) {
+  if (StrLen (CommandArg2) <= 4) {
     EDBPrint (L"SymbolFile name error!\n");
     return EFI_DEBUG_CONTINUE;
   }
-  if (EfiStriCmp (CommandArg2 + (EfiStrLen (CommandArg2) - 4), L".map") != 0) {
+  if (StriCmp (CommandArg2 + (StrLen (CommandArg2) - 4), L".map") != 0) {
     EDBPrint (L"SymbolFile name error!\n");
     return EFI_DEBUG_CONTINUE;
   }
@@ -938,10 +938,10 @@ Returns:
   if (CommandArg == NULL) {
     DebuggerPrivate->DebuggerSymbolContext.DisplayCodeOnly = !DebuggerPrivate->DebuggerSymbolContext.DisplayCodeOnly;
     EdbShowDisasm (DebuggerPrivate, SystemContext);
-  } else if (EfiStriCmp (CommandArg, L"on") == 0) {
+  } else if (StriCmp (CommandArg, L"on") == 0) {
     DebuggerPrivate->DebuggerSymbolContext.DisplayCodeOnly = TRUE;
     EdbShowDisasm (DebuggerPrivate, SystemContext);
-  } else if (EfiStriCmp (CommandArg, L"off") == 0) {
+  } else if (StriCmp (CommandArg, L"off") == 0) {
     DebuggerPrivate->DebuggerSymbolContext.DisplayCodeOnly = FALSE;
     EdbShowDisasm (DebuggerPrivate, SystemContext);
   } else {

@@ -25,14 +25,8 @@ EDK definitions that have no match in gnu-efi yet.
 
 #include "EfiImage.h"
 
-#define EfiCopyMem CopyMem
-#define EfiZeroMem ZeroMem
-#define EfiSetMem SetMem
-#define EfiStrLen StrLen
-#define EfiStrCmp StrCmp
-#define EfiStrCpy StrCpy
-#define EfiAsciiStrCmp strcmpa
-#define EfiAsciiStrLen strlena
+#define AsciiStrCmp strcmpa
+#define AsciiStrLen strlena
 
 #define EfiInitializeDriverLib InitializeLib
 #define EfiLibGetSystemConfigurationTable LibGetSystemConfigurationTable
@@ -53,22 +47,6 @@ EDK definitions that have no match in gnu-efi yet.
 // TODO: should handle x86, ARM, etc.
 #define CpuBreakpoint() Print(L"EFI_BREAKPOINT() TRIGGERED!!\n") //__asm__ volatile("int $0x03");
 #define CpuDeadLoop() while (TRUE)
-
-#define EFI_ERROR_CODE             0x00000002
-#define EFI_ERROR_UNRECOVERED      0x90000000
-
-#define EFI_SOFTWARE               0x03000000
-#define EFI_SOFTWARE_EBC_EXCEPTION (EFI_SOFTWARE | 0x000C0000)
-
-typedef INTN   EFI_EXCEPTION_TYPE;
-
-typedef UINT32 EFI_STATUS_CODE_VALUE;
-typedef UINT32 EFI_STATUS_CODE_TYPE;
-typedef struct {
-	UINT16    HeaderSize;
-	UINT16    Size;
-	EFI_GUID  Type;
-} EFI_STATUS_CODE_DATA;
 
 //
 // Math library routines

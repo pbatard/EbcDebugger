@@ -12,14 +12,6 @@ THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
 WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 **/
-#include "Tiano.h"
-#include "EfiDriverLib.h"
-
-//
-// To support the EFI debug support protocol
-//
-#include EFI_PROTOCOL_DEFINITION (Ebc)
-#include EFI_PROTOCOL_DEFINITION (DebugSupport)
 
 #include "EbcInt.h"
 #include "EbcExecute.h"

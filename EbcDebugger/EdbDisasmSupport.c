@@ -80,7 +80,7 @@ Returns:
   
 --*/
 {
-  EfiZeroMem (&mInstructionString, sizeof(mInstructionString));
+  ZeroMem (&mInstructionString, sizeof(mInstructionString));
   mInstructionNameOffset    = 0;
   mInstructionContentOffset = 0;
 
@@ -311,7 +311,7 @@ Returns:
     L"%s",
     Name
     );
-  mInstructionNameOffset += EfiStrLen (Name);
+  mInstructionNameOffset += StrLen (Name);
 
   return mInstructionNameOffset;
 }

@@ -19,23 +19,29 @@ Minimal set of EfiPrintLib declarations required to build the application
 #ifndef _EFI_PRINT_LIB_H_
 #define _EFI_PRINT_LIB_H_
 
-VOID
-EfiStrnCat(
-	IN CHAR16   *Dest,
-	IN CHAR16   *Src,
-	IN UINTN    Length
+EFI_STATUS
+EFIAPI
+StrnCatS(
+	IN OUT CHAR16       *Dest,
+	IN     UINTN        DestMax,
+	IN     CONST CHAR16 *Src,
+	IN     UINTN        Length
 );
 
 VOID
-EfiStrnCpy(
-	OUT CHAR16  *Dst,
-	IN  CHAR16  *Src,
-	IN  UINTN   Length
+EFIAPI
+StrnCpyS(
+	OUT CHAR16       *Dst,
+	IN  UINTN        DstMax,
+	IN  CONST CHAR16 *Src,
+	IN  UINTN        Length
 );
 
 VOID
-EfiAsciiStrnCpy(
+EFIAPI
+AsciiStrnCpyS(
 	OUT CHAR8    *Dst,
+	IN  UINTN    DstMax,
 	IN  CHAR8    *Src,
 	IN  UINTN    Length
 );
