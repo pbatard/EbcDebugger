@@ -1,31 +1,21 @@
+;/** @file
+;  
+;    This code provides low level routines that support the Virtual Machine
+;    for option ROMs.
+;  
+;  Copyright (c) 2006 - 2011, Intel Corporation. All rights reserved.<BR>
+;  This program and the accompanying materials
+;  are licensed and made available under the terms and conditions of the BSD License
+;  which accompanies this distribution.  The full text of the license may be found at
+;  http://opensource.org/licenses/bsd-license.php
+;  
+;  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+;  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+;  
+;**/
+
   page    ,132
   title   VM ASSEMBLY LANGUAGE ROUTINES
-;****************************************************************************
-;*                                                                         
-;*  Copyright (c) 2004 - 2005, Intel Corporation                                                         
-;*  All rights reserved. This program and the accompanying materials                          
-;*  are licensed and made available under the terms and conditions of the BSD License         
-;*  which accompanies this distribution.  The full text of the license may be found at        
-;*  http://opensource.org/licenses/bsd-license.php                                            
-;*                                                                                            
-;*  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-;*  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
-;*                                                                          
-;****************************************************************************
-;****************************************************************************
-;                                   REV 1.0
-;****************************************************************************
-;
-; Rev  Date      Description
-; ---  --------  ------------------------------------------------------------
-; 1.0  03/14/01  Initial creation of file.
-;
-;****************************************************************************
-                             
-;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
-; This code provides low level routines that support the Virtual Machine
-; for option ROMs. 
-;* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
 
 ;---------------------------------------------------------------------------
 ; Equate files needed.
@@ -40,47 +30,46 @@
 ;---------------------------------------------------------------------------
 
 .686p
-.model  flat        
-.code        
-;---------------------------------------------------------------------------
-;;GenericPostSegment      SEGMENT USE16
-;---------------------------------------------------------------------------
-EfiCommonLibCopyMem  PROTO  C Destination:PTR DWORD, Source:PTR DWORD, Count:DWORD
+.model  flat, C
+.code
+CopyMem  PROTO  Destination:PTR DWORD, Source:PTR DWORD, Count:DWORD
+EbcInterpret               PROTO
+ExecuteEbcImageEntryPoint  PROTO
 
 ;****************************************************************************
 ; EbcLLCALLEXNative
 ;
 ; This function is called to execute an EBC CALLEX instruction
-; to native code. 
+; to native code.
 ; This instruction requires that we thunk out to external native
-; code. For IA32, we simply switch stacks and jump to the 
+; code. For IA32, we simply switch stacks and jump to the
 ; specified function. On return, we restore the stack pointer
 ; to its original location.
 ;
 ; Destroys no working registers.
 ;****************************************************************************
-; VOID EbcLLCALLEXNative(UINTN FuncAddr, UINTN NewStackPointer, VOID *FramePtr)
-_EbcLLCALLEXNative        PROC    NEAR    PUBLIC
+; INT64 EbcLLCALLEXNative(UINTN FuncAddr, UINTN NewStackPointer, VOID *FramePtr)
+EbcLLCALLEXNative        PROC        PUBLIC
       push   ebp
       push   ebx
       mov    ebp, esp              ; standard function prolog
-      
+
       ; Get function address in a register
       ; mov ecx, FuncAddr => mov ecx, dword ptr [FuncAddr]
-      mov    ecx, dword ptr [esp]+0Ch
-      
+      mov    ecx, dword ptr [esp + 0Ch]
+
       ; Set stack pointer to new value
       ; mov eax, NewStackPointer => mov eax, dword ptr [NewSp]
-      mov    eax, dword ptr [esp] + 14h
-      mov    edx, dword ptr [esp] + 10h
+      mov    eax, dword ptr [esp + 14h]
+      mov    edx, dword ptr [esp + 10h]
       sub    eax, edx
-      sub    esp, eax      
+      sub    esp, eax
       mov    ebx, esp
       push   ecx
       push   eax
       push   edx
       push   ebx
-      call   EfiCommonLibCopyMem
+      call   CopyMem
       pop    eax
       pop    eax
       pop    eax
@@ -88,7 +77,7 @@ _EbcLLCALLEXNative        PROC    NEAR    PUBLIC
 
       ; Now call the external routine
       call  ecx
-      
+
       ; ebp is preserved by the callee. In this function it
       ; equals the original esp, so set them equal
       mov    esp, ebp
@@ -98,66 +87,121 @@ _EbcLLCALLEXNative        PROC    NEAR    PUBLIC
       pop      ebx
       pop      ebp
       ret
-_EbcLLCALLEXNative    ENDP
+EbcLLCALLEXNative    ENDP
 
+;****************************************************************************
+; EbcLLEbcInterpret
+;
+; Begin executing an EBC image.
+;****************************************************************************
+; UINT64 EbcLLEbcInterpret(VOID)
+EbcLLEbcInterpret PROC PUBLIC
+    ;
+    ;; mov eax, 0xca112ebc
+    ;; mov eax, EbcEntryPoint
+    ;; mov ecx, EbcLLEbcInterpret
+    ;; jmp ecx
+    ;
+    ; Caller uses above instruction to jump here
+    ; The stack is below:
+    ; +-----------+
+    ; |  RetAddr  |
+    ; +-----------+
+    ; |EntryPoint | (EAX)
+    ; +-----------+
+    ; |   Arg1    | <- EDI
+    ; +-----------+
+    ; |   Arg2    |
+    ; +-----------+
+    ; |   ...     |
+    ; +-----------+
+    ; |   Arg16   |
+    ; +-----------+
+    ; |   EDI     |
+    ; +-----------+
+    ; |   ESI     |
+    ; +-----------+
+    ; |   EBP     | <- EBP
+    ; +-----------+
+    ; |  RetAddr  | <- ESP is here
+    ; +-----------+
+    ; |   Arg1    | <- ESI
+    ; +-----------+
+    ; |   Arg2    |
+    ; +-----------+
+    ; |   ...     |
+    ; +-----------+
+    ; |   Arg16   |
+    ; +-----------+
+    ; 
 
-; UINTN EbcLLGetEbcEntryPoint(VOID);
-; Routine Description:
-;   The VM thunk code stuffs an EBC entry point into a processor
-;   register. Since we can't use inline assembly to get it from
-;   the interpreter C code, stuff it into the return value 
-;   register and return.
-;
-; Arguments:
-;     None.
-;
-; Returns:
-;     The contents of the register in which the entry point is passed.
-;
-_EbcLLGetEbcEntryPoint        PROC    NEAR    PUBLIC
+    ; Construct new stack
+    push ebp
+    mov  ebp, esp
+    push esi
+    push edi
+    sub  esp, 40h
+    push eax
+    mov  esi, ebp
+    add  esi, 8
+    mov  edi, esp
+    add  edi, 4
+    mov  ecx, 16
+    rep  movsd
+    
+    ; call C-code
+    call EbcInterpret
+    add  esp, 44h
+    pop  edi
+    pop  esi
+    pop  ebp
     ret
-_EbcLLGetEbcEntryPoint    ENDP
+EbcLLEbcInterpret ENDP
 
-;/*++
+;****************************************************************************
+; EbcLLExecuteEbcImageEntryPoint
 ;
-;Routine Description:
-;  
-;  Return the caller's value of the stack pointer.
-;
-;Arguments:
-;
-;  None.
-;
-;Returns:
-;
-;  The current value of the stack pointer for the caller. We
-;  adjust it by 4 here because when they called us, the return address
-;  is put on the stack, thereby lowering it by 4 bytes.
-;
-;--*/
-
-; UINTN EbcLLGetStackPointer()            
-_EbcLLGetStackPointer        PROC    NEAR    PUBLIC
-    mov    eax, esp      ; get current stack pointer
-    add   eax, 4        ; stack adjusted by this much when we were called
+; Begin executing an EBC image.
+;****************************************************************************
+; UINT64 EbcLLExecuteEbcImageEntryPoint(VOID)
+EbcLLExecuteEbcImageEntryPoint PROC PUBLIC
+    ;
+    ;; mov eax, 0xca112ebc
+    ;; mov eax, EbcEntryPoint
+    ;; mov ecx, EbcLLExecuteEbcImageEntryPoint
+    ;; jmp ecx
+    ;
+    ; Caller uses above instruction to jump here
+    ; The stack is below:
+    ; +-----------+
+    ; |  RetAddr  |
+    ; +-----------+
+    ; |EntryPoint | (EAX)
+    ; +-----------+
+    ; |ImageHandle|
+    ; +-----------+
+    ; |SystemTable|
+    ; +-----------+
+    ; |  RetAddr  | <- ESP is here
+    ; +-----------+
+    ; |ImageHandle|
+    ; +-----------+
+    ; |SystemTable|
+    ; +-----------+
+    ; 
+    
+    ; Construct new stack
+    mov  [esp - 0Ch], eax
+    mov  eax, [esp + 04h]
+    mov  [esp - 08h], eax
+    mov  eax, [esp + 08h]
+    mov  [esp - 04h], eax
+    
+    ; call C-code
+    sub  esp, 0Ch
+    call ExecuteEbcImageEntryPoint
+    add  esp, 0Ch
     ret
-_EbcLLGetStackPointer    ENDP
-
-; UINT64 EbcLLGetReturnValue(VOID);
-; Routine Description:
-;   When EBC calls native, on return the VM has to stuff the return
-;   value into a VM register. It's assumed here that the value is still
-;    in the register, so simply return and the caller should get the
-;   return result properly.
-;
-; Arguments:
-;     None.
-;
-; Returns:
-;     The unmodified value returned by the native code.
-;
-_EbcLLGetReturnValue   PROC    NEAR    PUBLIC
-    ret
-_EbcLLGetReturnValue    ENDP
+EbcLLExecuteEbcImageEntryPoint ENDP
 
 END

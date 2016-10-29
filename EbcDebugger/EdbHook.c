@@ -585,7 +585,7 @@ Returns:
 --*/
 {
   EbcDebuggerPushCallstackSource ((UINT64)(UINTN)-1, EfiDebuggerBranchTypeEbcCall);
-  EbcDebuggerPushCallstackParameter ((UINT64)(UINTN)VmPtr->R[0], EfiDebuggerBranchTypeEbcCall);
+  EbcDebuggerPushCallstackParameter ((UINT64)(UINTN)VmPtr->Gpr[0], EfiDebuggerBranchTypeEbcCall);
   EbcDebuggerPushCallstackDest ((UINT64)(UINTN)VmPtr->Ip, EfiDebuggerBranchTypeEbcCall);
   EbcDebuggerCheckHookFlag (VmPtr, EFI_DEBUG_FLAG_EBC_BOE);
   return ;
@@ -613,7 +613,7 @@ Returns:
 --*/
 {
   EbcDebuggerPushCallstackSource ((UINT64)(UINTN)-2, EfiDebuggerBranchTypeEbcCall);
-  EbcDebuggerPushCallstackParameter ((UINT64)(UINTN)VmPtr->R[0], EfiDebuggerBranchTypeEbcCall);
+  EbcDebuggerPushCallstackParameter ((UINT64)(UINTN)VmPtr->Gpr[0], EfiDebuggerBranchTypeEbcCall);
   EbcDebuggerPushCallstackDest ((UINT64)(UINTN)VmPtr->Ip, EfiDebuggerBranchTypeEbcCall);
   EbcDebuggerCheckHookFlag (VmPtr, EFI_DEBUG_FLAG_EBC_BOT);
   return ;
@@ -759,7 +759,7 @@ Returns:
 {
   EbcDebuggerCheckHookFlag (VmPtr, EFI_DEBUG_FLAG_EBC_BOC);
   EbcDebuggerPushCallstackSource ((UINT64)(UINTN)VmPtr->Ip, EfiDebuggerBranchTypeEbcCall);
-  EbcDebuggerPushCallstackParameter ((UINT64)(UINTN)VmPtr->R[0], EfiDebuggerBranchTypeEbcCall);
+  EbcDebuggerPushCallstackParameter ((UINT64)(UINTN)VmPtr->Gpr[0], EfiDebuggerBranchTypeEbcCall);
   EbcDebuggerPushTraceSourceEntry ((UINT64)(UINTN)VmPtr->Ip, EfiDebuggerBranchTypeEbcCall);
   return ;
 }
@@ -799,7 +799,7 @@ Returns:
   //
   // Use ReturnAddress as checkpoint for StepOver
   //
-  EfiCopyMem (&Address, (VOID *)(UINTN)VmPtr->R[0], sizeof(Address));
+  EfiCopyMem (&Address, (VOID *)(UINTN)VmPtr->Gpr[0], sizeof(Address));
   EbcDebuggerPushStepEntry (Address, FramePtr, EFI_DEBUG_FLAG_EBC_STEPOVER);
 
   //

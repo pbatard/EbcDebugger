@@ -26,13 +26,14 @@
   .MODEL SMALL
   .CODE
 
-LeftShiftU64  PROTO C  Operand:  QWORD, CountIn: QWORD
-RightShiftU64 PROTO C  Operand:  QWORD, CountIn: QWORD
-ARightShift64 PROTO C  Operand:  QWORD, CountIn: QWORD
-MulU64x64     PROTO C  Value1:   QWORD, Value2:  QWORD, ResultHigh: DWORD
-MulS64x64     PROTO C  Value1:   QWORD, Value2:  QWORD, ResultHigh: DWORD
-DivU64x64     PROTO C  Dividend: QWORD, Divisor: QWORD, Remainder:  DWORD, Error: DWORD
-DivS64x64     PROTO C  Dividend: QWORD, Divisor: QWORD, Remainder:  DWORD, Error: DWORD
+LeftShiftU64        PROTO C  Operand:  QWORD, CountIn: QWORD
+RightShiftU64       PROTO C  Operand:  QWORD, CountIn: QWORD
+ARShiftU64          PROTO C  Operand:  QWORD, CountIn: QWORD
+MultU64x64          PROTO C  Value1:   QWORD, Value2:  QWORD
+MultS64x64          PROTO C  Value1:   QWORD, Value2:  QWORD
+DivU64x64Remainder  PROTO C  Dividend: QWORD, Divisor: QWORD, Remainder:  DWORD
+DivS64x64Remainder  PROTO C  Dividend: QWORD, Divisor: QWORD, Remainder:  DWORD
+MemoryFence         PROTO C
 
   
 LeftShiftU64 PROC C Operand: QWORD, CountIn: QWORD
@@ -149,18 +150,18 @@ _RightShiftU64_Done:
 RightShiftU64 ENDP
 
 
-ARightShift64 PROC C Operand: QWORD, CountIn: QWORD
+ARShiftU64 PROC C Operand: QWORD, CountIn: QWORD
 
 ;------------------------------------------------------------------------------
-; INT64
-; ARightShift64 (
-;   IN INT64  Operand,
+; UINT64
+; ARShiftU64 (
+;   IN UINT64 Operand,
 ;   IN UINT64 CountIn
 ;   )
 ;
 ; Routine Description:
 ;  
-;   Arithmatic shift a 64 bit signed value.
+;   Arithmetic shift a 64 bit signed value.
 ;
 ; Arguments:
 ;
@@ -220,17 +221,16 @@ _ARightShiftU64_Done:
   pop    ecx
   ret
 
-ARightShift64 ENDP
+ARShiftU64 ENDP
 
 
-MulU64x64 PROC C  Value1: QWORD, Value2: QWORD, ResultHigh: DWORD
+MultU64x64 PROC C  Value1: QWORD, Value2: QWORD
 
 ;------------------------------------------------------------------------------
 ; UINT64 
-; MulU64x64 (
-;   UINT64 Value1, 
-;   UINT64 Value2, 
-;   UINT64 *ResultHigh
+; MultU64x64 (
+;   UINT64 Value1,
+;   UINT64 Value2
 ;   )
 ;
 ; Routine Description:
@@ -241,17 +241,13 @@ MulU64x64 PROC C  Value1: QWORD, Value2: QWORD, ResultHigh: DWORD
 ;
 ;   Value1      - first value to multiply
 ;   Value2      - value to multiply by Value1
-;   ResultHigh  - result to flag overflows
 ;
 ; Returns:
 ; 
 ;   Value1 * Value2
-;   The 128-bit result is the concatenation of *ResultHigh and the return value 
 ;------------------------------------------------------------------------------
 
-  push   ebx
   push   ecx
-  mov    ebx, ResultHigh           ; ebx points to the high 4 words of result
   ;
   ; The result consists of four double-words.
   ; Here we assume their names from low to high: dw0, dw1, dw2, dw3
@@ -265,7 +261,6 @@ MulU64x64 PROC C  Value1: QWORD, Value2: QWORD, ResultHigh: DWORD
   mul    dword ptr Value2[0]
   add    ecx, eax                  ; add eax to partial result of dw1
   adc    edx, 0    
-  mov    dword ptr [ebx], edx      ; lower double-word of ResultHigh contains partial result of dw2
     
   mov    eax, dword ptr Value1[0]
   mul    dword ptr Value2[4]
@@ -276,29 +271,22 @@ MulU64x64 PROC C  Value1: QWORD, Value2: QWORD, ResultHigh: DWORD
 
   mov    eax, dword ptr Value1[4]
   mul    dword ptr Value2[4]
-  add    ecx, eax                  ; add eax to partial result of dw2
-  adc    edx, 0
-  add    dword ptr [ebx], ecx      ; lower double-word of ResultHigh contains final result of dw2
-  adc    edx, 0
-  mov    dword ptr [ebx + 4], edx  ; high double-word of ResultHigh contains final result of dw3
-    
+
   pop    edx                       ; edx contains the final result of dw1
   pop    eax                       ; edx contains the final result of dw0
   pop    ecx
-  pop    ebx
   ret
 
-MulU64x64 ENDP
+MultU64x64 ENDP
 
 
-MulS64x64  PROC C  Value1: QWORD, Value2: QWORD, ResultHigh: DWORD
+MultS64x64  PROC C  Value1: QWORD, Value2: QWORD
 
 ;------------------------------------------------------------------------------
 ; INT64
 ; MulS64x64 (
 ;   INT64 Value1,
-;   INT64 Value2,
-;   INT64 *ResultHigh
+;   INT64 Value2
 ;   )
 ;
 ; Routine Description:
@@ -309,17 +297,13 @@ MulS64x64  PROC C  Value1: QWORD, Value2: QWORD, ResultHigh: DWORD
 ;
 ;   Value1      - first value to multiply
 ;   Value2      - value to multiply by Value1
-;   ResultHigh  - result to flag overflows
 ;
 ; Returns:
 ;
 ;   Value1 * Value2
-;   The 128-bit result is the concatenation of *ResultHigh and the return value 
 ;------------------------------------------------------------------------------
 
-  push   ebx
   push   ecx
-  mov    ebx, ResultHigh           ; ebx points to the high 4 words of result
   xor    ecx, ecx                 ; the lowest bit of ecx flags the sign
     
   mov    edx, dword ptr Value1[4]
@@ -354,7 +338,7 @@ _MulS64x64_A_Positive:
   btc    ecx, 0
     
 _MulS64x64_B_Positive:
-  invoke MulU64x64, Value1, Value2, ResultHigh
+  invoke MultU64x64, Value1, Value2
   bt     ecx, 0
   jnc    short _MulS64x64_Done
   ;
@@ -362,30 +346,24 @@ _MulS64x64_B_Positive:
   ;
   not    eax
   not    edx
-  not    dword ptr [ebx]
-  not    dword ptr [ebx + 4]
   add    eax, 1
   adc    edx, 0
-  adc    dword ptr [ebx], 0
-  adc    dword ptr [ebx + 4], 0
     
 _MulS64x64_Done:
   pop    ecx
-  pop    ebx
   ret
 
-MulS64x64 ENDP
+MultS64x64 ENDP
 
 
-DivU64x64 PROC C  Dividend: QWORD, Divisor: QWORD, Remainder: DWORD, Error: DWORD, 
+DivU64x64Remainder PROC C  Dividend: QWORD, Divisor: QWORD, Remainder: DWORD
 
 ;------------------------------------------------------------------------------
 ; UINT64
 ; DivU64x64 (
 ;   IN  UINT64   Dividend,
 ;   IN  UINT64   Divisor,
-;   OUT UINT64   *Remainder OPTIONAL,
-;   OUT UINT32   *Error
+;   OUT UINT64   *Remainder
 ;   )
 ;
 ; Routine Description:
@@ -397,8 +375,7 @@ DivU64x64 PROC C  Dividend: QWORD, Divisor: QWORD, Remainder: DWORD, Error: DWOR
 ;
 ;   Dividend    - dividend
 ;   Divisor     - divisor
-;   ResultHigh  - result to flag overflows
-;   Error       - flag for error
+;   Remainder   - remainder
 ;
 ; Returns:
 ; 
@@ -407,9 +384,6 @@ DivU64x64 PROC C  Dividend: QWORD, Divisor: QWORD, Remainder: DWORD, Error: DWOR
 ;------------------------------------------------------------------------------
 
   push   ecx
-  
-  mov    eax, Error
-  mov    dword ptr [eax], 0 
   
   cmp    dword ptr Divisor[0], 0
   jne    _DivU64x64_Valid
@@ -486,17 +460,16 @@ _DivU64x64_Done:
   pop    ecx
   ret
   
-DivU64x64 ENDP
+DivU64x64Remainder ENDP
 
-DivS64x64 PROC C  Dividend: QWORD, Divisor: QWORD, Remainder: DWORD, Error: DWORD, 
+DivS64x64Remainder PROC C  Dividend: QWORD, Divisor: QWORD, Remainder: DWORD
 
 ;------------------------------------------------------------------------------
 ; INT64
-; DivU64x64 (
+; DivS64x64Remainder (
 ;   IN  INT64   Dividend,
 ;   IN  INT64   Divisor,
-;   OUT UINT64   *Remainder OPTIONAL,
-;   OUT UINT32   *Error
+;   OUT UINT64  *Remainder OPTIONAL
 ;   )
 ;
 ; Routine Description:
@@ -508,8 +481,7 @@ DivS64x64 PROC C  Dividend: QWORD, Divisor: QWORD, Remainder: DWORD, Error: DWOR
 ;
 ;   Dividend    - dividend
 ;   Divisor     - divisor
-;   ResultHigh  - result to flag overflows
-;   Error       - flag for error
+;   Remainder   - remainder
 ;
 ; Returns:
 ; 
@@ -518,9 +490,6 @@ DivS64x64 PROC C  Dividend: QWORD, Divisor: QWORD, Remainder: DWORD, Error: DWOR
 ;------------------------------------------------------------------------------
 
   push   ecx
-  
-  mov    eax, Error
-  mov    dword ptr [eax], 0 
   
   cmp    dword ptr Divisor[0], 0
   jne    _DivS64x64_Valid
@@ -590,7 +559,7 @@ _DivS64x64_Dividend_Positive:
   btc    ecx, 0
     
 _DivS64x64_Divisor_Positive:
-  invoke DivU64x64, Dividend, Divisor, Remainder, Error
+  invoke DivU64x64Remainder, Dividend, Divisor, Remainder
   bt     ecx, 0
   jnc    short _DivS64x64_Remainder
   ;
@@ -617,6 +586,10 @@ _DivS64x64_Done:
   pop    ecx
   ret
 
-DivS64x64 ENDP
+DivS64x64Remainder ENDP
+
+MemoryFence PROC C
+  ret
+MemoryFence ENDP
 
 END

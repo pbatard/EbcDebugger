@@ -43,10 +43,16 @@ EDK definitions that have no match in gnu-efi yet.
 
 #define EFI_FORWARD_DECLARATION(x) typedef struct _##x x
 
-#define DEBUG_CODE(x)
+#define DEBUG_CODE_BEGIN()  do { if (0) { UINT8  __DebugCodeLocal
+#define DEBUG_CODE_END()    __DebugCodeLocal = 0; __DebugCodeLocal++; } } while (FALSE)
+#define DEBUG_CODE(Expression)  \
+  DEBUG_CODE_BEGIN ();          \
+  Expression                    \
+  DEBUG_CODE_END ()
+
 // TODO: should handle x86, ARM, etc.
-#define EFI_BREAKPOINT() Print(L"EFI_BREAKPOINT() TRIGGERED!!\n") //__asm__ volatile("int $0x03");
-#define EFI_DEADLOOP() while (TRUE)
+#define CpuBreakpoint() Print(L"EFI_BREAKPOINT() TRIGGERED!!\n") //__asm__ volatile("int $0x03");
+#define CpuDeadLoop() while (TRUE)
 
 #define EFI_ERROR_CODE             0x00000002
 #define EFI_ERROR_UNRECOVERED      0x90000000
@@ -63,5 +69,41 @@ typedef struct {
 	UINT16    Size;
 	EFI_GUID  Type;
 } EFI_STATUS_CODE_DATA;
+
+//
+// Math library routines
+//
+INT64 DivS64x64Remainder(
+  IN INT64      Value1,
+  IN INT64      Value2,
+  OUT INT64     *Remainder);
+
+UINT64 DivU64x64Remainder(
+  IN UINT64   Value1,
+  IN UINT64   Value2,
+  OUT UINT64  *Remainder);
+
+INT64 MultS64x64(
+  IN INT64  Value1,
+  IN INT64  Value2);
+
+UINT64 MultU64x64(
+  IN UINT64   Value1,
+  IN UINT64   Value2);
+
+UINT64 ARShiftU64(
+  IN UINT64   Operand,
+  IN UINTN    Count);
+
+UINT64 LeftShiftU64(
+  IN UINT64   Operand,
+  IN UINT64   Count);
+
+UINT64 RightShiftU64(
+  IN UINT64   Operand,
+  IN UINT64   Count);
+
+VOID MemoryFence(
+  VOID);
 
 #endif

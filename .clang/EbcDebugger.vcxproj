@@ -421,6 +421,8 @@
     <ClInclude Include="..\Missing\includes.h" />
     <ClInclude Include="..\Missing\Tiano.h" />
     <ClInclude Include="..\Protocol\DebuggerConfiguration\DebuggerConfiguration.h" />
+    <ClInclude Include="..\Protocol\EbcSimpleDebugger.h" />
+    <ClInclude Include="..\Protocol\EbcVmTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

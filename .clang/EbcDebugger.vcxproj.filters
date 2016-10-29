@@ -180,6 +180,12 @@
     <ClInclude Include="..\Missing\EfiDriverLib.h">
       <Filter>Source Files\Missing</Filter>
     </ClInclude>
+    <ClInclude Include="..\Protocol\EbcVmTest.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Protocol\EbcSimpleDebugger.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="..\x64\EbcLowLevel.asm">

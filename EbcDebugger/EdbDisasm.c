@@ -162,7 +162,7 @@ Returns:
   return 2;
 }
 
-STATIC CONST UINT8                    mJMPLen[] = { 2, 2, 6, 10 };
+extern CONST UINT8                    mJMPLen[];
 
 UINTN
 EdbDisasmJMP (

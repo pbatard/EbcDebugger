@@ -1,25 +1,18 @@
-/*++
-
-Copyright (c) 2004 - 2006, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
-
-Module Name:
-
-  EbcExecute.h
-
-Abstract:
-
+/** @file
   Header file for Virtual Machine support. Contains EBC defines that can
-  be of use to a disassembler for the most part. Also provides function 
+  be of use to a disassembler for the most part. Also provides function
   prototypes for VM functions.
 
---*/
+Copyright (c) 2006 - 2011, Intel Corporation. All rights reserved.<BR>
+This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+
+**/
 
 #ifndef _EBC_EXECUTE_H_
 #define _EBC_EXECUTE_H_
@@ -132,8 +125,8 @@ Abstract:
 #define OPERAND1_CHAR(op)         ('0' + OPERAND1_REGNUM (op))
 #define OPERAND2_CHAR(op)         ('0' + OPERAND2_REGNUM (op))
 
-#define OPERAND1_REGDATA(pvm, op) pvm->R[OPERAND1_REGNUM (op)]
-#define OPERAND2_REGDATA(pvm, op) pvm->R[OPERAND2_REGNUM (op)]
+#define OPERAND1_REGDATA(pvm, op) pvm->Gpr[OPERAND1_REGNUM (op)]
+#define OPERAND2_REGDATA(pvm, op) pvm->Gpr[OPERAND2_REGNUM (op)]
 
 //
 // Condition masks usually for byte 1 encodings of code
@@ -234,146 +227,113 @@ Abstract:
 #define OPCODE_MOVIN  0x38
 #define OPCODE_MOVREL 0x39
 
+/**
+  Execute an EBC image from an entry point or from a published protocol.
+
+  @param  VmPtr             A pointer to a VM context.
+
+  @retval EFI_UNSUPPORTED   At least one of the opcodes is not supported.
+  @retval EFI_SUCCESS       All of the instructions are executed successfully.
+
+**/
 EFI_STATUS
 EbcExecute (
   IN VM_CONTEXT *VmPtr
-  )
-;
+  );
 
-//
-// Math library routines
-//
-INT64
-DivS64x64 (
-  IN INT64      Value1,
-  IN INT64      Value2,
-  OUT INT64     *Remainder,
-  OUT UINT32    *Error
-  )
-;
 
-UINT64
-DivU64x64 (
-  IN UINT64   Value1,
-  IN UINT64   Value2,
-  OUT UINT64  *Remainder,
-  OUT UINT32  *Error
-  )
-;
 
-INT64
-MulS64x64 (
-  IN INT64  Value1,
-  IN INT64  Value2,
-  OUT INT64 *ResultHigh
-  )
-;
+/**
+  Returns the version of the EBC virtual machine.
 
-UINT64
-MulU64x64 (
-  IN UINT64   Value1,
-  IN UINT64   Value2,
-  OUT UINT64  *ResultHigh
-  )
-;
+  @return The 64-bit version of EBC virtual machine.
 
-INT64
-ARightShift64 (
-  IN INT64  Operand,
-  IN INT64  Count
-  )
-;
-
-UINT64
-LeftShiftU64 (
-  IN UINT64   Operand,
-  IN UINT64   Count
-  )
-;
-
-UINT64
-RightShiftU64 (
-  IN UINT64   Operand,
-  IN UINT64   Count
-  )
-;
-
+**/
 UINT64
 GetVmVersion (
   VOID
-  )
-;
+  );
 
+/**
+  Writes UINTN data to memory address.
+
+  This routine is called by the EBC data
+  movement instructions that write to memory. Since these writes
+  may be to the stack, which looks like (high address on top) this,
+
+  [EBC entry point arguments]
+  [VM stack]
+  [EBC stack]
+
+  we need to detect all attempts to write to the EBC entry point argument
+  stack area and adjust the address (which will initially point into the
+  VM stack) to point into the EBC entry point arguments.
+
+  @param  VmPtr             A pointer to a VM context.
+  @param  Addr              Address to write to.
+  @param  Data              Value to write to Addr.
+
+  @retval EFI_SUCCESS       The instruction is executed successfully.
+  @retval Other             Some error occurs when writing data to the address.
+
+**/
 EFI_STATUS
 VmWriteMemN (
   IN VM_CONTEXT   *VmPtr,
   IN UINTN        Addr,
   IN UINTN        Data
-  )
-;
+  );
 
+/**
+  Writes 64-bit data to memory address.
+
+  This routine is called by the EBC data
+  movement instructions that write to memory. Since these writes
+  may be to the stack, which looks like (high address on top) this,
+
+  [EBC entry point arguments]
+  [VM stack]
+  [EBC stack]
+
+  we need to detect all attempts to write to the EBC entry point argument
+  stack area and adjust the address (which will initially point into the
+  VM stack) to point into the EBC entry point arguments.
+
+  @param  VmPtr             A pointer to a VM context.
+  @param  Addr              Address to write to.
+  @param  Data              Value to write to Addr.
+
+  @retval EFI_SUCCESS       The instruction is executed successfully.
+  @retval Other             Some error occurs when writing data to the address.
+
+**/
 EFI_STATUS
 VmWriteMem64 (
-  IN VM_CONTEXT *VmPtr,
-  UINTN         Addr,
-  IN UINT64     Data
-  )
-;
-
-//
-// Define a protocol for an EBC VM test interface.
-//
-#define EFI_EBC_VM_TEST_PROTOCOL_GUID \
-  { \
-    0xAAEACCFDL, 0xF27B, 0x4C17, 0xB6, 0x10, 0x75, 0xCA, 0x1F, 0x2D, 0xFB, 0x52 \
-  }
-
-//
-// Define for forward reference.
-//
-EFI_FORWARD_DECLARATION (EFI_EBC_VM_TEST_PROTOCOL);
-
-typedef
-EFI_STATUS
-(*EBC_VM_TEST_EXECUTE) (
-  IN EFI_EBC_VM_TEST_PROTOCOL         * This,
-  IN VM_CONTEXT                       * VmPtr,
-  IN OUT UINTN                        *InstructionCount
+  IN VM_CONTEXT   *VmPtr,
+  IN UINTN        Addr,
+  IN UINT64       Data
   );
 
-typedef
-EFI_STATUS
-(*EBC_VM_TEST_ASM) (
-  IN EFI_EBC_VM_TEST_PROTOCOL         * This,
-  IN CHAR16                           *AsmText,
-  IN OUT INT8                         *Buffer,
-  IN OUT UINTN                        *BufferLen
-  );
+/**
+  Given a pointer to a new VM context, execute one or more instructions. This
+  function is only used for test purposes via the EBC VM test protocol.
 
-typedef
-EFI_STATUS
-(*EBC_VM_TEST_DASM) (
-  IN EFI_EBC_VM_TEST_PROTOCOL         * This,
-  IN OUT CHAR16                       *AsmText,
-  IN OUT INT8                         *Buffer,
-  IN OUT UINTN                        *Len
-  );
+  @param  This              A pointer to the EFI_EBC_VM_TEST_PROTOCOL structure.
+  @param  VmPtr             A pointer to a VM context.
+  @param  InstructionCount  A pointer to a UINTN value holding the number of
+                            instructions to execute. If it holds value of 0,
+                            then the instruction to be executed is 1.
 
-//
-// Prototype for the actual EBC test protocol interface
-//
-typedef struct _EFI_EBC_VM_TEST_PROTOCOL {
-  EBC_VM_TEST_EXECUTE Execute;
-  EBC_VM_TEST_ASM     Assemble;
-  EBC_VM_TEST_DASM    Disassemble;
-} EFI_EBC_VM_TEST_PROTOCOL;
+  @retval EFI_UNSUPPORTED   At least one of the opcodes is not supported.
+  @retval EFI_SUCCESS       All of the instructions are executed successfully.
 
+**/
 EFI_STATUS
+EFIAPI
 EbcExecuteInstructions (
   IN EFI_EBC_VM_TEST_PROTOCOL *This,
   IN VM_CONTEXT               *VmPtr,
   IN OUT UINTN                *InstructionCount
-  )
-;
+  );
 
 #endif // ifndef _EBC_EXECUTE_H_
