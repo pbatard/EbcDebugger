@@ -45,7 +45,7 @@ Returns:
   UINT8     Index;
   UINT8     Array[10];
 
-  for (Index = 0; Index < 40; Index++) {
+  for (Index = 0; Index < 10; Index++) {
     Array[Index] = Index;
   }
 
