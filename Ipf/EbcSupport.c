@@ -20,14 +20,7 @@ Abstract:
 
 --*/
 
-#include "Tiano.h"
-#include "EfiDriverLib.h"
-
-//
-// To support the EFI debug support protocol
-//
-#include EFI_PROTOCOL_DEFINITION (Ebc)
-#include EFI_PROTOCOL_DEFINITION (DebugSupport)
+#include <Uefi.h>
 
 #include "EbcInt.h"
 #include "EbcExecute.h"

@@ -77,7 +77,7 @@ Returns:
 --*/
 {
   if (mDebuggerPrivate.CallStackEntryCount > EFI_DEBUGGER_CALLSTACK_MAX) {
-    EFI_DEBUGGER_ASSERT (FALSE);
+    ASSERT (FALSE);
     mDebuggerPrivate.CallStackEntryCount = EFI_DEBUGGER_CALLSTACK_MAX;
   }
   //
@@ -115,7 +115,7 @@ Returns:
 --*/
 {
   if (mDebuggerPrivate.CallStackEntryCount > EFI_DEBUGGER_CALLSTACK_MAX) {
-    EFI_DEBUGGER_ASSERT (FALSE);
+    ASSERT (FALSE);
     mDebuggerPrivate.CallStackEntryCount = EFI_DEBUGGER_CALLSTACK_MAX;
   }
   //
@@ -162,14 +162,14 @@ Returns:
     //
     // If there is empty entry for callstack, add it
     //
-    EFI_DEBUGGER_ASSERT (mDebuggerPrivate.CallStackEntry[mDebuggerPrivate.CallStackEntryCount].Type == Type);
+    ASSERT (mDebuggerPrivate.CallStackEntry[mDebuggerPrivate.CallStackEntryCount].Type == Type);
     mDebuggerPrivate.CallStackEntry[mDebuggerPrivate.CallStackEntryCount].DestAddress = DestEntry;
     mDebuggerPrivate.CallStackEntryCount ++;
   } else {
     //
     // If there is no empty entry for callstack, throw the oldest one
     //
-    EFI_DEBUGGER_ASSERT (mDebuggerPrivate.CallStackEntry[EFI_DEBUGGER_TRACE_MAX].Type == Type);
+    ASSERT (mDebuggerPrivate.CallStackEntry[EFI_DEBUGGER_TRACE_MAX].Type == Type);
     for (Index = 0; Index < EFI_DEBUGGER_CALLSTACK_MAX; Index++) {
       mDebuggerPrivate.CallStackEntry[Index] = mDebuggerPrivate.CallStackEntry[Index + 1];
     }
@@ -213,7 +213,7 @@ Returns:
     // callstack, we do not know how many function already called.
     //
   } else {
-    EFI_DEBUGGER_ASSERT (FALSE);
+    ASSERT (FALSE);
   }
 
   return ;
@@ -241,7 +241,7 @@ Returns:
 --*/
 {
   if (mDebuggerPrivate.TraceEntryCount > EFI_DEBUGGER_TRACE_MAX) {
-    EFI_DEBUGGER_ASSERT (FALSE);
+    ASSERT (FALSE);
     mDebuggerPrivate.TraceEntryCount = EFI_DEBUGGER_TRACE_MAX;
   }
   //
@@ -284,14 +284,14 @@ Returns:
     //
     // If there is empty entry for trace, add it
     //
-    EFI_DEBUGGER_ASSERT (mDebuggerPrivate.TraceEntry[mDebuggerPrivate.TraceEntryCount].Type == Type);
+    ASSERT (mDebuggerPrivate.TraceEntry[mDebuggerPrivate.TraceEntryCount].Type == Type);
     mDebuggerPrivate.TraceEntry[mDebuggerPrivate.TraceEntryCount].DestAddress = DestEntry;
     mDebuggerPrivate.TraceEntryCount ++;
   } else {
     //
     // If there is no empty entry for trace, throw the oldest one
     //
-    EFI_DEBUGGER_ASSERT (mDebuggerPrivate.TraceEntry[EFI_DEBUGGER_TRACE_MAX].Type == Type);
+    ASSERT (mDebuggerPrivate.TraceEntry[EFI_DEBUGGER_TRACE_MAX].Type == Type);
     for (Index = 0; Index < EFI_DEBUGGER_TRACE_MAX; Index++) {
       mDebuggerPrivate.TraceEntry[Index] = mDebuggerPrivate.TraceEntry[Index + 1];
     }
@@ -417,17 +417,17 @@ Returns:
   // Init Symbol
   //
   Object = AllocateZeroPool (sizeof(EFI_DEBUGGER_SYMBOL_OBJECT) * EFI_DEBUGGER_SYMBOL_OBJECT_MAX);
-  EFI_DEBUGGER_ASSERT (Object != NULL);
+  ASSERT (Object != NULL);
   mDebuggerPrivate.DebuggerSymbolContext.Object = Object;
   mDebuggerPrivate.DebuggerSymbolContext.ObjectCount = 0;
   mDebuggerPrivate.DebuggerSymbolContext.MaxObjectCount = EFI_DEBUGGER_SYMBOL_OBJECT_MAX;
   for (Index = 0; Index < EFI_DEBUGGER_SYMBOL_OBJECT_MAX; Index++) {
     Entry = AllocateZeroPool (sizeof(EFI_DEBUGGER_SYMBOL_ENTRY) * EFI_DEBUGGER_SYMBOL_ENTRY_MAX);
-    EFI_DEBUGGER_ASSERT (Entry != NULL);
+    ASSERT (Entry != NULL);
     Object[Index].Entry = Entry;
     Object[Index].MaxEntryCount = EFI_DEBUGGER_SYMBOL_ENTRY_MAX;
     Object[Index].SourceBuffer = AllocateZeroPool (sizeof(VOID *) * (EFI_DEBUGGER_SYMBOL_ENTRY_MAX + 1));
-    EFI_DEBUGGER_ASSERT (Object[Index].SourceBuffer != NULL);
+    ASSERT (Object[Index].SourceBuffer != NULL);
   }
 
   //
@@ -436,33 +436,23 @@ Returns:
   Status = gBS->LocateProtocol (
                   &gEfiPciRootBridgeIoProtocolGuid,
                   NULL,
-                  &mDebuggerPrivate.PciRootBridgeIo
+                  (VOID**) &mDebuggerPrivate.PciRootBridgeIo
                   );
 
   //
   // locate DebugImageInfoTable
   //
-  Status = EfiLibGetSystemConfigurationTable (
+  Status = EfiGetSystemConfigurationTable (
              &gEfiDebugImageInfoTableGuid,
-             &mDebuggerPrivate.DebugImageInfoTableHeader
+             (VOID**) &mDebuggerPrivate.DebugImageInfoTableHeader
              );
-
-  //
-  // Register Debugger Configuration Protocol, for config in shell
-  //
-  Status = gBS->InstallProtocolInterface (
-                  &Handle,
-                  &gEfiDebuggerConfigurationProtocolGuid,
-                  EFI_NATIVE_INTERFACE,
-                  &mDebuggerPrivate.DebuggerConfiguration
-                  );
 
   //
   // Create break event
   //
   Status = gBS->CreateEvent (
-                  EFI_EVENT_TIMER | EFI_EVENT_NOTIFY_SIGNAL,
-                  EFI_TPL_CALLBACK,
+                  EVT_TIMER | EVT_NOTIFY_SIGNAL,
+                  TPL_CALLBACK,
                   EbcDebuggerBreakEventFunc,
                   NULL,
                   &mDebuggerPrivate.BreakEvent
@@ -691,9 +681,9 @@ Returns:
     //
     // Only break when the current TPL <= TPL_APPLICATION
     //
-    CurrentTpl = gBS->RaiseTPL (EFI_TPL_HIGH_LEVEL);
+    CurrentTpl = gBS->RaiseTPL (TPL_HIGH_LEVEL);
     gBS->RestoreTPL (CurrentTpl);
-    if (CurrentTpl <= EFI_TPL_APPLICATION) {
+    if (CurrentTpl <= TPL_APPLICATION) {
       EbcDebugSignalException (
         EXCEPT_EBC_BREAKPOINT,
         EXCEPTION_FLAG_NONE,

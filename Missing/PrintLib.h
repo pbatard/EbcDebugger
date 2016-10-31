@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Abstract:
 
-Minimal set of EfiPrintLib declarations required to build the application
+Minimal set of PrintLib declarations required to build the application
 
 --*/
 
@@ -26,6 +26,14 @@ StrnCatS(
 	IN     UINTN        DestMax,
 	IN     CONST CHAR16 *Src,
 	IN     UINTN        Length
+);
+
+VOID
+EFIAPI
+StrCpyS(
+	OUT CHAR16       *Dst,
+	IN  UINTN        DstMax,
+	IN  CONST CHAR16 *Src
 );
 
 VOID
@@ -44,6 +52,13 @@ AsciiStrnCpyS(
 	IN  UINTN    DstMax,
 	IN  CHAR8    *Src,
 	IN  UINTN    Length
+);
+
+INTN
+EFIAPI
+AsciiStriCmp(
+	IN CHAR8    *String,
+	IN CHAR8    *String2
 );
 
 #endif

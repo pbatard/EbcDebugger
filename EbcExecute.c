@@ -11,13 +11,11 @@ THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
 WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 **/
-#include "Tiano.h"
 
 #include "EbcInt.h"
 #include "EbcExecute.h"
 #include "EbcDebuggerHook.h"
 
-#include "Protocol/EbcSimpleDebugger.h"
 
 //
 // Define some useful data size constants to allow switch statements based on

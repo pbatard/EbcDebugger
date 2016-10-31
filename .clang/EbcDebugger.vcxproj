@@ -381,7 +381,6 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="..\Missing\String.c" />
-    <ClCompile Include="..\Protocol\DebuggerConfiguration\DebuggerConfiguration.c" />
     <ClCompile Include="..\x64\EbcSupport.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -411,12 +410,8 @@
     <ClInclude Include="..\EbcDebugger\EdbHook.h" />
     <ClInclude Include="..\EbcDebugger\EdbSupport.h" />
     <ClInclude Include="..\EbcDebugger\EdbSymbol.h" />
-    <ClInclude Include="..\Missing\EfiImage.h" />
-    <ClInclude Include="..\Missing\EfiPeOptionalHeader.h" />
-    <ClInclude Include="..\Missing\EfiPrintLib.h" />
-    <ClInclude Include="..\Missing\includes.h" />
-    <ClInclude Include="..\Missing\Tiano.h" />
-    <ClInclude Include="..\Protocol\DebuggerConfiguration\DebuggerConfiguration.h" />
+    <ClInclude Include="..\Missing\PrintLib.h" />
+    <ClInclude Include="..\Missing\Uefi.h" />
     <ClInclude Include="..\Protocol\EbcSimpleDebugger.h" />
     <ClInclude Include="..\Protocol\EbcVmTest.h" />
   </ItemGroup>

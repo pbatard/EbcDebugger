@@ -19,7 +19,7 @@ Abstract:
 
 --*/
 
-#include "Tiano.h"
+#include <Uefi.h>
 
 UINT64
 LeftShiftU64 (

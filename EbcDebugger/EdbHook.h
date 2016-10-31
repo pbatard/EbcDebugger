@@ -21,7 +21,7 @@ Abstract:
 #ifndef _EFI_EDB_HOOKER_H_
 #define _EFI_EDB_HOOKER_H_
 
-#include "Tiano.h"
+#include <Uefi.h>
 #include "EbcDebuggerHook.h"
 
 #endif

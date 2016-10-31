@@ -141,7 +141,7 @@ Returns:
   
 --*/
 {
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_BREAK);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_BREAK);
 
   if (*(UINT8 *)(UINTN)(InstructionAddress + 1) > 6) {
     return 0;
@@ -194,7 +194,7 @@ Returns:
   UINT32  Data32;
   UINT64  Data64;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_JMP);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_JMP);
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);
   Operands   = GET_OPERANDS (InstructionAddress);
@@ -274,7 +274,7 @@ Returns:
 {
   UINT8   Modifiers;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_JMP8);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_JMP8);
   Modifiers  = GET_MODIFIERS (InstructionAddress);
 
   //
@@ -333,7 +333,7 @@ Returns:
   UINTN   Result;
   EFI_PHYSICAL_ADDRESS      SavedInstructionAddress;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_CALL);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_CALL);
   SavedInstructionAddress = InstructionAddress;
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);
@@ -434,7 +434,7 @@ Returns:
   
 --*/
 {
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_RET);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_RET);
 
   if (*(UINT8 *)(UINTN)(InstructionAddress + 1) != 0) {
     return 0;
@@ -484,7 +484,7 @@ Returns:
   UINT16 Data16;
   UINTN  Size;
 
-  EFI_DEBUGGER_ASSERT (
+  ASSERT (
     (GET_OPCODE(InstructionAddress) == OPCODE_CMPEQ)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_CMPLTE)  ||
     (GET_OPCODE(InstructionAddress) == OPCODE_CMPGTE)  ||
@@ -582,7 +582,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (
+  ASSERT (
     (GET_OPCODE(InstructionAddress) == OPCODE_NOT)    ||
     (GET_OPCODE(InstructionAddress) == OPCODE_MULU)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_DIVU)   ||
@@ -706,7 +706,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (
+  ASSERT (
     (GET_OPCODE(InstructionAddress) == OPCODE_NEG)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_ADD)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_SUB)   ||
@@ -812,7 +812,7 @@ Returns:
   UINT32  Data32;
   UINT64  Data64;
 
-  EFI_DEBUGGER_ASSERT (
+  ASSERT (
     (GET_OPCODE(InstructionAddress) == OPCODE_MOVBW)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_MOVWW)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_MOVDW)   ||
@@ -968,7 +968,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVSNW);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVSNW);
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);
   Operands   = GET_OPERANDS (InstructionAddress);
@@ -1044,7 +1044,7 @@ Returns:
   UINTN  Size;
   UINT32 Data32;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVSND);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVSND);
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);
   Operands   = GET_OPERANDS (InstructionAddress);
@@ -1117,7 +1117,7 @@ Returns:
 {
   UINT8  Operands;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_LOADSP);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_LOADSP);
 
   Operands   = GET_OPERANDS (InstructionAddress);
 
@@ -1165,7 +1165,7 @@ Returns:
 {
   UINT8  Operands;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_STORESP);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_STORESP);
 
   Operands   = GET_OPERANDS (InstructionAddress);
 
@@ -1216,7 +1216,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_PUSH);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_PUSH);
 
   Operands   = GET_OPERANDS (InstructionAddress);
   Modifiers  = GET_MODIFIERS (InstructionAddress);
@@ -1286,7 +1286,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_POP);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_POP);
 
   Operands   = GET_OPERANDS (InstructionAddress);
   Modifiers  = GET_MODIFIERS (InstructionAddress);
@@ -1358,7 +1358,7 @@ Returns:
   UINT32 Data32;
   UINTN  Size;
 
-  EFI_DEBUGGER_ASSERT (
+  ASSERT (
     (GET_OPCODE(InstructionAddress) == OPCODE_CMPIEQ)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_CMPILTE)  ||
     (GET_OPCODE(InstructionAddress) == OPCODE_CMPIGTE)  ||
@@ -1473,7 +1473,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_PUSHN);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_PUSHN);
 
   Operands   = GET_OPERANDS (InstructionAddress);
   Modifiers  = GET_MODIFIERS (InstructionAddress);
@@ -1538,7 +1538,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_POPN);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_POPN);
 
   Operands   = GET_OPERANDS (InstructionAddress);
   Modifiers  = GET_MODIFIERS (InstructionAddress);
@@ -1605,7 +1605,7 @@ Returns:
   UINT32 Data32;
   UINT64 Data64;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVI);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVI);
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);
   Operands   = GET_OPERANDS (InstructionAddress);
@@ -1719,7 +1719,7 @@ Returns:
   UINT32 Data32;
   UINT64 Data64;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVIN);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVIN);
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);
   Operands   = GET_OPERANDS (InstructionAddress);
@@ -1821,7 +1821,7 @@ Returns:
   UINTN   Result;
   EFI_PHYSICAL_ADDRESS      SavedInstructionAddress;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVREL);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVREL);
   SavedInstructionAddress = InstructionAddress;
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);

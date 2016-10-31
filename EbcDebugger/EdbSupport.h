@@ -21,7 +21,7 @@ Abstract:
 #ifndef _EFI_EDB_SUPPORT_H_
 #define _EFI_EDB_SUPPORT_H_
 
-#include "Tiano.h"
+#include <Uefi.h>
 
 #define EFI_DEBUG_PROMPT_STRING      L"EDB > "
 #define EFI_DEBUG_PROMPT_COLUMN      5
@@ -41,10 +41,12 @@ LXtoi (
   CHAR16  *str
   );
 
+#ifndef _GNU_EFI
 UINTN
-_Atoi (
+Atoi (
   CHAR16  *str
   );
+#endif
 
 UINTN
 AsciiXtoi (
@@ -57,28 +59,23 @@ AsciiAtoi (
   );
 
 INTN
-AsciiStriCmp (
-  IN CHAR8   *String,
-  IN CHAR8   *String2
-  );
-
-INTN
 StrCmpUnicodeAndAscii (
   IN CHAR16   *String,
   IN CHAR8    *String2
   );
 
+#ifndef _GNU_EFI
+INTN
+StriCmp (
+  IN CHAR16   *String,
+  IN CHAR16   *String2
+  );
+#endif
+
 INTN
 StriCmpUnicodeAndAscii (
   IN CHAR16   *String,
   IN CHAR8    *String2
-  );
-
-INTN
-AsciiStrnCmp (
-  IN      CHAR8               *FirstString,
-  IN      CHAR8               *SecondString,
-  IN      UINTN               Length
   );
 
 BOOLEAN
@@ -87,10 +84,12 @@ StrEndWith (
   IN CHAR16                       *SubStr
   );
 
+#ifndef _GNU_EFI
 CHAR16 *
-_StrDuplicate (
+StrDuplicate (
   IN CHAR16   *Src
   );
+#endif
 
 CHAR16 *
 StrGetNewTokenLine (

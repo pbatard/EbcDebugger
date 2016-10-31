@@ -227,7 +227,7 @@ Returns:
     Status = gBS->HandleProtocol (
                     HandleBuffer[Index],
                     &gEfiSimpleFileSystemProtocolGuid,
-                    &Vol
+                    (VOID**) &Vol
                     );
     if (EFI_ERROR(Status)) {
       continue;
@@ -309,7 +309,7 @@ Returns:
     Status = gBS->LocateProtocol (
                     &gEfiSimpleFileSystemProtocolGuid,
                     NULL,
-                    &DebuggerPrivate->Vol
+                    (VOID**) &DebuggerPrivate->Vol
                     );
     if (EFI_ERROR(Status)) {
       return NULL;

@@ -21,8 +21,7 @@ Abstract:
 #ifndef _EFI_EDB_H_
 #define _EFI_EDB_H_
 
-#include "Tiano.h"
-#include "EfiPrintLib.h"
+#include <Uefi.h>
 #include "EdbCommon.h"
 
 #include "EbcInt.h"
@@ -36,24 +35,6 @@ Abstract:
 #define EFI_DEBUG_CONTINUE  3
 
 //
-// TBD
-//
-#define EFI_DEBUGGER_ASSERT(assertion)
-// #define EFI_DEBUGGER_ASSERT(assertion) if(!(assertion))  \
-//                                         EfiDebugAssert (__FILE__, __LINE__, #assertion)
-
-//
-// ASSERT support
-//
-VOID
-EfiDebugAssert (
-  IN CHAR8    *FileName,
-  IN INTN     LineNumber,
-  IN CHAR8    *Description
-  );
-
-
-//
 // Function
 //
 EFI_STATUS
@@ -63,9 +44,10 @@ EfiDebuggerEntrypoint (
   );
 
 VOID
+EFIAPI
 EdbExceptionHandler (
-  IN EFI_EXCEPTION_TYPE   ExceptionType,
-  IN EFI_SYSTEM_CONTEXT   SystemContext
+  IN     EFI_EXCEPTION_TYPE   ExceptionType,
+  IN OUT EFI_SYSTEM_CONTEXT   SystemContext
   );
 
 extern EFI_DEBUGGER_PRIVATE_DATA mDebuggerPrivate;

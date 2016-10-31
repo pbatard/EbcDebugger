@@ -1,50 +1,39 @@
-#/*++
+## @file
+#  EFI Byte Code (EBC) Debugger.
 #
-# Copyright (c)  2007, Intel Corporation                                                         
-# All rights reserved. This program and the accompanying materials                          
-# are licensed and made available under the terms and conditions of the BSD License         
-# which accompanies this distribution.  The full text of the license may be found at        
-# http://opensource.org/licenses/bsd-license.php                                            
-#                                                                                           
-# THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-# WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
-# 
-#  Module Name:
+#  Copyright (c) 2007 - 2016, Intel Corporation. All rights reserved.<BR>
 #
-#    EbcDebugger.inf
+#  This program and the accompanying materials
+#  are licensed and made available under the terms and conditions of the BSD License
+#  which accompanies this distribution. The full text of the license may be found at
+#  http://opensource.org/licenses/bsd-license.php
+#  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #
-#  Abstract:
 #
-#    Component description file for EBC interpreter.
+##
+
+[Defines]
+  INF_VERSION                    = 0x00010005
+  BASE_NAME                      = EbcDebugger
+  MODULE_UNI_FILE                = EbcDebugger.uni
+  FILE_GUID                      = 8296AF37-D183-4416-B3B6-19D2A80AD4A8
+  MODULE_TYPE                    = DXE_DRIVER
+  VERSION_STRING                 = 2.0
+  ENTRY_POINT                    = InitializeEbcDriver
+
 #
---*/
+# The following information is for reference only and not required by the build tools.
+#
+#  VALID_ARCHITECTURES           = IA32 X64 IPF AARCH64
+#
 
-[defines]
-BASE_NAME            = EbcDebugger
-FILE_GUID            = 8296AF37-D183-4416-B3B6-19D2A80AD4A8
-COMPONENT_TYPE       = BS_DRIVER
-
-[sources.ia32]
-  ..\Ia32\EbcLowLevel.asm
-  ..\Ia32\Ia32Math.asm
-  ..\Ia32\EbcSupport.c
-
-[sources.ipf]
-  ..\Ipf\EbcLowLevel.s
-  ..\Ipf\IpfMath.c
-  ..\Ipf\IpfMul.s
-  ..\Ipf\EbcSupport.c
-
-[sources.x64]
-  ..\x64\EbcLowLevel.asm
-  ..\x64\x64Math.c
-  ..\x64\EbcSupport.c
-
-[sources.common]
-  ..\EbcInt.c
-  ..\EbcInt.h
-  ..\EbcExecute.c
-  ..\EbcExecute.h
+[Sources]
+  ../EbcDebuggerHook.h
+  ../EbcInt.c
+  ../EbcInt.h
+  ../EbcExecute.c
+  ../EbcExecute.h
   Edb.c
   Edb.h
   EdbCommon.h
@@ -76,27 +65,60 @@ COMPONENT_TYPE       = BS_DRIVER
   EdbSupportString.c
   EdbSupportFile.c
 
-[includes.common]
-  $(EDK_SOURCE)\Foundation\Efi
-  $(EDK_SOURCE)\Foundation
-  $(EDK_SOURCE)\Foundation\Framework
-  .
-  ..
-  $(EDK_SOURCE)\Foundation\Core\Dxe
-  $(EDK_SOURCE)\Foundation\Include
-  $(EDK_SOURCE)\Foundation\Efi\Include
-  $(EDK_SOURCE)\Foundation\Framework\Include
-  $(EDK_SOURCE)\Foundation\Include\IndustryStandard
-  $(EDK_SOURCE)\Foundation\Library\Dxe\Include
+[Sources.Ia32]
+  ../Ia32/EbcSupport.c
+  ../Ia32/EbcLowLevel.nasm
+  ../Ia32/EbcLowLevel.S
+  ../Ia32/EbcLowLevel.asm
 
-[libraries.common]
-  EfiProtocolLib
-  EfiDriverLib
+[Sources.X64]
+  ../X64/EbcSupport.c
+  ../X64/EbcLowLevel.nasm
+  ../X64/EbcLowLevel.S
+  ../X64/EbcLowLevel.asm
+
+[Sources.IPF]
+  ../Ipf/EbcSupport.h
+  ../Ipf/EbcSupport.c
+  ../Ipf/EbcLowLevel.s
+
+[Sources.AARCH64]
+  ../AArch64/EbcSupport.c
+  ../AArch64/EbcLowLevel.S
+
+[Packages]
+  MdePkg/MdePkg.dec
+  MdeModulePkg/MdeModulePkg.dec
+
+[LibraryClasses]
+  UefiDriverEntryPoint
+  UefiLib
+  UefiBootServicesTableLib
+  MemoryAllocationLib
+  BaseMemoryLib
+  DebugLib
+  BaseLib
   PrintLib
-  DebuggerConfigurationProtocolLib
 
-[nmake.common]
-  IMAGE_ENTRY_POINT=InitializeEbcDriver
-  DPX_SOURCE=..\Ebc.dxs
-  C_FLAGS = $(C_FLAGS) /D EFI_EBC_DEBUGGER_ENABLED
+[Protocols]
+  gEfiDebugSupportProtocolGuid                  ## PRODUCES
+  gEfiEbcProtocolGuid                           ## PRODUCES
+  gEfiEbcVmTestProtocolGuid                     ## SOMETIMES_PRODUCES
+  gEfiEbcSimpleDebuggerProtocolGuid             ## SOMETIMES_CONSUMES
+  gEfiPciRootBridgeIoProtocolGuid               ## SOMETIMES_CONSUMES
+  gEfiSimpleFileSystemProtocolGuid              ## SOMETIMES_CONSUMES
 
+[Guids]
+  gEfiFileInfoGuid                              ## SOMETIMES_CONSUMES ## GUID
+  gEfiFileSystemInfoGuid                        ## SOMETIMES_CONSUMES ## GUID
+  gEfiFileSystemVolumeLabelInfoIdGuid           ## SOMETIMES_CONSUMES ## GUID
+  gEfiDebugImageInfoTableGuid                   ## SOMETIMES_CONSUMES ## GUID
+
+[Depex]
+  TRUE
+
+[BuildOptions]
+  *_*_*_CC_FLAGS = -D EFI_EBC_DEBUGGER_ENABLED
+
+[UserExtensions.TianoCore."ExtraFiles"]
+  EbcDebuggerExtra.uni

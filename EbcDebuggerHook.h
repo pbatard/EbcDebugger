@@ -122,4 +122,3 @@ EbcDebuggerHookJMP8End (
   );
 
 #endif
-

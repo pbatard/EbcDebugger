@@ -21,7 +21,7 @@ Abstract:
 #ifndef _EFI_EDB_DISASM_H_
 #define _EFI_EDB_DISASM_H_
 
-#include "Tiano.h"
+#include <Uefi.h>
 
 //
 // Definition for instruction OPCODE, MODIFIER, and OPERAND

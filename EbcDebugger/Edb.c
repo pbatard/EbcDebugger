@@ -17,7 +17,7 @@ Abstract:
 
 --*/
 
-#include "Tiano.h"
+#include <Uefi.h>
 #include "Edb.h"
 
 EFI_DEBUGGER_PRIVATE_DATA mDebuggerPrivate = {
@@ -27,21 +27,17 @@ EFI_DEBUGGER_PRIVATE_DATA mDebuggerPrivate = {
     EBC_DEBUGGER_MINOR_VERSION,              // EfiDebuggerRevision
   (VM_MAJOR_VERSION << 16) |
     VM_MINOR_VERSION,                        // EbcVmRevision
-  {
-     EFI_DEBUGGER_CONFIGURATION_VERSION,
-     &mDebuggerPrivate,
-  },                                         // DebuggerConfiguration
   NULL,                                      // DebugImageInfoTableHeader
   NULL,                                      // Vol
   NULL,                                      // PciRootBridgeIo
   mDebuggerCommandSet,                       // DebuggerCommandSet
   {0},                                       // DebuggerSymbolContext
   0,                                         // DebuggerBreakpointCount
-  {0},                                       // DebuggerBreakpointContext
+  {{0}},                                     // DebuggerBreakpointContext
   0,                                         // CallStackEntryCount
-  {0},                                       // CallStackEntry
+  {{0}},                                     // CallStackEntry
   0,                                         // TraceEntryCount
-  {0},                                       // TraceEntry
+  {{0}},                                     // TraceEntry
   {0},                                       // StepContext
   {0},                                       // GoTilContext
   0,                                         // InstructionScope
@@ -533,9 +529,10 @@ Returns:
 }
 
 VOID
+EFIAPI
 EdbExceptionHandler (
-  IN EFI_EXCEPTION_TYPE   ExceptionType,
-  IN EFI_SYSTEM_CONTEXT   SystemContext
+  IN     EFI_EXCEPTION_TYPE   ExceptionType,
+  IN OUT EFI_SYSTEM_CONTEXT   SystemContext
   )
 /*++
 
@@ -623,8 +620,8 @@ Returns:
     //
     // Check PageBreak;
     //
-    if (CommandArg != NULL) {
-      if (StriCmp (CommandArg, L"-b") == 0) {
+    if ((CommandArg != NULL) && (StrLen(CommandArg) == 2) && (CommandArg[0] == L'-')) {
+      if ((CommandArg[1] == L'b') || (CommandArg[1] == L'B')) {
         CommandArg = StrGetNextTokenLine (L" ");
         mDebuggerPrivate.EnablePageBreak = TRUE;
       }
@@ -647,7 +644,7 @@ Returns:
     } else if (DebugStatus == EFI_DEBUG_CONTINUE) {
       continue;
     } else {
-      EFI_DEBUGGER_ASSERT (FALSE);
+      ASSERT (FALSE);
     }
   }
 

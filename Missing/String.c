@@ -15,11 +15,32 @@ String.c
 
 Abstract:
 
-Unicode string primitives
+String primitives
 
 --*/
 
-#include "Tiano.h"
+#include <Uefi.h>
+
+VOID
+EFIAPI
+StrCpyS(
+	OUT CHAR16       *Dst,
+	IN  UINTN        DstMax,
+	IN  CONST CHAR16 *Src
+)
+{
+	UINTN Index;
+	UINTN SrcLen;
+
+	SrcLen = StrLen(Src);
+
+	Index = 0;
+	while (Index < SrcLen) {
+		Dst[Index] = Src[Index];
+		Index++;
+	}
+	Dst[Index] = 0;
+}
 
 VOID
 EFIAPI
@@ -29,15 +50,6 @@ StrnCpyS(
 	IN  CONST CHAR16 *Src,
 	IN  UINTN        Length
 )
-/*++
-Routine Description:
-Copy a string from source to destination
-Arguments:
-Dst              Destination string
-Src              Source string
-Length           Length of destination string
-Returns:
---*/
 {
 	UINTN Index;
 	UINTN SrcLen;
@@ -62,15 +74,6 @@ StrnCatS(
 	IN     CONST CHAR16 *Src,
 	IN     UINTN        Length
 )
-/*++
-Routine Description:
-Concatinate Source on the end of Destination
-Arguments:
-Dst              Destination string
-Src              Source string
-Length           Length of destination string
-Returns:
---*/
 {
 	StrnCpyS(Dest + StrLen(Dest), DestMax, Src, Length);
 }
@@ -83,15 +86,6 @@ AsciiStrnCpyS(
 	IN  CHAR8    *Src,
 	IN  UINTN    Length
 )
-/*++
-Routine Description:
-Copy the Ascii string from source to destination
-Arguments:
-Dst              Destination string
-Src              Source string
-Length           Length of destination string
-Returns:
---*/
 {
 	UINTN Index;
 	UINTN SrcLen;
@@ -106,6 +100,24 @@ Returns:
 	for (Index = SrcLen; Index < Length; Index++) {
 		Dst[Index] = 0;
 	}
+}
+
+extern CHAR8 AsciiToUpper(CHAR8 Chr);
+
+INTN
+EFIAPI
+AsciiStriCmp(
+	IN CHAR8    *String,
+	IN CHAR8    *String2
+)
+{
+	while ((*String != L'\0') &&
+		(AsciiToUpper(*String) == (CHAR16)AsciiToUpper(*String2))) {
+		String++;
+		String2++;
+	}
+
+	return AsciiToUpper(*String) - (CHAR16)AsciiToUpper(*String2);
 }
 
 #include <Protocol/EbcVmTest.h>

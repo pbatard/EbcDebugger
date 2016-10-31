@@ -1454,7 +1454,7 @@ Returns:
   case 7:
     return SystemContext.SystemContextEbc->R7;
   default:
-    EFI_DEBUGGER_ASSERT (FALSE);
+    ASSERT (FALSE);
     break;
   }
   return 0;

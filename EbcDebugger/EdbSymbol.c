@@ -191,8 +191,8 @@ Returns:
   
 --*/
 {
-  UINT8                      *LineBuffer;
-  UINT8                      *FieldBuffer;
+  CHAR8                      *LineBuffer;
+  CHAR8                      *FieldBuffer;
   EFI_DEBUGGER_SYMBOL_ENTRY  *Entry;
   EDB_EBC_MAP_PARSE_STATE    MapParseState;
   EDB_EBC_SYMBOL_PARSE_STATE SymbolParseState;
@@ -309,7 +309,7 @@ Returns:
           case EdbEbcMapParseStateStaticFunctionSymbol:
             break;
           default:
-            EFI_DEBUGGER_ASSERT (FALSE);
+            ASSERT (FALSE);
             break;
           }
           Name = FieldBuffer;
@@ -338,7 +338,7 @@ Returns:
             Type = EfiDebuggerSymbolStaticFunction;
             break;
           default:
-            EFI_DEBUGGER_ASSERT (FALSE);
+            ASSERT (FALSE);
             break;
           }
           break;
@@ -361,7 +361,7 @@ Returns:
             //
             break;
           default:
-            EFI_DEBUGGER_ASSERT (FALSE);
+            ASSERT (FALSE);
             break;
           }
           break;
@@ -369,7 +369,7 @@ Returns:
         case EfiDebuggerSymbolStaticFunction:
           break;
         default:
-          EFI_DEBUGGER_ASSERT (FALSE);
+          ASSERT (FALSE);
           break;
         }
         //
@@ -379,7 +379,7 @@ Returns:
         SymbolParseState = EdbEbcSymbolParseStateUninitialized;
         break;
       default:
-        EFI_DEBUGGER_ASSERT (FALSE);
+        ASSERT (FALSE);
         break;
       }
 
@@ -819,7 +819,7 @@ Returns:
   CHAR8                           *PdbPath;
   UINT32                          DirCount;
   EFI_IMAGE_DOS_HEADER            *DosHdr;
-  EFI_IMAGE_NT_HEADERS            *NtHdr;
+  EFI_IMAGE_OPTIONAL_HEADER_UNION *NtHdr;
   EFI_IMAGE_OPTIONAL_HEADER32     *OptionalHdr32;
   EFI_IMAGE_OPTIONAL_HEADER64     *OptionalHdr64;
   EFI_IMAGE_DATA_DIRECTORY        *DirectoryEntry;
@@ -839,11 +839,11 @@ Returns:
   if (DosHdr->e_magic != EFI_IMAGE_DOS_SIGNATURE) {
     return NULL;
   }
-  NtHdr           = (EFI_IMAGE_NT_HEADERS *) ((UINT8 *) DosHdr + DosHdr->e_lfanew);
+  NtHdr           = (EFI_IMAGE_OPTIONAL_HEADER_UNION *) ((UINT8 *) DosHdr + DosHdr->e_lfanew);
   //
   // Check Machine, filter for EBC
   //
-  if (NtHdr->FileHeader.Machine != EFI_IMAGE_MACHINE_EBC) {
+  if (NtHdr->Pe32.FileHeader.Machine != EFI_IMAGE_MACHINE_EBC) {
     //
     // If not EBC, return NULL
     //
@@ -854,11 +854,11 @@ Returns:
   // Get DirectoryEntry
   // EBC spec says PE32+, but implementation uses PE32. So check dynamically here.
   //
-  if (NtHdr->OptionalHeader.Magic == EFI_IMAGE_NT_OPTIONAL_HDR32_MAGIC) {
-    OptionalHdr32   = (VOID *) &NtHdr->OptionalHeader;
+  if (NtHdr->Pe32.OptionalHeader.Magic == EFI_IMAGE_NT_OPTIONAL_HDR32_MAGIC) {
+    OptionalHdr32   = (VOID *) &NtHdr->Pe32.OptionalHeader;
     DirectoryEntry  = (EFI_IMAGE_DATA_DIRECTORY *) &(OptionalHdr32->DataDirectory[EFI_IMAGE_DIRECTORY_ENTRY_DEBUG]);
-  } else if (NtHdr->OptionalHeader.Magic == EFI_IMAGE_NT_OPTIONAL_HDR64_MAGIC) {
-    OptionalHdr64   = (VOID *) &NtHdr->OptionalHeader;
+  } else if (NtHdr->Pe32Plus.OptionalHeader.Magic == EFI_IMAGE_NT_OPTIONAL_HDR64_MAGIC) {
+    OptionalHdr64   = (VOID *) &NtHdr->Pe32Plus.OptionalHeader;
     DirectoryEntry  = (EFI_IMAGE_DATA_DIRECTORY *) &(OptionalHdr64->DataDirectory[EFI_IMAGE_DIRECTORY_ENTRY_DEBUG]);
   } else {
     return NULL;
@@ -1070,9 +1070,9 @@ Returns:
   // Try again to get DebugImageInfoTable
   //
   if (mDebuggerPrivate.DebugImageInfoTableHeader == NULL) {
-    Status = EfiLibGetSystemConfigurationTable (
+    Status = EfiGetSystemConfigurationTable (
                &gEfiDebugImageInfoTableGuid,
-               &mDebuggerPrivate.DebugImageInfoTableHeader
+               (VOID **) &mDebuggerPrivate.DebugImageInfoTableHeader
                );
     if (EFI_ERROR (Status)) {
       EDBPrint (L"DebugImageInfoTable not found!\n");
@@ -1527,8 +1527,8 @@ Returns:
   
 --*/
 {
-  UINT8                      *LineBuffer;
-  UINT8                      *FieldBuffer;
+  CHAR8                      *LineBuffer;
+  CHAR8                      *FieldBuffer;
   VOID                       *BufferStart;
   VOID                       *BufferEnd;
   UINTN                      Offset;
@@ -2137,8 +2137,8 @@ Returns:
 --*/
 {
   UINTN  LineNumber;
-  UINT8  *LineBuffer;
-  UINT8  *FieldBuffer;
+  CHAR8  *LineBuffer;
+  CHAR8  *FieldBuffer;
 
   LineNumber = (UINTN)-1;
   LineBuffer = Line;
@@ -2237,7 +2237,7 @@ Returns:
   
 --*/
 {
-  UINT8  *LineBuffer;
+  CHAR8  *LineBuffer;
   UINTN  LineNumber;
   UINTN  Offset;
   UINTN  CandidateLineNumber;
@@ -2354,8 +2354,8 @@ Returns:
   
 --*/
 {
-  UINT8  *LineBuffer;
-  UINT8  *FieldBuffer;
+  CHAR8  *LineBuffer;
+  CHAR8  *FieldBuffer;
   VOID   *FuncStart;
   UINTN  Number;
 
@@ -2497,7 +2497,7 @@ Returns:
   //
   // Get Func String
   //
-  FuncStart = EdbGetSourceStrFromCode (RetEntry, FuncOffset, &FuncEnd);
+  FuncStart = EdbGetSourceStrFromCode (RetEntry, FuncOffset, (VOID**) &FuncEnd);
   if (FuncStart == NULL) {
     return 0 ;
   }

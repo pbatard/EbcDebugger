@@ -22,7 +22,7 @@ Abstract:
 
 VOID
 SetCursorPosition (
-  IN EFI_SIMPLE_TEXT_OUT_PROTOCOL     *ConOut,
+  IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL  *ConOut,
   IN  UINTN                           Column,
   IN  INTN                            Row,
   IN  UINTN                           LineLength,
@@ -63,7 +63,7 @@ Returns:
     //
     // Create a timer event
     //
-    Status = gBS->CreateEvent (EFI_EVENT_TIMER, 0, NULL, NULL, &TimerEvent);
+    Status = gBS->CreateEvent (EVT_TIMER, 0, NULL, NULL, &TimerEvent);
     if (!EFI_ERROR (Status)) {
       //
       // Set the timer event
@@ -94,8 +94,8 @@ Returns:
     // No timeout... just wait on the event
     //
     Status = gBS->WaitForEvent (1, &Event, &Index);
-    EFI_DEBUGGER_ASSERT (!EFI_ERROR (Status));
-    EFI_DEBUGGER_ASSERT (Index == 0);
+    ASSERT (!EFI_ERROR (Status));
+    ASSERT (Index == 0);
   }
 
   return Status;
@@ -121,8 +121,8 @@ Returns:
 
 --*/
 {
-  EFI_DEBUGGER_ASSERT (Column != NULL);
-  EFI_DEBUGGER_ASSERT (Row != NULL);
+  ASSERT (Column != NULL);
+  ASSERT (Row != NULL);
   //
   // If current column is 0, move to the last column of the previous line,
   // otherwise, just decrement column.
@@ -163,8 +163,8 @@ Returns:
 
 --*/
 {
-  EFI_DEBUGGER_ASSERT (Column != NULL);
-  EFI_DEBUGGER_ASSERT (Row != NULL);
+  ASSERT (Column != NULL);
+  ASSERT (Row != NULL);
   //
   // If current column is at line end, move to the first column of the nest
   // line, otherwise, just increment column.
@@ -188,11 +188,11 @@ Input (
   IN UINTN     StrLength
   )
 {
-  EFI_SIMPLE_TEXT_OUT_PROTOCOL     *ConOut;
-  EFI_SIMPLE_TEXT_IN_PROTOCOL      *ConIn;
+  EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL     *ConOut;
+  EFI_SIMPLE_TEXT_INPUT_PROTOCOL      *ConIn;
   BOOLEAN       Done;
   UINTN         Column;
-  INTN          Row;
+  UINTN         Row;
   UINTN         StartColumn;
   UINTN         Update;
   UINTN         Delete;
@@ -214,9 +214,9 @@ Input (
   ConOut = gST->ConOut;
   ConIn = gST->ConIn;
  
-  EFI_DEBUGGER_ASSERT (ConOut != NULL);
-  EFI_DEBUGGER_ASSERT (ConIn != NULL);
-  EFI_DEBUGGER_ASSERT (InStr != NULL);
+  ASSERT (ConOut != NULL);
+  ASSERT (ConIn != NULL);
+  ASSERT (InStr != NULL);
 
   if (Prompt) {
     ConOut->OutputString (ConOut, Prompt);
@@ -530,7 +530,7 @@ Input (
 
 VOID
 SetCursorPosition (
-  IN EFI_SIMPLE_TEXT_OUT_PROTOCOL     *ConOut,
+  IN  EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *ConOut,
   IN  UINTN                           Column,
   IN  INTN                            Row,
   IN  UINTN                           LineLength,
@@ -542,8 +542,8 @@ SetCursorPosition (
 {
   CHAR16  Backup;
 
-  EFI_DEBUGGER_ASSERT (ConOut != NULL);
-  EFI_DEBUGGER_ASSERT (Str != NULL);
+  ASSERT (ConOut != NULL);
+  ASSERT (Str != NULL);
 
   Backup = 0;
   if (Row >= 0) {
@@ -643,7 +643,7 @@ EDBPrint (
   CHAR16  Buffer[EFI_DEBUG_MAX_PRINT_BUFFER];
 
   VA_START (Marker, Format);
-  Return = VSPrint (Buffer, sizeof (Buffer), Format, Marker);
+  Return = UnicodeVSPrint (Buffer, sizeof (Buffer), Format, Marker);
   VA_END (Marker);
 
   if (gST->ConOut != NULL) {
@@ -667,10 +667,10 @@ EDBSPrint (
   UINTN   Return;
   VA_LIST Marker;
 
-  EFI_DEBUGGER_ASSERT (BufferSize > 0);
+  ASSERT (BufferSize > 0);
 
   VA_START (Marker, Format);
-  Return = VSPrint (Buffer, (UINTN)BufferSize, Format, Marker);
+  Return = UnicodeVSPrint (Buffer, (UINTN)BufferSize, Format, Marker);
   VA_END (Marker);
 
   return Return;
@@ -688,10 +688,10 @@ EDBSPrintWithOffset (
   UINTN   Return;
   VA_LIST Marker;
 
-  EFI_DEBUGGER_ASSERT (BufferSize - (Offset * sizeof(CHAR16)) > 0);
+  ASSERT (BufferSize - (Offset * sizeof(CHAR16)) > 0);
 
   VA_START (Marker, Format);
-  Return = VSPrint (Buffer + Offset, (UINTN)(BufferSize - (Offset * sizeof(CHAR16))), Format, Marker);
+  Return = UnicodeVSPrint (Buffer + Offset, (UINTN)(BufferSize - (Offset * sizeof(CHAR16))), Format, Marker);
   VA_END (Marker);
 
   return Return;

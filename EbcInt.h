@@ -17,14 +17,16 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #define _EBC_INT_H_
 
 
-#include <Tiano.h>
+#include <Uefi.h>
 
-// #include <Protocol/DebugSupport.h>
-// #include <Protocol/Ebc.h>
+#ifndef _GNU_EFI
+#include <Protocol/DebugSupport.h>
+#include <Protocol/Ebc.h>
+#endif
 #include <Protocol/EbcVmTest.h>
 #include <Protocol/EbcSimpleDebugger.h>
 
-#if 0
+#ifndef _GNU_EFI
 #include <Library/BaseLib.h>
 #include <Library/DebugLib.h>
 #include <Library/UefiDriverEntryPoint.h>

@@ -21,15 +21,22 @@ EDK definitions that have no match in gnu-efi yet.
 
 #include <efi.h>
 #include <efilib.h>
-#include "includes.h"
 
-#include "EfiImage.h"
+#define GUID EFI_GUID
+#define SIGNATURE_16  EFI_SIGNATURE_16
+#define SIGNATURE_32  EFI_SIGNATURE_32
+
+#include "IndustryStandard/PeImage.h"
 
 #define AsciiStrCmp strcmpa
+#define AsciiStrnCmp strncmpa
 #define AsciiStrLen strlena
+#define UnicodeVSPrint VSPrint
 
-#define EfiInitializeDriverLib InitializeLib
-#define EfiLibGetSystemConfigurationTable LibGetSystemConfigurationTable
+#define EfiGetSystemConfigurationTable LibGetSystemConfigurationTable
+
+#define EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL EFI_SIMPLE_TEXT_OUT_PROTOCOL
+#define EFI_SIMPLE_TEXT_INPUT_PROTOCOL  EFI_SIMPLE_TEXT_IN_PROTOCOL
 
 #define EFI_PROTOCOL_DEFINITION(a)  "includes.h"
 #define EFI_GUID_DEFINITION(x)      "includes.h"
@@ -43,6 +50,7 @@ EDK definitions that have no match in gnu-efi yet.
   DEBUG_CODE_BEGIN ();          \
   Expression                    \
   DEBUG_CODE_END ()
+
 
 // TODO: should handle x86, ARM, etc.
 #define CpuBreakpoint() Print(L"EFI_BREAKPOINT() TRIGGERED!!\n") //__asm__ volatile("int $0x03");

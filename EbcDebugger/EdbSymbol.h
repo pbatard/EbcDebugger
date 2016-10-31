@@ -21,7 +21,7 @@ Abstract:
 #ifndef _EFI_EDB_SYMBOL_H_
 #define _EFI_EDB_SYMBOL_H_
 
-#include "Tiano.h"
+#include <Uefi.h>
 
 //
 // The default base address is 0x10000000

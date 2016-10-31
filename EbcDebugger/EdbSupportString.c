@@ -42,7 +42,7 @@ Returns:
   CHAR16  c;
   UINTN   m;
   
-  EFI_DEBUGGER_ASSERT (str != NULL);
+  ASSERT (str != NULL);
   
   m = (UINTN) -1 >> 4;
   //
@@ -78,7 +78,7 @@ Returns:
         return (UINTN) -1;
       }
 
-      u = u << 4 | c - (c >= 'A' ? 'A' - 10 : '0');
+      u = (u << 4) | (c - (c >= 'A' ? 'A' - 10 : '0'));
     } else {
       break;
     }
@@ -111,7 +111,7 @@ Returns:
   CHAR16  c;
   UINT64  m;
   
-  EFI_DEBUGGER_ASSERT (str != NULL);
+  ASSERT (str != NULL);
   
   m = RShiftU64 ((UINT64) -1, 4);
   //
@@ -159,8 +159,9 @@ Returns:
   return u;
 }
 
+#ifndef _GNU_EFI
 UINTN
-_Atoi (
+Atoi (
   CHAR16  *str
   )
 /*++
@@ -182,7 +183,7 @@ Returns:
   UINTN   m;
   UINTN   n;
   
-  EFI_DEBUGGER_ASSERT (str != NULL);
+  ASSERT (str != NULL);
   
   m = (UINTN) -1 / 10;
   n = (UINTN) -1 % 10;
@@ -199,7 +200,7 @@ Returns:
   c = *(str++);
   while (c) {
     if (c >= '0' && c <= '9') {
-      if (u > m || u == m && c - '0' > (INTN) n) {
+      if (u > m || (u == m && c - '0' > (INTN) n)) {
         return (UINTN) -1;
       }
 
@@ -213,6 +214,7 @@ Returns:
 
   return u;
 }
+#endif
 
 UINTN
 AsciiXtoi (
@@ -236,7 +238,7 @@ Returns:
   CHAR8   c;
   UINTN   m;
   
-  EFI_DEBUGGER_ASSERT (str != NULL);
+  ASSERT (str != NULL);
   
   m = (UINTN) -1 >> 4;
   //
@@ -272,7 +274,7 @@ Returns:
         return (UINTN) -1;
       }
 
-      u = u << 4 | c - (c >= 'A' ? 'A' - 10 : '0');
+      u = (u << 4) | (c - (c >= 'A' ? 'A' - 10 : '0'));
     } else {
       break;
     }
@@ -306,7 +308,7 @@ Returns:
   UINTN   m;
   UINTN   n;
   
-  EFI_DEBUGGER_ASSERT (str != NULL);
+  ASSERT (str != NULL);
   
   m = (UINTN) -1 / 10;
   n = (UINTN) -1 % 10;
@@ -323,7 +325,7 @@ Returns:
   c = *(str++);
   while (c) {
     if (c >= '0' && c <= '9') {
-      if (u > m || u == m && c - '0' > (INTN) n) {
+      if (u > m || (u == m && c - '0' > (INTN) n)) {
         return (UINTN) -1;
       }
 
@@ -354,37 +356,6 @@ AsciiToUpper (
   )
 {
   return (Chr >= 'a' && Chr <= 'z') ? Chr - ('a' - 'A') : Chr;
-}
-
-INTN
-AsciiStriCmp (
-  IN CHAR8   *String,
-  IN CHAR8   *String2
-  )
-/*++
-
-Routine Description:
-  Compare the Ascii string pointed by String to the string pointed by String2.
-
-Arguments:
-  String - String to process
-
-  String2 - The other string to process
-
-Returns:
-  Return a positive integer if String is lexicall greater than String2; Zero if 
-  the two strings are identical; and a negative interger if String is lexically 
-  less than String2.
-
---*/
-{
-  while ((*String != '\0') &&
-         (AsciiToUpper (*String) == AsciiToUpper (*String2))) {
-    String++;
-    String2++;
-  }
-
-  return AsciiToUpper (*String) - AsciiToUpper (*String2);
 }
 
 INTN
@@ -421,6 +392,38 @@ Returns:
   return (*String - (CHAR16)*String2);
 }
 
+#ifndef _GNU_EFI
+INTN
+StriCmp (
+  IN CHAR16   *String,
+  IN CHAR16   *String2
+  )
+/*++
+
+Routine Description:
+  Compare the Unicode string pointed by String to the string pointed by String2.
+
+Arguments:
+  String - Unicode String to process
+  String2 - Unicode string to process
+
+Returns:
+  Return a positive integer if String is lexically greater than String2; Zero if 
+  the two strings are identical; and a negative integer if String is lexically 
+  less than String2.
+
+--*/
+{
+  while ((*String != L'\0') &&
+         (UnicodeToUpper (*String) == UnicodeToUpper (*String2))) {
+    String++;
+    String2++;
+  }
+
+  return UnicodeToUpper (*String) - UnicodeToUpper (*String2);
+}
+#endif
+
 INTN
 StriCmpUnicodeAndAscii (
   IN CHAR16   *String,
@@ -437,8 +440,8 @@ Arguments:
   String2 - Ascii string to process
 
 Returns:
-  Return a positive integer if String is lexicall greater than String2; Zero if 
-  the two strings are identical; and a negative interger if String is lexically 
+  Return a positive integer if String is lexically greater than String2; Zero if 
+  the two strings are identical; and a negative integer if String is lexically 
   less than String2.
 
 --*/
@@ -450,27 +453,6 @@ Returns:
   }
 
   return UnicodeToUpper (*String) - (CHAR16)AsciiToUpper (*String2);
-}
-
-INTN
-AsciiStrnCmp (
-  IN      CHAR8               *FirstString,
-  IN      CHAR8               *SecondString,
-  IN      UINTN               Length
-  )
-{
-  if (Length == 0) {
-    return 0;
-  }
-
-  while ((*FirstString != '\0') &&
-         (*FirstString == *SecondString) &&
-         (Length > 1)) {
-    FirstString++;
-    SecondString++;
-    Length--;
-  }
-  return *FirstString - *SecondString;
 }
 
 BOOLEAN
@@ -504,8 +486,9 @@ Routine Description:
   }
 }
 
+#ifndef _GNU_EFI
 CHAR16 *
-_StrDuplicate (
+StrDuplicate (
   IN CHAR16   *Src
   )
 // duplicate a string
@@ -520,7 +503,7 @@ _StrDuplicate (
   }
   return Dest;
 }
-
+#endif
 
 CHAR16  *mLineBuffer          = NULL;
 CHAR16  *mFieldBuffer         = NULL;

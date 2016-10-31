@@ -67,6 +67,9 @@ Returns:
     CopyMem (&Data64, (VOID *)Address, sizeof(UINT64));
     EDBPrint (L"%016lx ", Data64);
     return sizeof(UINT64);
+  case EdbWidthMax:
+    ASSERT (FALSE);
+    break;
   }
 
   //

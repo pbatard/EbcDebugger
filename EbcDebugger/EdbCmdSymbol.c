@@ -149,7 +149,7 @@ Returns:
 --*/
 {
   if (Type < 0 || Type >= EfiDebuggerSymbolTypeMax) {
-    return L"(??)";
+    return L"(?)";
   }
 
   return mSymbolTypeStr [Type];
@@ -530,7 +530,7 @@ Returns:
   DirName = GetDirNameFromFullPath (CommandArg);
   ZeroMem (CodFile, sizeof(CodFile));
   if (StrCmp (DirName, L"") != 0) {
-    StrCpy (CodFile, DirName);
+    StrCpyS (CodFile, sizeof(CodFile), DirName);
   } else {
     DirName = L"\\";
   }
@@ -543,7 +543,7 @@ Returns:
   while (CodFileName != NULL) {
     ZeroMem (CodFile, sizeof(CodFile));
     if (StrCmp (DirName, L"\\") != 0) {
-      StrCpy (CodFile, DirName);
+      StrCpyS (CodFile, sizeof(CodFile), DirName);
     }
 
     //
@@ -640,7 +640,7 @@ Returns:
   DirName = GetDirNameFromFullPath (CommandArg);
   ZeroMem (CodFile, sizeof(CodFile));
   if (StrCmp (DirName, L"") != 0) {
-    StrCpy (CodFile, DirName);
+    StrCpyS (CodFile, sizeof(CodFile), DirName);
   } else {
     DirName = L"\\";
   }
@@ -653,7 +653,7 @@ Returns:
   while (CodFileName != NULL) {
     ZeroMem (CodFile, sizeof(CodFile));
     if (StrCmp (DirName, L"\\") != 0) {
-      StrCpy (CodFile, DirName);
+      StrCpyS (CodFile, sizeof(CodFile), DirName);
     }
 
     //

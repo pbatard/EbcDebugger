@@ -21,7 +21,7 @@ Abstract:
 #ifndef _EFI_EDB_DISASM_SUPPORT_H_
 #define _EFI_EDB_DISASM_SUPPORT_H_
 
-#include "Tiano.h"
+#include <Uefi.h>
 
 #define EDB_BYTECODE_NUMBER_IN_LINE     5
 
