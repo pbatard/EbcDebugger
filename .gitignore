@@ -8,8 +8,4 @@
 *.opensdf
 *.opendb
 *.fd
-arm
-arm64
 image
-ia32
-x64

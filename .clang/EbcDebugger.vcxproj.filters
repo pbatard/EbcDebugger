@@ -21,6 +21,9 @@
     <Filter Include="Source Files\Missing">
       <UniqueIdentifier>{8a26e0ad-df2e-4ef6-ab5e-4f6d5e7a4bb3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\arm">
+      <UniqueIdentifier>{b76e5959-77c6-4eb4-a190-ab1b43a34657}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\debug.vbs">
@@ -112,6 +115,9 @@
     <ClCompile Include="..\Missing\String.c">
       <Filter>Source Files\Missing</Filter>
     </ClCompile>
+    <ClCompile Include="..\Arm\EbcSupport.c">
+      <Filter>Source Files\arm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\EbcDebugger\Edb.h">
@@ -150,14 +156,14 @@
     <ClInclude Include="..\Missing\Uefi.h">
       <Filter>Source Files\Missing</Filter>
     </ClInclude>
-    <ClInclude Include="..\Protocol\EbcVmTest.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\Protocol\EbcSimpleDebugger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\Missing\PrintLib.h">
       <Filter>Source Files\Missing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Missing\Protocol\EbcVmTest.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

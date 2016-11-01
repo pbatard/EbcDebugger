@@ -348,6 +348,14 @@
     </MASM>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Arm\EbcSupport.c">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">false</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="..\EbcExecute.c" />
     <ClCompile Include="..\EbcInt.c" />
     <ClCompile Include="..\EbcDebugger\Edb.c" />
@@ -411,9 +419,9 @@
     <ClInclude Include="..\EbcDebugger\EdbSupport.h" />
     <ClInclude Include="..\EbcDebugger\EdbSymbol.h" />
     <ClInclude Include="..\Missing\PrintLib.h" />
+    <ClInclude Include="..\Missing\Protocol\EbcVmTest.h" />
     <ClInclude Include="..\Missing\Uefi.h" />
     <ClInclude Include="..\Protocol\EbcSimpleDebugger.h" />
-    <ClInclude Include="..\Protocol\EbcVmTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

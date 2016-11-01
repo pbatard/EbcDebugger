@@ -16,8 +16,20 @@ EDK definitions that have no match in gnu-efi yet.
 
 --*/
 
-#ifndef TIANO_H
-#define TIANO_H
+#ifndef UEFI_H
+#define UEFI_H
+
+#if !defined (_MSC_VER) && !defined (__clang__)
+#error This header should only be used with Microsoft compilers
+#endif
+
+#if defined (_M_IX86)
+#define MDE_CPU_IA32
+#elif defined (_M_X64)
+#define MDE_CPU_X64
+#elif defined (_M_ARM)
+#define MDE_CPU_ARM
+#endif
 
 #include <efi.h>
 #include <efilib.h>
