@@ -12,7 +12,7 @@ QEMU_PATH  = "C:\Program Files\qemu\"
 QEMU_OPTS  = "-net none -monitor none -parallel none"
 ' Set to True if you need to download a file that might be cached locally
 NO_CACHE   = False
-DEMO_APP   = "EbcDemo.efi"
+DEMO_APP   = "Hello.efi"
 DEMO_PATH  = "EbcDemo"
 
 ' You shouldn't have to modify anything below this
@@ -145,7 +145,7 @@ Call fso.CopyFile(WScript.Arguments(2) & DEMO_PATH & "\" & DEMO_APP, "image\" & 
 ' Create a startup.nsh that: sets logging, loads the driver and executes an "Hello World" app from the disk
 Set file = fso.CreateTextFile("image\efi\boot\startup.nsh", True)
 Call file.Write("fs0:" & vbCrLf &_
-  "EbcDebugger.efi" & vbCrLf &_
+  "load EbcDebugger.efi" & vbCrLf &_
   DEMO_APP & vbCrLf)
 Call file.Close()
 

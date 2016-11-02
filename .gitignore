@@ -2,7 +2,7 @@
 *.config
 *.o
 *.efi
-!EbcDemo.efi
+!Hello.efi
 *.sdf
 *.suo
 *.opensdf
