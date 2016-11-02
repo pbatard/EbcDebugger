@@ -5,15 +5,15 @@ This is an updated version of the original [EDK EBC Debugger](https://github.com
 that:
 * Can be compiled without the cumbersome annoyance of having to use the EDK/EDK2, through the convenience of
   a Visual Studio 2015 project and [gnu-efi](https://sourceforge.net/projects/gnu-efi/)
-* Can be compiled for x86_32, x86_64 and __ARM__ (planned) targets
+* Can be compiled for x86_32, x86_64 and ARM targets
 * Can be tested on the fly, through a [QEMU](http://www.qemu.org)+[OVMF](http://tianocore.github.io/ovmf/)
   UEFI virtual machine.
 * Fixes some notorious __bugs__ with the original EDK debugger, such as not displaying 32/64 bit indexes properly.
 
 ## Prerequisites
 
-* [Visual Studio 2015](http://www.visualstudio.com/products/visual-studio-community-vs) __with Clang (C2) support__
-* [QEMU](http://www.qemu.org) __v2.5 or later__
+* [Visual Studio 2015](http://www.visualstudio.com/products/visual-studio-community-vs)
+* [QEMU](http://www.qemu.org) __v2.7 or later__
   (NB: You can find QEMU Windows binaries [here](https://qemu.weilnetz.de/w64/))
 * git
 

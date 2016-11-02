@@ -1051,7 +1051,7 @@ EbcLLCALLEX (
     // we can ignore.
     //
     VmPtr->Gpr[7] = EbcLLCALLEXNativeArm (FuncAddr, NewStackPointer,
-          FramePtr - 8, ArgLayout);
+          &((UINT8*)FramePtr)[-8], ArgLayout);
 
     //
     // Advance the IP.

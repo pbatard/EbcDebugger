@@ -31,6 +31,12 @@ EDK definitions that have no match in gnu-efi yet.
 #define MDE_CPU_ARM
 #endif
 
+#define VA_LIST  va_list
+#define VA_START va_start
+#define VA_ARG   va_arg
+#define VA_COPY  va_copy
+#define VA_END   va_end
+
 #include <efi.h>
 #include <efilib.h>
 
@@ -50,12 +56,6 @@ EDK definitions that have no match in gnu-efi yet.
 #define EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL EFI_SIMPLE_TEXT_OUT_PROTOCOL
 #define EFI_SIMPLE_TEXT_INPUT_PROTOCOL  EFI_SIMPLE_TEXT_IN_PROTOCOL
 
-#define EFI_PROTOCOL_DEFINITION(a)  "includes.h"
-#define EFI_GUID_DEFINITION(x)      "includes.h"
-#define EFI_GUID_STRING(guidpointer, shortstring, longstring)
-
-#define EFI_FORWARD_DECLARATION(x) typedef struct _##x x
-
 #define DEBUG_CODE_BEGIN()  do { if (0) { UINT8  __DebugCodeLocal
 #define DEBUG_CODE_END()    __DebugCodeLocal = 0; __DebugCodeLocal++; } } while (FALSE)
 #define DEBUG_CODE(Expression)  \
@@ -71,37 +71,43 @@ EDK definitions that have no match in gnu-efi yet.
 //
 // Math library routines
 //
-INT64 DivS64x64Remainder(
-  IN INT64      Value1,
-  IN INT64      Value2,
-  OUT INT64     *Remainder);
+INT64 EFIAPI DivS64x64Remainder (
+  IN  INT64  Dividend,
+  IN  INT64  Divisor,
+  OUT INT64  *Remainder  OPTIONAL
+);
 
-UINT64 DivU64x64Remainder(
-  IN UINT64   Value1,
-  IN UINT64   Value2,
-  OUT UINT64  *Remainder);
+UINT64 EFIAPI DivU64x64Remainder(
+  IN  UINT64  Dividend,
+  IN  UINT64  Divisor,
+  OUT UINT64  *Remainder  OPTIONAL
+);
 
-INT64 MultS64x64(
-  IN INT64  Value1,
-  IN INT64  Value2);
+INT64 EFIAPI MultS64x64(
+  IN  INT64  Multiplicand,
+  IN  INT64  Multiplier
+);
 
-UINT64 MultU64x64(
-  IN UINT64   Value1,
-  IN UINT64   Value2);
+UINT64 EFIAPI MultU64x64(
+  IN  UINT64  Multiplicand,
+  IN  UINT64  Multiplier
+);
 
-UINT64 ARShiftU64(
-  IN UINT64   Operand,
-  IN UINTN    Count);
+UINT64 EFIAPI ARShiftU64(
+  IN UINT64  Operand,
+  IN UINTN   Count
+);
 
-UINT64 LeftShiftU64(
-  IN UINT64   Operand,
-  IN UINT64   Count);
+UINT16 EFIAPI SwapBytes16 (
+  IN UINT16  Value
+);
 
-UINT64 RightShiftU64(
-  IN UINT64   Operand,
-  IN UINT64   Count);
+UINT32 EFIAPI SwapBytes32(
+  IN UINT32  Value
+);
 
-VOID MemoryFence(
-  VOID);
+VOID EFIAPI MemoryFence(
+  VOID
+);
 
 #endif

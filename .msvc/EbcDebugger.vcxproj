@@ -34,41 +34,42 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140_clang_c2</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140_clang_c2</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140_clang_c2</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140_clang_c2</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140_clang_c2</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140_clang_c2</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
+    <Import Project="..\Missing\armasm.props" />
     <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
@@ -143,12 +144,11 @@
       <AdditionalIncludeDirectories>$(VCClangInstallDir)\include;$(SolutionDir);$(SolutionDir)\EbcDebugger;$(SolutionDir)\missing;$(SolutionDir)\gnu-efi\inc;$(SolutionDir)\gnu-efi\inc\x86_64</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>EFI_EBC_DEBUGGER_ENABLED;_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4090</DisableSpecificWarnings>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <ExceptionHandling>Disabled</ExceptionHandling>
-      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -Wno-pointer-sign -Wno-missing-braces -Wno-incompatible-pointer-types-discards-qualifiers -fno-builtin</AdditionalOptions>
       <MSExtensions>false</MSExtensions>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Lib>
       <SubSystem>EFI Application</SubSystem>
@@ -172,12 +172,11 @@
       <AdditionalIncludeDirectories>$(VCClangInstallDir)\include;$(SolutionDir);$(SolutionDir)\EbcDebugger;$(SolutionDir)\missing;$(SolutionDir)\gnu-efi\inc;$(SolutionDir)\gnu-efi\inc\ia32</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>EFI_EBC_DEBUGGER_ENABLED;_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4090</DisableSpecificWarnings>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <ExceptionHandling>Disabled</ExceptionHandling>
-      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -Wno-pointer-sign -Wno-missing-braces -Wno-incompatible-pointer-types-discards-qualifiers -fno-builtin</AdditionalOptions>
       <MSExtensions>false</MSExtensions>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Lib>
       <SubSystem>EFI Application</SubSystem>
@@ -202,12 +201,11 @@
       <AdditionalIncludeDirectories>$(VCClangInstallDir)\include;$(SolutionDir);$(SolutionDir)\EbcDebugger;$(SolutionDir)\missing;$(SolutionDir)\gnu-efi\inc;$(SolutionDir)\gnu-efi\inc\arm</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>EFI_EBC_DEBUGGER_ENABLED;_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4090</DisableSpecificWarnings>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <ExceptionHandling>Disabled</ExceptionHandling>
-      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -Wno-pointer-sign -Wno-missing-braces -Wno-incompatible-pointer-types-discards-qualifiers -fno-builtin</AdditionalOptions>
       <MSExtensions>false</MSExtensions>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Lib>
       <SubSystem>EFI Application</SubSystem>
@@ -231,11 +229,10 @@
       <AdditionalIncludeDirectories>$(VCClangInstallDir)\include;$(SolutionDir);$(SolutionDir)\EbcDebugger;$(SolutionDir)\missing;$(SolutionDir)\gnu-efi\inc;$(SolutionDir)\gnu-efi\inc\x86_64</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>EFI_EBC_DEBUGGER_ENABLED;_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4090</DisableSpecificWarnings>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <ExceptionHandling>Disabled</ExceptionHandling>
-      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -Wno-pointer-sign -Wno-missing-braces -Wno-incompatible-pointer-types-discards-qualifiers -fno-builtin</AdditionalOptions>
       <MSExtensions>false</MSExtensions>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Lib>
       <SubSystem>EFI Application</SubSystem>
@@ -261,11 +258,10 @@
       <AdditionalIncludeDirectories>$(VCClangInstallDir)\include;$(SolutionDir);$(SolutionDir)\EbcDebugger;$(SolutionDir)\missing;$(SolutionDir)\gnu-efi\inc;$(SolutionDir)\gnu-efi\inc\ia32</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>EFI_EBC_DEBUGGER_ENABLED;_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4090</DisableSpecificWarnings>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <ExceptionHandling>Disabled</ExceptionHandling>
-      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -Wno-pointer-sign -Wno-missing-braces -Wno-incompatible-pointer-types-discards-qualifiers -fno-builtin</AdditionalOptions>
       <MSExtensions>false</MSExtensions>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Lib>
       <SubSystem>EFI Application</SubSystem>
@@ -291,11 +287,10 @@
       <AdditionalIncludeDirectories>$(VCClangInstallDir)\include;$(SolutionDir);$(SolutionDir)\EbcDebugger;$(SolutionDir)\missing;$(SolutionDir)\gnu-efi\inc;$(SolutionDir)\gnu-efi\inc\arm</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>EFI_EBC_DEBUGGER_ENABLED;_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4090</DisableSpecificWarnings>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <ExceptionHandling>Disabled</ExceptionHandling>
-      <AdditionalOptions>-ffreestanding -Wno-macro-redefined -Wno-pointer-sign -Wno-missing-braces -Wno-incompatible-pointer-types-discards-qualifiers -fno-builtin</AdditionalOptions>
       <MSExtensions>false</MSExtensions>
+      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Lib>
       <SubSystem>EFI Application</SubSystem>
@@ -317,17 +312,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="..\debug.vbs" />
-    <MASM Include="..\Ia32\EbcLowLevel.asm">
+    <ARMASM Include="..\Arm\EbcLowLevel.asm">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</UseSafeExceptionHandlers>
-      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</UseSafeExceptionHandlers>
-    </MASM>
-    <MASM Include="..\Ia32\Ia32Math.asm">
+      <FileType>Document</FileType>
+    </ARMASM>
+    <MASM Include="..\Ia32\EbcLowLevel.asm">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</ExcludedFromBuild>
@@ -388,16 +382,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="..\Missing\Math64.c" />
     <ClCompile Include="..\Missing\String.c" />
     <ClCompile Include="..\x64\EbcSupport.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\x64\x64Math.c">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</ExcludedFromBuild>
@@ -425,6 +412,7 @@
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\Missing\armasm.targets" />
     <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
 </Project>
