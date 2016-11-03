@@ -589,8 +589,7 @@ UpdateStackTrackerFromDelta (
   @param  Arg2                  The 2nd argument.
   @param  Arg3                  The 3rd argument.
   @param  Arg4                  The 4th argument.
-  @param  Arg8                  The 8th argument.
-  @param  EntryPoint            The entrypoint of EBC code.
+  @param  InstructionBuffer     A pointer to the thunk instruction buffer.
   @param  Args5_16[]            Array containing arguments #5 to #16.
 
   @return The value returned by the EBC application we're going to run.
@@ -599,12 +598,12 @@ UpdateStackTrackerFromDelta (
 UINT64
 EFIAPI
 EbcInterpret (
-  IN UINTN      Arg1,
-  IN UINTN      Arg2,
-  IN UINTN      Arg3,
-  IN UINTN      Arg4,
-  IN UINTN      EntryPoint,
-  IN UINTN      Args5_16[]
+  IN UINTN                  Arg1,
+  IN UINTN                  Arg2,
+  IN UINTN                  Arg3,
+  IN UINTN                  Arg4,
+  IN EBC_INSTRUCTION_BUFFER *InstructionBuffer,
+  IN UINTN                  Args5_16[]
   )
 {
   //
@@ -624,7 +623,7 @@ EbcInterpret (
   //
   // Get the EBC entry point
   //
-  Addr = EntryPoint;
+  Addr = InstructionBuffer->EbcEntryPoint;
 
   //
   // Now clear out our context

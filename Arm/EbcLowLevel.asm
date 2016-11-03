@@ -1,22 +1,22 @@
-;------------------------------------------------------------------------------
-;
-; This code provides low level routines that support the Virtual Machine
-; for option ROMs.
-;
-;  Copyright (c) 2016, Pete Batard. All rights reserved.<BR>
-;  Copyright (c) 2016, Linaro, Ltd. All rights reserved.<BR>
-;  Copyright (c) 2015, The Linux Foundation. All rights reserved.<BR>
-;  Copyright (c) 2007 - 2014, Intel Corporation. All rights reserved.<BR>
-;
-; This program and the accompanying materials
-; are licensed and made available under the terms and conditions of the BSD License
-; which accompanies this distribution.  The full text of the license may be found at
-; http://opensource.org/licenses/bsd-license.php.
-;
-; THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
-; WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
-;
-;------------------------------------------------------------------------------
+///** @file
+//
+//  This code provides low level routines that support the Virtual Machine
+//  for option ROMs.
+//
+//  Copyright (c) 2016, Pete Batard. All rights reserved.<BR>
+//  Copyright (c) 2016, Linaro, Ltd. All rights reserved.<BR>
+//  Copyright (c) 2015, The Linux Foundation. All rights reserved.<BR>
+//  Copyright (c) 2007 - 2014, Intel Corporation. All rights reserved.<BR>
+//
+//  This program and the accompanying materials
+//  are licensed and made available under the terms and conditions of the BSD License
+//  which accompanies this distribution.  The full text of the license may be found at
+//  http://opensource.org/licenses/bsd-license.php
+//
+//  THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+//  WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
+//
+//**/
 
     EXPORT EbcLLCALLEXNativeArm
     EXPORT EbcLLEbcInterpret
@@ -25,6 +25,7 @@
     EXPORT mEbcInstructionBufferTemplate
 
     IMPORT ExecuteEbcImageEntryPoint
+    IMPORT EbcInterpret
 
     AREA EbcLowLevel, CODE, READONLY
 
@@ -145,18 +146,20 @@ n10
 //
 //****************************************************************************
 EbcLLEbcInterpret FUNCTION
-    push    {r4, lr}
+
+    stmdb   sp!, {r4, lr}
 
     // push the entry point and the address of args #5 - #16 onto the stack
     add     r4, sp, #8
-    strd    ip, r4, [sp, #-8]!
+    str     ip, [sp, #-8]!
+    str     r4, [sp, #4]
 
     // call C-code
-    ldr     ip, [ip, #20]
-    blx     ip
+    bl      EbcInterpret
 
     add     sp, sp, #8
-    pop     {r4, pc}
+    ldmia   sp!, {r4, pc}
+
     ENDFUNC
 
 //****************************************************************************
