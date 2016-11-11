@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbCmdGo.c
-  
+
 Abstract:
 
 
@@ -32,7 +32,7 @@ DebuggerGo (
 Routine Description:
 
   DebuggerCommand - Go
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -44,7 +44,7 @@ Returns:
 
   EFI_DEBUG_BREAK    - formal return value
   EFI_DEBUG_CONTINUE - something wrong
-  
+
 --*/
 {
   UINTN        Address;
@@ -55,7 +55,7 @@ Returns:
   // Check argument
   //
   if (CommandArg != NULL) {
-    if (EfiStriCmp (CommandArg, L"til") == 0) {
+    if (StriCmp (CommandArg, L"til") == 0) {
       CommandStr = StrGetNextTokenLine (L" ");
       if (CommandStr != NULL) {
         //

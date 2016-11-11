@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbCmdExtIo.c
-  
+
 Abstract:
 
 
@@ -32,7 +32,7 @@ DebuggerExtIoIB (
 Routine Description:
 
   DebuggerCommand - IB
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -43,7 +43,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   EDBPrint (L"Unsupported\n");
@@ -65,7 +65,7 @@ DebuggerExtIoIW (
 Routine Description:
 
   DebuggerCommand - IW
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -76,7 +76,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   EDBPrint (L"Unsupported\n");
@@ -98,7 +98,7 @@ DebuggerExtIoID (
 Routine Description:
 
   DebuggerCommand - ID
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -109,7 +109,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   EDBPrint (L"Unsupported\n");
@@ -131,7 +131,7 @@ DebuggerExtIoOB (
 Routine Description:
 
   DebuggerCommand - OB
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -142,7 +142,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   EDBPrint (L"Unsupported\n");
@@ -164,7 +164,7 @@ DebuggerExtIoOW (
 Routine Description:
 
   DebuggerCommand - OW
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -175,7 +175,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   EDBPrint (L"Unsupported\n");
@@ -197,7 +197,7 @@ DebuggerExtIoOD (
 Routine Description:
 
   DebuggerCommand - OD
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -208,7 +208,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   EDBPrint (L"Unsupported\n");

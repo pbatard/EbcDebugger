@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbSupportUI.c
-  
+
 Abstract:
 
 
@@ -21,8 +21,9 @@ Abstract:
 #include "Edb.h"
 
 VOID
+EFIAPI
 SetCursorPosition (
-  IN EFI_SIMPLE_TEXT_OUT_PROTOCOL     *ConOut,
+  IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL  *ConOut,
   IN  UINTN                           Column,
   IN  INTN                            Row,
   IN  UINTN                           LineLength,
@@ -33,6 +34,7 @@ SetCursorPosition (
   );
 
 EFI_STATUS
+EFIAPI
 WaitForSingleEvent (
   IN EFI_EVENT                  Event,
   IN UINT64                     Timeout OPTIONAL
@@ -63,7 +65,7 @@ Returns:
     //
     // Create a timer event
     //
-    Status = gBS->CreateEvent (EFI_EVENT_TIMER, 0, NULL, NULL, &TimerEvent);
+    Status = gBS->CreateEvent (EVT_TIMER, 0, NULL, NULL, &TimerEvent);
     if (!EFI_ERROR (Status)) {
       //
       // Set the timer event
@@ -94,14 +96,15 @@ Returns:
     // No timeout... just wait on the event
     //
     Status = gBS->WaitForEvent (1, &Event, &Index);
-    EFI_DEBUGGER_ASSERT (!EFI_ERROR (Status));
-    EFI_DEBUGGER_ASSERT (Index == 0);
+    ASSERT (!EFI_ERROR (Status));
+    ASSERT (Index == 0);
   }
 
   return Status;
 }
 
 VOID
+EFIAPI
 ConMoveCursorBackward (
   IN     UINTN                   LineLength,
   IN OUT UINTN                   *Column,
@@ -121,8 +124,8 @@ Returns:
 
 --*/
 {
-  EFI_DEBUGGER_ASSERT (Column != NULL);
-  EFI_DEBUGGER_ASSERT (Row != NULL);
+  ASSERT (Column != NULL);
+  ASSERT (Row != NULL);
   //
   // If current column is 0, move to the last column of the previous line,
   // otherwise, just decrement column.
@@ -142,6 +145,7 @@ Returns:
 }
 
 VOID
+EFIAPI
 ConMoveCursorForward (
   IN     UINTN                   LineLength,
   IN     UINTN                   TotalRow,
@@ -163,8 +167,8 @@ Returns:
 
 --*/
 {
-  EFI_DEBUGGER_ASSERT (Column != NULL);
-  EFI_DEBUGGER_ASSERT (Row != NULL);
+  ASSERT (Column != NULL);
+  ASSERT (Row != NULL);
   //
   // If current column is at line end, move to the first column of the nest
   // line, otherwise, just increment column.
@@ -182,17 +186,18 @@ CHAR16 mBackupSpace[EFI_DEBUG_INPUS_BUFFER_SIZE];
 CHAR16 mInputBufferHistory[EFI_DEBUG_INPUS_BUFFER_SIZE];
 
 VOID
+EFIAPI
 Input (
   IN CHAR16    *Prompt OPTIONAL,
   OUT CHAR16   *InStr,
   IN UINTN     StrLength
   )
 {
-  EFI_SIMPLE_TEXT_OUT_PROTOCOL     *ConOut;
-  EFI_SIMPLE_TEXT_IN_PROTOCOL      *ConIn;
+  EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL     *ConOut;
+  EFI_SIMPLE_TEXT_INPUT_PROTOCOL      *ConIn;
   BOOLEAN       Done;
   UINTN         Column;
-  INTN          Row;
+  UINTN         Row;
   UINTN         StartColumn;
   UINTN         Update;
   UINTN         Delete;
@@ -210,13 +215,13 @@ Input (
   BOOLEAN       NeedAdjust;
   UINTN         SubIndex;
   CHAR16        *CommandStr;
-  
+
   ConOut = gST->ConOut;
   ConIn = gST->ConIn;
- 
-  EFI_DEBUGGER_ASSERT (ConOut != NULL);
-  EFI_DEBUGGER_ASSERT (ConIn != NULL);
-  EFI_DEBUGGER_ASSERT (InStr != NULL);
+
+  ASSERT (ConOut != NULL);
+  ASSERT (ConIn != NULL);
+  ASSERT (InStr != NULL);
 
   if (Prompt) {
     ConOut->OutputString (ConOut, Prompt);
@@ -249,7 +254,7 @@ Input (
     return ;
   }
 
-  EfiSetMem (InStr, StrLength * sizeof (CHAR16), 0);
+  SetMem (InStr, StrLength * sizeof (CHAR16), 0);
   Done = FALSE;
   do {
     //
@@ -277,7 +282,7 @@ Input (
         StrPos -= 1;
         Update  = StrPos;
         Delete  = 1;
-        EfiCopyMem (InStr + StrPos, InStr + StrPos + 1, sizeof (CHAR16) * (Len - StrPos));
+        CopyMem (InStr + StrPos, InStr + StrPos + 1, sizeof (CHAR16) * (Len - StrPos));
 
         //
         // Adjust the current column and row
@@ -324,7 +329,7 @@ Input (
         if (Len) {
           Update  = StrPos;
           Delete  = 1;
-          EfiCopyMem (InStr + StrPos, InStr + StrPos + 1, sizeof (CHAR16) * (Len - StrPos));
+          CopyMem (InStr + StrPos, InStr + StrPos + 1, sizeof (CHAR16) * (Len - StrPos));
 
           NeedAdjust = TRUE;
         }
@@ -396,8 +401,8 @@ Input (
         //
         // show history
         //
-        EfiCopyMem (InStr, mInputBufferHistory, StrLength * sizeof(CHAR16));
-        StrPos       = EfiStrLen (mInputBufferHistory);
+        CopyMem (InStr, mInputBufferHistory, StrLength * sizeof(CHAR16));
+        StrPos       = StrLen (mInputBufferHistory);
         Update       = 0;
         Delete       = 0;
         OutputLength = 0;
@@ -413,7 +418,7 @@ Input (
           mBackupSpace[SubIndex] = L' ';
         }
         EDBPrint (mBackupSpace);
-        EfiSetMem (mBackupSpace, (EFI_DEBUG_INPUS_BUFFER_SIZE - (StartColumn - EFI_DEBUG_PROMPT_COLUMN)) * sizeof(CHAR16), 0);
+        SetMem (mBackupSpace, (EFI_DEBUG_INPUS_BUFFER_SIZE - (StartColumn - EFI_DEBUG_PROMPT_COLUMN)) * sizeof(CHAR16), 0);
 
         ConOut->SetCursorPosition (ConOut, StartColumn, Row);
         Len = StrPos;
@@ -434,7 +439,7 @@ Input (
       case SCAN_F12:
         CommandStr = GetCommandNameByKey (Key);
         if (CommandStr != NULL) {
-          EfiStrnCpy (InStr, CommandStr, StrLength - 1);
+          StrnCpyS (InStr, StrLength, CommandStr, StrLength - 1);
           return ;
         }
         break;
@@ -454,15 +459,15 @@ Input (
           mBackupSpace[SubIndex] = L' ';
         }
         EDBPrint (mBackupSpace);
-        EfiSetMem (mBackupSpace, (EFI_DEBUG_INPUS_BUFFER_SIZE - (Column - EFI_DEBUG_PROMPT_COLUMN)) * sizeof(CHAR16), 0);
+        SetMem (mBackupSpace, (EFI_DEBUG_INPUS_BUFFER_SIZE - (Column - EFI_DEBUG_PROMPT_COLUMN)) * sizeof(CHAR16), 0);
         ConOut->SetCursorPosition (ConOut, Column, Row);
         NeedAdjust = FALSE;
       }
       EDBPrint (InStr + Update);
-      Len = EfiStrLen (InStr);
+      Len = StrLen (InStr);
 
       if (Delete) {
-        EfiSetMem (InStr + Len, Delete * sizeof (CHAR16), 0x00);
+        SetMem (InStr + Len, Delete * sizeof (CHAR16), 0x00);
       }
 
       if (StrPos > Len) {
@@ -520,7 +525,7 @@ Input (
     SetCursorPosition (ConOut, Column, Row, LineLength, TotalRow, InStr, StrPos, Len);
   } while (!Done);
 
-  EfiCopyMem (mInputBufferHistory, InStr, StrLength * sizeof(CHAR16));
+  CopyMem (mInputBufferHistory, InStr, StrLength * sizeof(CHAR16));
 
   //
   // Return the data to the caller
@@ -529,8 +534,9 @@ Input (
 }
 
 VOID
+EFIAPI
 SetCursorPosition (
-  IN EFI_SIMPLE_TEXT_OUT_PROTOCOL     *ConOut,
+  IN  EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *ConOut,
   IN  UINTN                           Column,
   IN  INTN                            Row,
   IN  UINTN                           LineLength,
@@ -542,8 +548,8 @@ SetCursorPosition (
 {
   CHAR16  Backup;
 
-  EFI_DEBUGGER_ASSERT (ConOut != NULL);
-  EFI_DEBUGGER_ASSERT (Str != NULL);
+  ASSERT (ConOut != NULL);
+  ASSERT (Str != NULL);
 
   Backup = 0;
   if (Row >= 0) {
@@ -565,6 +571,7 @@ SetCursorPosition (
 }
 
 BOOLEAN
+EFIAPI
 SetPageBreak (
   VOID
   )
@@ -633,6 +640,7 @@ SetPageBreak (
 }
 
 UINTN
+EFIAPI
 EDBPrint (
   IN CONST CHAR16  *Format,
   ...
@@ -643,7 +651,7 @@ EDBPrint (
   CHAR16  Buffer[EFI_DEBUG_MAX_PRINT_BUFFER];
 
   VA_START (Marker, Format);
-  Return = VSPrint (Buffer, sizeof (Buffer), Format, Marker);
+  Return = UnicodeVSPrint (Buffer, sizeof (Buffer), Format, Marker);
   VA_END (Marker);
 
   if (gST->ConOut != NULL) {
@@ -657,6 +665,7 @@ EDBPrint (
 }
 
 UINTN
+EFIAPI
 EDBSPrint (
   OUT CHAR16        *Buffer,
   IN  INTN          BufferSize,
@@ -667,16 +676,17 @@ EDBSPrint (
   UINTN   Return;
   VA_LIST Marker;
 
-  EFI_DEBUGGER_ASSERT (BufferSize > 0);
+  ASSERT (BufferSize > 0);
 
   VA_START (Marker, Format);
-  Return = VSPrint (Buffer, (UINTN)BufferSize, Format, Marker);
+  Return = UnicodeVSPrint (Buffer, (UINTN)BufferSize, Format, Marker);
   VA_END (Marker);
 
   return Return;
 }
 
 UINTN
+EFIAPI
 EDBSPrintWithOffset (
   OUT CHAR16        *Buffer,
   IN  INTN          BufferSize,
@@ -688,10 +698,10 @@ EDBSPrintWithOffset (
   UINTN   Return;
   VA_LIST Marker;
 
-  EFI_DEBUGGER_ASSERT (BufferSize - (Offset * sizeof(CHAR16)) > 0);
+  ASSERT (BufferSize - (Offset * sizeof(CHAR16)) > 0);
 
   VA_START (Marker, Format);
-  Return = VSPrint (Buffer + Offset, (UINTN)(BufferSize - (Offset * sizeof(CHAR16))), Format, Marker);
+  Return = UnicodeVSPrint (Buffer + Offset, (UINTN)(BufferSize - (Offset * sizeof(CHAR16))), Format, Marker);
   VA_END (Marker);
 
   return Return;

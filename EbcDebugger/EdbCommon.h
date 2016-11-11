@@ -1,13 +1,13 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
@@ -21,21 +21,21 @@ Abstract:
 #ifndef _EFI_EDB_COMMON_H_
 #define _EFI_EDB_COMMON_H_
 
-#include "Tiano.h"
-#include EFI_PROTOCOL_DEFINITION (DebugSupport)
-#include EFI_PROTOCOL_DEFINITION (PciRootBridgeIo)
-#include EFI_PROTOCOL_DEFINITION (FileInfo)
-#include EFI_PROTOCOL_DEFINITION (FileSystemInfo)
-#include EFI_PROTOCOL_DEFINITION (FileSystemVolumeLabelInfo)
-#include EFI_PROTOCOL_DEFINITION (SimpleFileSystem)
-#include EFI_GUID_DEFINITION (DebugImageInfoTable)
-
-#include EFI_PROTOCOL_DEFINITION (DebuggerConfiguration)
-
+#include <Uefi.h>
+#include <Library/UefiLib.h>
+#include <Library/PrintLib.h>
+#include <Library/UefiBootServicesTableLib.h>
+#include <Protocol/DebugSupport.h>
+#include <Protocol/PciRootBridgeIo.h>
+#include <Protocol/SimpleFileSystem.h>
+#include <Guid/FileInfo.h>
+#include <Guid/FileSystemInfo.h>
+#include <Guid/FileSystemVolumeLabelInfo.h>
+#include <Guid/DebugImageInfoTable.h>
 
 typedef UINTN EFI_DEBUG_STATUS;
 
-EFI_FORWARD_DECLARATION (EFI_DEBUGGER_PRIVATE_DATA);
+typedef struct _EFI_DEBUGGER_PRIVATE_DATA EFI_DEBUGGER_PRIVATE_DATA;
 
 //
 // Definition for Debugger Command
@@ -186,7 +186,7 @@ typedef struct {
 //
 // Definition for Debugger private data structure
 //
-#define EFI_DEBUGGER_SIGNATURE         EFI_SIGNATURE_32 ('e', 'd', 'b', '!')
+#define EFI_DEBUGGER_SIGNATURE         SIGNATURE_32 ('e', 'd', 'b', '!')
 
 #define EFI_DEBUG_DEFAULT_INSTRUCTION_NUMBER  5
 
@@ -222,7 +222,6 @@ typedef struct _EFI_DEBUGGER_PRIVATE_DATA {
   EFI_INSTRUCTION_SET_ARCHITECTURE            Isa;
   UINT32                                      EfiDebuggerRevision;
   UINT32                                      EbcVmRevision;
-  EFI_DEBUGGER_CONFIGURATION_PROTOCOL         DebuggerConfiguration;
   EFI_DEBUG_IMAGE_INFO_TABLE_HEADER           *DebugImageInfoTableHeader;
   EFI_SIMPLE_FILE_SYSTEM_PROTOCOL             *Vol;
   EFI_PCI_ROOT_BRIDGE_IO_PROTOCOL             *PciRootBridgeIo;

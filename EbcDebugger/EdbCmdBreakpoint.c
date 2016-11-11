@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbCmdBreakpoint.c
-  
+
 Abstract:
 
 
@@ -29,7 +29,7 @@ IsEBCBREAK3 (
 Routine Description:
 
   Check whether current IP is EBC BREAK3 instruction
-  
+
 Arguments:
 
   Address   - EBC IP address.
@@ -38,7 +38,7 @@ Returns:
 
   TRUE  - Current IP is EBC BREAK3 instruction
   FALSE - Current IP is not EBC BREAK3 instruction
-  
+
 --*/
 {
   if (GET_OPCODE(Address) != OPCODE_BREAK) {
@@ -62,7 +62,7 @@ DebuggerBreakpointIsDuplicated (
 Routine Description:
 
   Check whether the Address is already set in breakpoint
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -72,7 +72,7 @@ Returns:
 
   TRUE          - breakpoint is found
   FALSE         - breakpoint is not found
-  
+
 --*/
 {
   UINTN  Index;
@@ -105,7 +105,7 @@ DebuggerBreakpointAdd (
 Routine Description:
 
   Add this breakpoint
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -116,7 +116,7 @@ Returns:
   EFI_SUCCESS          - breakpoint added successfully
   EFI_ALREADY_STARTED  - breakpoint is already added
   EFI_OUT_OF_RESOURCES - all the breakpoint entries are used
-  
+
 --*/
 {
   //
@@ -128,7 +128,7 @@ Returns:
   }
 
   //
-  // Check whether the address is a breakpoint 3 instruction 
+  // Check whether the address is a breakpoint 3 instruction
   //
   if (IsEBCBREAK3 (Address)) {
     EDBPrint (L"Breakpoint can not be set on BREAK 3 instruction!\n");
@@ -146,7 +146,7 @@ Returns:
   DebuggerPrivate->DebuggerBreakpointContext[DebuggerPrivate->DebuggerBreakpointCount].BreakpointAddress = Address;
   DebuggerPrivate->DebuggerBreakpointContext[DebuggerPrivate->DebuggerBreakpointCount].State = TRUE;
   DebuggerPrivate->DebuggerBreakpointContext[DebuggerPrivate->DebuggerBreakpointCount].OldInstruction = 0;
-  EfiCopyMem (
+  CopyMem (
     &DebuggerPrivate->DebuggerBreakpointContext[DebuggerPrivate->DebuggerBreakpointCount].OldInstruction,
     (VOID *)Address,
     sizeof(UINT16)
@@ -170,7 +170,7 @@ DebuggerBreakpointDel (
 Routine Description:
 
   Delete this breakpoint
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -180,7 +180,7 @@ Returns:
 
   EFI_SUCCESS   - breakpoint deleted successfully
   EFI_NOT_FOUND - breakpoint not found
-  
+
 --*/
 {
   UINTN    BpIndex;
@@ -196,7 +196,7 @@ Returns:
   for (BpIndex = Index; BpIndex < DebuggerPrivate->DebuggerBreakpointCount - 1; BpIndex++) {
     DebuggerPrivate->DebuggerBreakpointContext[BpIndex] = DebuggerPrivate->DebuggerBreakpointContext[BpIndex + 1];
   }
-  EfiZeroMem (
+  ZeroMem (
     &DebuggerPrivate->DebuggerBreakpointContext[BpIndex],
     sizeof(DebuggerPrivate->DebuggerBreakpointContext[BpIndex])
     );
@@ -219,7 +219,7 @@ DebuggerBreakpointDis (
 Routine Description:
 
   Disable this breakpoint
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -229,7 +229,7 @@ Returns:
 
   EFI_SUCCESS   - breakpoint disabled successfully
   EFI_NOT_FOUND - breakpoint not found
-  
+
 --*/
 {
   if ((Index >= EFI_DEBUGGER_BREAKPOINT_MAX) ||
@@ -255,7 +255,7 @@ DebuggerBreakpointEn (
 Routine Description:
 
   Enable this breakpoint
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -265,7 +265,7 @@ Returns:
 
   EFI_SUCCESS   - breakpoint enabled successfully
   EFI_NOT_FOUND - breakpoint not found
-  
+
 --*/
 {
   if ((Index >= EFI_DEBUGGER_BREAKPOINT_MAX) ||
@@ -293,7 +293,7 @@ DebuggerBreakpointList (
 Routine Description:
 
   DebuggerCommand - BreakpointList
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -304,7 +304,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   UINTN Index;
@@ -359,7 +359,7 @@ DebuggerBreakpointSet (
 Routine Description:
 
   DebuggerCommand - BreakpointSet
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -370,7 +370,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   UINTN      Address;
@@ -423,7 +423,7 @@ DebuggerBreakpointClear (
 Routine Description:
 
   DebuggerCommand - BreakpointClear
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -434,7 +434,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   UINTN      Index;
@@ -447,12 +447,12 @@ Returns:
     return EFI_DEBUG_CONTINUE;
   }
 
-  if (EfiStriCmp (CommandArg, L"*") == 0) {
+  if (StriCmp (CommandArg, L"*") == 0) {
     //
     // delete all breakpoint
     //
     DebuggerPrivate->DebuggerBreakpointCount = 0;
-    EfiZeroMem (DebuggerPrivate->DebuggerBreakpointContext, sizeof(DebuggerPrivate->DebuggerBreakpointContext));
+    ZeroMem (DebuggerPrivate->DebuggerBreakpointContext, sizeof(DebuggerPrivate->DebuggerBreakpointContext));
     EDBPrint (L"All the Breakpoint is cleared\n");
     return EFI_DEBUG_CONTINUE;
   }
@@ -497,7 +497,7 @@ DebuggerBreakpointDisable (
 Routine Description:
 
   DebuggerCommand - BreakpointDisable
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -508,7 +508,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   UINTN      Index;
@@ -519,7 +519,7 @@ Returns:
     return EFI_DEBUG_CONTINUE;
   }
 
-  if (EfiStriCmp (CommandArg, L"*") == 0) {
+  if (StriCmp (CommandArg, L"*") == 0) {
     //
     // disable all breakpoint
     //
@@ -561,7 +561,7 @@ DebuggerBreakpointEnable (
 Routine Description:
 
   DebuggerCommand - BreakpointEnable
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -572,7 +572,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   UINTN      Index;
@@ -583,7 +583,7 @@ Returns:
     return EFI_DEBUG_CONTINUE;
   }
 
-  if (EfiStriCmp (CommandArg, L"*") == 0) {
+  if (StriCmp (CommandArg, L"*") == 0) {
     //
     // enable all breakpoint
     //

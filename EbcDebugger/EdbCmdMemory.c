@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbCmdMemory.c
-  
+
 Abstract:
 
 
@@ -30,7 +30,7 @@ EdbDisplayMemoryUnit (
 Routine Description:
 
   Display memory unit
-  
+
 Arguments:
 
   Address         - Memory Address
@@ -39,7 +39,7 @@ Arguments:
 Returns:
 
   Length of the memory unit
-  
+
 --*/
 {
   UINT8  Data8;
@@ -52,21 +52,24 @@ Returns:
   //
   switch (Width) {
   case EdbWidthUint8:
-    EfiCopyMem (&Data8, (VOID *)Address, sizeof(UINT8));
+    CopyMem (&Data8, (VOID *)Address, sizeof(UINT8));
     EDBPrint (L"%02x ", Data8);
     return sizeof(UINT8);
   case EdbWidthUint16:
-    EfiCopyMem (&Data16, (VOID *)Address, sizeof(UINT16));
+    CopyMem (&Data16, (VOID *)Address, sizeof(UINT16));
     EDBPrint (L"%04x ", Data16);
     return sizeof(UINT16);
   case EdbWidthUint32:
-    EfiCopyMem (&Data32, (VOID *)Address, sizeof(UINT32));
+    CopyMem (&Data32, (VOID *)Address, sizeof(UINT32));
     EDBPrint (L"%08x ", Data32);
     return sizeof(UINT32);
   case EdbWidthUint64:
-    EfiCopyMem (&Data64, (VOID *)Address, sizeof(UINT64));
+    CopyMem (&Data64, (VOID *)Address, sizeof(UINT64));
     EDBPrint (L"%016lx ", Data64);
     return sizeof(UINT64);
+  default:
+    ASSERT (FALSE);
+    break;
   }
 
   //
@@ -86,7 +89,7 @@ EdbDisplayMemory (
 Routine Description:
 
   Display memory
-  
+
 Arguments:
 
   Address         - Memory Address
@@ -96,7 +99,7 @@ Arguments:
 Returns:
 
   None
-  
+
 --*/
 {
   UINTN  LineNumber;
@@ -190,7 +193,7 @@ EdbEnterMemory (
 Routine Description:
 
   Entry memory
-  
+
 Arguments:
 
   Address         - Memory Address
@@ -200,21 +203,21 @@ Arguments:
 Returns:
 
   None
-  
+
 --*/
 {
   switch (Width) {
   case EdbWidthUint8:
-    EfiCopyMem ((VOID *)Address, Value, sizeof(UINT8));
+    CopyMem ((VOID *)Address, Value, sizeof(UINT8));
     break;
   case EdbWidthUint16:
-    EfiCopyMem ((VOID *)Address, Value, sizeof(UINT16));
+    CopyMem ((VOID *)Address, Value, sizeof(UINT16));
     break;
   case EdbWidthUint32:
-    EfiCopyMem ((VOID *)Address, Value, sizeof(UINT32));
+    CopyMem ((VOID *)Address, Value, sizeof(UINT32));
     break;
   case EdbWidthUint64:
-    EfiCopyMem ((VOID *)Address, Value, sizeof(UINT64));
+    CopyMem ((VOID *)Address, Value, sizeof(UINT64));
     break;
   default:
     break;
@@ -234,7 +237,7 @@ EdbGetMemoryAddressCount (
 Routine Description:
 
   Get memory address and count
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -245,7 +248,7 @@ Returns:
 
   EFI_SUCCESS           - memory address and count are got
   EFI_INVALID_PARAMETER - something wrong
-  
+
 --*/
 {
   CHAR16       *CommandStr;
@@ -301,7 +304,7 @@ EdbGetMemoryAddressValue (
 Routine Description:
 
   Get memory address and value
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -312,7 +315,7 @@ Returns:
 
   EFI_SUCCESS           - memory address and value are got
   EFI_INVALID_PARAMETER - something wrong
-  
+
 --*/
 {
   CHAR16       *CommandStr;
@@ -367,7 +370,7 @@ DebuggerMemoryDisplay (
 Routine Description:
 
   Display memory
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -376,7 +379,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_RETURN   - formal return value
-  
+
 --*/
 {
   EFI_STATUS Status;
@@ -412,7 +415,7 @@ DebuggerMemoryEnter (
 Routine Description:
 
   Enter memory
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -421,7 +424,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_RETURN   - formal return value
-  
+
 --*/
 {
   EFI_STATUS Status;
@@ -459,7 +462,7 @@ DebuggerMemoryDB (
 Routine Description:
 
   DebuggerCommand - DB
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -470,7 +473,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_RETURN   - formal return value
-  
+
 --*/
 {
   return DebuggerMemoryDisplay (CommandArg, EdbWidthUint8);
@@ -488,7 +491,7 @@ DebuggerMemoryDW (
 Routine Description:
 
   DebuggerCommand - DW
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -499,7 +502,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_RETURN   - formal return value
-  
+
 --*/
 {
   return DebuggerMemoryDisplay (CommandArg, EdbWidthUint16);
@@ -517,7 +520,7 @@ DebuggerMemoryDD (
 Routine Description:
 
   DebuggerCommand - DD
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -528,7 +531,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_RETURN   - formal return value
-  
+
 --*/
 {
   return DebuggerMemoryDisplay (CommandArg, EdbWidthUint32);
@@ -546,7 +549,7 @@ DebuggerMemoryDQ (
 Routine Description:
 
   DebuggerCommand - DQ
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -557,7 +560,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_RETURN   - formal return value
-  
+
 --*/
 {
   return DebuggerMemoryDisplay (CommandArg, EdbWidthUint64);
@@ -575,7 +578,7 @@ DebuggerMemoryEB (
 Routine Description:
 
   DebuggerCommand - EB
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -586,7 +589,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_RETURN   - formal return value
-  
+
 --*/
 {
   return DebuggerMemoryEnter (CommandArg, EdbWidthUint8);
@@ -604,7 +607,7 @@ DebuggerMemoryEW (
 Routine Description:
 
   DebuggerCommand - EW
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -615,7 +618,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_RETURN   - formal return value
-  
+
 --*/
 {
   return DebuggerMemoryEnter (CommandArg, EdbWidthUint16);
@@ -633,7 +636,7 @@ DebuggerMemoryED (
 Routine Description:
 
   DebuggerCommand - ED
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -644,7 +647,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_RETURN   - formal return value
-  
+
 --*/
 {
   return DebuggerMemoryEnter (CommandArg, EdbWidthUint32);
@@ -662,7 +665,7 @@ DebuggerMemoryEQ (
 Routine Description:
 
   DebuggerCommand - EQ
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -673,9 +676,8 @@ Arguments:
 Returns:
 
   EFI_DEBUG_RETURN   - formal return value
-  
+
 --*/
 {
   return DebuggerMemoryEnter (CommandArg, EdbWidthUint64);
 }
-

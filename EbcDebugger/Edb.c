@@ -17,9 +17,7 @@ Abstract:
 
 --*/
 
-#include "Tiano.h"
-#include "EfiDriverLib.h"
-
+#include <Uefi.h>
 #include "Edb.h"
 
 EFI_DEBUGGER_PRIVATE_DATA mDebuggerPrivate = {
@@ -29,21 +27,17 @@ EFI_DEBUGGER_PRIVATE_DATA mDebuggerPrivate = {
     EBC_DEBUGGER_MINOR_VERSION,              // EfiDebuggerRevision
   (VM_MAJOR_VERSION << 16) |
     VM_MINOR_VERSION,                        // EbcVmRevision
-  {
-     EFI_DEBUGGER_CONFIGURATION_VERSION,
-     &mDebuggerPrivate,
-  },                                         // DebuggerConfiguration
   NULL,                                      // DebugImageInfoTableHeader
   NULL,                                      // Vol
   NULL,                                      // PciRootBridgeIo
   mDebuggerCommandSet,                       // DebuggerCommandSet
   {0},                                       // DebuggerSymbolContext
   0,                                         // DebuggerBreakpointCount
-  {0},                                       // DebuggerBreakpointContext
+  {{0}},                                     // DebuggerBreakpointContext
   0,                                         // CallStackEntryCount
-  {0},                                       // CallStackEntry
+  {{0}},                                     // CallStackEntry
   0,                                         // TraceEntryCount
-  {0},                                       // TraceEntry
+  {{0}},                                     // TraceEntry
   {0},                                       // StepContext
   {0},                                       // GoTilContext
   0,                                         // InstructionScope
@@ -97,7 +91,7 @@ Returns:
   //
   for (Index = 0; (Index < DebuggerPrivate->DebuggerBreakpointCount) && (Index < EFI_DEBUGGER_BREAKPOINT_MAX); Index++) {
     if (DebuggerPrivate->DebuggerBreakpointContext[Index].State) {
-      EfiCopyMem (
+      CopyMem (
         (VOID *)(UINTN)DebuggerPrivate->DebuggerBreakpointContext[Index].BreakpointAddress,
         &DebuggerPrivate->DebuggerBreakpointContext[Index].OldInstruction,
         sizeof(UINT16)
@@ -110,7 +104,7 @@ Returns:
   //
   if (NeedRemove) {
     DebuggerPrivate->DebuggerBreakpointCount = 0;
-    EfiZeroMem (DebuggerPrivate->DebuggerBreakpointContext, sizeof(DebuggerPrivate->DebuggerBreakpointContext));
+    ZeroMem (DebuggerPrivate->DebuggerBreakpointContext, sizeof(DebuggerPrivate->DebuggerBreakpointContext));
   }
 
   //
@@ -148,7 +142,7 @@ Returns:
   Data16 = 0x0300;
   for (Index = 0; (Index < DebuggerPrivate->DebuggerBreakpointCount) && (Index < EFI_DEBUGGER_BREAKPOINT_MAX); Index++) {
     if (DebuggerPrivate->DebuggerBreakpointContext[Index].State) {
-      EfiCopyMem (
+      CopyMem (
         (VOID *)(UINTN)DebuggerPrivate->DebuggerBreakpointContext[Index].BreakpointAddress,
         &Data16,
         sizeof(UINT16)
@@ -161,7 +155,7 @@ Returns:
   // If so, we need to patch memory back to let user see the real memory.
   //
   if (DebuggerPrivate->DebuggerBreakpointContext[EFI_DEBUGGER_BREAKPOINT_MAX].BreakpointAddress != 0) {
-    EfiCopyMem (
+    CopyMem (
       (VOID *)(UINTN)DebuggerPrivate->DebuggerBreakpointContext[EFI_DEBUGGER_BREAKPOINT_MAX].BreakpointAddress,
       &DebuggerPrivate->DebuggerBreakpointContext[EFI_DEBUGGER_BREAKPOINT_MAX].OldInstruction,
       sizeof(UINT16)
@@ -269,7 +263,7 @@ Returns:
       //
       // Zero current breakpoint
       //
-      EfiZeroMem (
+      ZeroMem (
         &DebuggerPrivate->DebuggerBreakpointContext[EFI_DEBUGGER_BREAKPOINT_MAX],
         sizeof(DebuggerPrivate->DebuggerBreakpointContext[EFI_DEBUGGER_BREAKPOINT_MAX])
         );
@@ -317,9 +311,9 @@ Returns:
     // Go throuth each entry
     //
     for (Index = 0; Index < Object->EntryCount; Index++) {
-      EfiZeroMem (&Object->Entry[Index], sizeof(Object->Entry[Index]));
+      ZeroMem (&Object->Entry[Index], sizeof(Object->Entry[Index]));
     }
-    EfiZeroMem (Object->Name, sizeof(Object->Name));
+    ZeroMem (Object->Name, sizeof(Object->Name));
     Object->EntryCount = 0;
     Object->BaseAddress = 0;
     Object->StartEntrypointRVA = 0;
@@ -377,7 +371,7 @@ Returns:
     DebuggerPrivate->InstructionNumber = EFI_DEBUG_DEFAULT_INSTRUCTION_NUMBER;
 
     DebuggerPrivate->DebuggerBreakpointCount = 0;
-    EfiZeroMem (DebuggerPrivate->DebuggerBreakpointContext, sizeof(DebuggerPrivate->DebuggerBreakpointContext));
+    ZeroMem (DebuggerPrivate->DebuggerBreakpointContext, sizeof(DebuggerPrivate->DebuggerBreakpointContext));
 
 //    DebuggerPrivate->StatusFlags = 0;
 
@@ -442,8 +436,8 @@ Returns:
     DebuggerPrivate->FeatureFlags = EFI_DEBUG_FLAG_EBC_BOE | EFI_DEBUG_FLAG_EBC_BOT;
     DebuggerPrivate->CallStackEntryCount = 0;
     DebuggerPrivate->TraceEntryCount = 0;
-    EfiZeroMem (DebuggerPrivate->CallStackEntry, sizeof(DebuggerPrivate->CallStackEntry));
-    EfiZeroMem (DebuggerPrivate->TraceEntry, sizeof(DebuggerPrivate->TraceEntry));
+    ZeroMem (DebuggerPrivate->CallStackEntry, sizeof(DebuggerPrivate->CallStackEntry));
+    ZeroMem (DebuggerPrivate->TraceEntry, sizeof(DebuggerPrivate->TraceEntry));
 
     //
     // Clear all breakpoint
@@ -464,7 +458,7 @@ Returns:
   //
   // Clear Step context
   //
-  EfiZeroMem (&mDebuggerPrivate.StepContext, sizeof(mDebuggerPrivate.StepContext));
+  ZeroMem (&mDebuggerPrivate.StepContext, sizeof(mDebuggerPrivate.StepContext));
   DebuggerPrivate->StatusFlags = 0;
 
   //
@@ -535,9 +529,10 @@ Returns:
 }
 
 VOID
+EFIAPI
 EdbExceptionHandler (
-  IN EFI_EXCEPTION_TYPE   ExceptionType,
-  IN EFI_SYSTEM_CONTEXT   SystemContext
+  IN     EFI_EXCEPTION_TYPE   ExceptionType,
+  IN OUT EFI_SYSTEM_CONTEXT   SystemContext
   )
 /*++
 
@@ -626,7 +621,7 @@ Returns:
     // Check PageBreak;
     //
     if (CommandArg != NULL) {
-      if (EfiStriCmp (CommandArg, L"-b") == 0) {
+      if (StriCmp (CommandArg, L"-b") == 0) {
         CommandArg = StrGetNextTokenLine (L" ");
         mDebuggerPrivate.EnablePageBreak = TRUE;
       }
@@ -649,7 +644,7 @@ Returns:
     } else if (DebugStatus == EFI_DEBUG_CONTINUE) {
       continue;
     } else {
-      EFI_DEBUGGER_ASSERT (FALSE);
+      ASSERT (FALSE);
     }
   }
 
@@ -662,4 +657,3 @@ Returns:
 
   return;
 }
-

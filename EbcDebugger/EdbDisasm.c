@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbDisasm.c
-  
+
 Abstract:
 
 
@@ -128,7 +128,7 @@ EdbDisasmBREAK (
 Routine Description:
 
   Disasm instruction - BREAK
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -138,10 +138,10 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_BREAK);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_BREAK);
 
   if (*(UINT8 *)(UINTN)(InstructionAddress + 1) > 6) {
     return 0;
@@ -162,7 +162,7 @@ Returns:
   return 2;
 }
 
-STATIC CONST UINT8                    mJMPLen[] = { 2, 2, 6, 10 };
+extern CONST UINT8                    mJMPLen[];
 
 UINTN
 EdbDisasmJMP (
@@ -175,7 +175,7 @@ EdbDisasmJMP (
 Routine Description:
 
   Disasm instruction - JMP
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -185,7 +185,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8   Modifiers;
@@ -194,7 +194,7 @@ Returns:
   UINT32  Data32;
   UINT64  Data64;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_JMP);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_JMP);
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);
   Operands   = GET_OPERANDS (InstructionAddress);
@@ -222,14 +222,14 @@ Returns:
 
     InstructionAddress += 2;
     if (Modifiers & OPCODE_M_IMMDATA64) {
-      EfiCopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
+      CopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
       if (Modifiers & OPCODE_M_IMMDATA) {
         EdbPrintData64 (Data64);
       } else {
         return 0;
       }
     } else {
-      EfiCopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
+      CopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
       EdbPrintRegister1 (Operands);
 
       if ((Operands & OPERAND_M_INDIRECT1) == 0) {
@@ -259,7 +259,7 @@ EdbDisasmJMP8 (
 Routine Description:
 
   Disasm instruction - JMP8
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -269,12 +269,12 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8   Modifiers;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_JMP8);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_JMP8);
   Modifiers  = GET_MODIFIERS (InstructionAddress);
 
   //
@@ -311,7 +311,7 @@ EdbDisasmCALL (
 Routine Description:
 
   Disasm instruction - CALL
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -321,7 +321,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8   Modifiers;
@@ -333,7 +333,7 @@ Returns:
   UINTN   Result;
   EFI_PHYSICAL_ADDRESS      SavedInstructionAddress;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_CALL);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_CALL);
   SavedInstructionAddress = InstructionAddress;
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);
@@ -361,7 +361,7 @@ Returns:
 
     InstructionAddress += 2;
     if (Modifiers & OPCODE_M_IMMDATA64) {
-      EfiCopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
+      CopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
       Ip = Data64;
       if (Modifiers & OPCODE_M_IMMDATA) {
         Result = EdbFindAndPrintSymbol ((UINTN)Ip);
@@ -373,7 +373,7 @@ Returns:
       }
     } else {
       if (Modifiers & OPCODE_M_IMMDATA) {
-        EfiCopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
+        CopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
       } else {
         Data32 = 0;
       }
@@ -421,7 +421,7 @@ EdbDisasmRET (
 Routine Description:
 
   Disasm instruction - RET
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -431,10 +431,10 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_RET);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_RET);
 
   if (*(UINT8 *)(UINTN)(InstructionAddress + 1) != 0) {
     return 0;
@@ -465,7 +465,7 @@ EdbDisasmCMP (
 Routine Description:
 
   Disasm instruction - CMP
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -475,7 +475,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Opcode;
@@ -484,7 +484,7 @@ Returns:
   UINT16 Data16;
   UINTN  Size;
 
-  EFI_DEBUGGER_ASSERT (
+  ASSERT (
     (GET_OPCODE(InstructionAddress) == OPCODE_CMPEQ)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_CMPLTE)  ||
     (GET_OPCODE(InstructionAddress) == OPCODE_CMPGTE)  ||
@@ -538,7 +538,7 @@ Returns:
     EdbPrintRegister2 (Operands);
 
     if (Modifiers & OPCODE_M_IMMDATA) {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       if (Operands & OPERAND_M_INDIRECT2) {
         EdbPrintRawIndexData16 (Data16);
       } else {
@@ -563,7 +563,7 @@ EdbDisasmUnsignedDataManip (
 Routine Description:
 
   Disasm instruction - Unsigned Data Manipulate
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -573,7 +573,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -582,7 +582,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (
+  ASSERT (
     (GET_OPCODE(InstructionAddress) == OPCODE_NOT)    ||
     (GET_OPCODE(InstructionAddress) == OPCODE_MULU)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_DIVU)   ||
@@ -662,7 +662,7 @@ Returns:
 
     InstructionAddress += 2;
     if (Modifiers & DATAMANIP_M_IMMDATA) {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       if (Operands & OPERAND_M_INDIRECT2) {
         EdbPrintRawIndexData16 (Data16);
       } else {
@@ -687,7 +687,7 @@ EdbDisasmSignedDataManip (
 Routine Description:
 
   Disasm instruction - Signed Data Manipulate
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -697,7 +697,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -706,7 +706,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (
+  ASSERT (
     (GET_OPCODE(InstructionAddress) == OPCODE_NEG)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_ADD)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_SUB)   ||
@@ -766,7 +766,7 @@ Returns:
 
     InstructionAddress += 2;
     if (Modifiers & DATAMANIP_M_IMMDATA) {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       if (Operands & OPERAND_M_INDIRECT2) {
         EdbPrintRawIndexData16 (Data16);
       } else {
@@ -791,7 +791,7 @@ EdbDisasmMOVxx (
 Routine Description:
 
   Disasm instruction - MOVxx
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -801,7 +801,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8   Modifiers;
@@ -812,7 +812,7 @@ Returns:
   UINT32  Data32;
   UINT64  Data64;
 
-  EFI_DEBUGGER_ASSERT (
+  ASSERT (
     (GET_OPCODE(InstructionAddress) == OPCODE_MOVBW)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_MOVWW)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_MOVDW)   ||
@@ -903,15 +903,15 @@ Returns:
     InstructionAddress += 2;
     if (Modifiers & OPCODE_M_IMMED_OP1) {
       if ((Opcode <= OPCODE_MOVQW) || (Opcode == OPCODE_MOVNW)) {
-        EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+        CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
         InstructionAddress += 2;
         EdbPrintRawIndexData16 (Data16);
       } else if ((Opcode <= OPCODE_MOVQD) || (Opcode == OPCODE_MOVND)) {
-        EfiCopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
+        CopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
         InstructionAddress += 4;
         EdbPrintRawIndexData32 (Data32);
       } else if (Opcode == OPCODE_MOVQQ) {
-        EfiCopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
+        CopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
         InstructionAddress += 8;
         EdbPrintRawIndexData64 (Data64);
       }
@@ -922,13 +922,13 @@ Returns:
 
     if (Modifiers & OPCODE_M_IMMED_OP2) {
       if ((Opcode <= OPCODE_MOVQW) || (Opcode == OPCODE_MOVNW)) {
-        EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+        CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
         EdbPrintRawIndexData16 (Data16);
       } else if ((Opcode <= OPCODE_MOVQD) || (Opcode == OPCODE_MOVND)) {
-        EfiCopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
+        CopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
         EdbPrintRawIndexData32 (Data32);
       } else if (Opcode == OPCODE_MOVQQ) {
-        EfiCopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
+        CopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
         EdbPrintRawIndexData64 (Data64);
       }
     }
@@ -950,7 +950,7 @@ EdbDisasmMOVsnw (
 Routine Description:
 
   Disasm instruction - MOVsnw
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -960,7 +960,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -968,7 +968,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVSNW);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVSNW);
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);
   Operands   = GET_OPERANDS (InstructionAddress);
@@ -992,7 +992,7 @@ Returns:
 
     InstructionAddress += 2;
     if (Modifiers & OPCODE_M_IMMED_OP1) {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       InstructionAddress += 2;
       EdbPrintRawIndexData16 (Data16);
     }
@@ -1001,7 +1001,7 @@ Returns:
     EdbPrintRegister2 (Operands);
 
     if (Modifiers & OPCODE_M_IMMED_OP2) {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       if (Operands & OPERAND_M_INDIRECT2) {
         EdbPrintRawIndexData16 (Data16);
       } else {
@@ -1026,7 +1026,7 @@ EdbDisasmMOVsnd (
 Routine Description:
 
   Disasm instruction - MOVsnd
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1036,7 +1036,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1044,7 +1044,7 @@ Returns:
   UINTN  Size;
   UINT32 Data32;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVSND);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVSND);
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);
   Operands   = GET_OPERANDS (InstructionAddress);
@@ -1068,7 +1068,7 @@ Returns:
 
     InstructionAddress += 2;
     if (Modifiers & OPCODE_M_IMMED_OP1) {
-      EfiCopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
+      CopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
       InstructionAddress += 4;
       EdbPrintRawIndexData32 (Data32);
     }
@@ -1077,7 +1077,7 @@ Returns:
     EdbPrintRegister2 (Operands);
 
     if (Modifiers & OPCODE_M_IMMED_OP2) {
-      EfiCopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
+      CopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
       if (Operands & OPERAND_M_INDIRECT2) {
         EdbPrintRawIndexData32 (Data32);
       } else {
@@ -1102,7 +1102,7 @@ EdbDisasmLOADSP (
 Routine Description:
 
   Disasm instruction - LOADSP
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1112,12 +1112,12 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Operands;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_LOADSP);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_LOADSP);
 
   Operands   = GET_OPERANDS (InstructionAddress);
 
@@ -1150,7 +1150,7 @@ EdbDisasmSTORESP (
 Routine Description:
 
   Disasm instruction - STORESP
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1160,12 +1160,12 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Operands;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_STORESP);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_STORESP);
 
   Operands   = GET_OPERANDS (InstructionAddress);
 
@@ -1198,7 +1198,7 @@ EdbDisasmPUSH (
 Routine Description:
 
   Disasm instruction - PUSH
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1208,7 +1208,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1216,7 +1216,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_PUSH);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_PUSH);
 
   Operands   = GET_OPERANDS (InstructionAddress);
   Modifiers  = GET_MODIFIERS (InstructionAddress);
@@ -1243,7 +1243,7 @@ Returns:
 
     InstructionAddress += 2;
     if (Modifiers & PUSHPOP_M_IMMDATA) {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       if (Operands & OPERAND_M_INDIRECT1) {
         EdbPrintRawIndexData16 (Data16);
       } else {
@@ -1268,7 +1268,7 @@ EdbDisasmPOP (
 Routine Description:
 
   Disasm instruction - POP
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1278,7 +1278,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1286,7 +1286,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_POP);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_POP);
 
   Operands   = GET_OPERANDS (InstructionAddress);
   Modifiers  = GET_MODIFIERS (InstructionAddress);
@@ -1313,7 +1313,7 @@ Returns:
 
     InstructionAddress += 2;
     if (Modifiers & PUSHPOP_M_IMMDATA) {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       if (Operands & OPERAND_M_INDIRECT1) {
         EdbPrintRawIndexData16 (Data16);
       } else {
@@ -1338,7 +1338,7 @@ EdbDisasmCMPI (
 Routine Description:
 
   Disasm instruction - CMPI
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1348,7 +1348,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1358,7 +1358,7 @@ Returns:
   UINT32 Data32;
   UINTN  Size;
 
-  EFI_DEBUGGER_ASSERT (
+  ASSERT (
     (GET_OPCODE(InstructionAddress) == OPCODE_CMPIEQ)   ||
     (GET_OPCODE(InstructionAddress) == OPCODE_CMPILTE)  ||
     (GET_OPCODE(InstructionAddress) == OPCODE_CMPIGTE)  ||
@@ -1423,7 +1423,7 @@ Returns:
 
     InstructionAddress += 2;
     if (Operands & OPERAND_M_CMPI_INDEX) {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       InstructionAddress += 2;
       EdbPrintRawIndexData16 (Data16);
     }
@@ -1431,10 +1431,10 @@ Returns:
     EdbPrintComma ();
 
     if (Modifiers & OPCODE_M_CMPI32_DATA) {
-      EfiCopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
+      CopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
       EdbPrintDatan (Data32);
     } else {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       EdbPrintDatan (Data16);
     }
 
@@ -1455,7 +1455,7 @@ EdbDisasmPUSHn (
 Routine Description:
 
   Disasm instruction - PUSHn
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1465,7 +1465,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1473,7 +1473,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_PUSHN);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_PUSHN);
 
   Operands   = GET_OPERANDS (InstructionAddress);
   Modifiers  = GET_MODIFIERS (InstructionAddress);
@@ -1495,7 +1495,7 @@ Returns:
 
     InstructionAddress += 2;
     if (Modifiers & PUSHPOP_M_IMMDATA) {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       if (Operands & OPERAND_M_INDIRECT1) {
         EdbPrintRawIndexData16 (Data16);
       } else {
@@ -1520,7 +1520,7 @@ EdbDisasmPOPn (
 Routine Description:
 
   Disasm instruction - POPn
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1530,7 +1530,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1538,7 +1538,7 @@ Returns:
   UINTN  Size;
   UINT16 Data16;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_POPN);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_POPN);
 
   Operands   = GET_OPERANDS (InstructionAddress);
   Modifiers  = GET_MODIFIERS (InstructionAddress);
@@ -1560,7 +1560,7 @@ Returns:
 
     InstructionAddress += 2;
     if (Modifiers & PUSHPOP_M_IMMDATA) {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       if (Operands & OPERAND_M_INDIRECT1) {
         EdbPrintRawIndexData16 (Data16);
       } else {
@@ -1585,7 +1585,7 @@ EdbDisasmMOVI (
 Routine Description:
 
   Disasm instruction - MOVI
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1595,7 +1595,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1605,7 +1605,7 @@ Returns:
   UINT32 Data32;
   UINT64 Data64;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVI);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVI);
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);
   Operands   = GET_OPERANDS (InstructionAddress);
@@ -1660,7 +1660,7 @@ Returns:
 
     InstructionAddress += 2;
     if (Operands & MOVI_M_IMMDATA) {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       InstructionAddress += 2;
       EdbPrintRawIndexData16 (Data16);
     }
@@ -1669,15 +1669,15 @@ Returns:
 
     switch (Modifiers & MOVI_M_DATAWIDTH) {
     case MOVI_DATAWIDTH16:
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       EdbPrintDatan (Data16);
       break;
     case MOVI_DATAWIDTH32:
-      EfiCopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
+      CopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
       EdbPrintDatan (Data32);
       break;
     case MOVI_DATAWIDTH64:
-      EfiCopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
+      CopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
       EdbPrintData64n (Data64);
       break;
     }
@@ -1699,7 +1699,7 @@ EdbDisasmMOVIn (
 Routine Description:
 
   Disasm instruction - MOVIn
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1709,7 +1709,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1719,7 +1719,7 @@ Returns:
   UINT32 Data32;
   UINT64 Data64;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVIN);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVIN);
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);
   Operands   = GET_OPERANDS (InstructionAddress);
@@ -1760,7 +1760,7 @@ Returns:
 
     InstructionAddress += 2;
     if (Operands & MOVI_M_IMMDATA) {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       InstructionAddress += 2;
       EdbPrintRawIndexData16 (Data16);
     }
@@ -1769,15 +1769,15 @@ Returns:
 
     switch (Modifiers & MOVI_M_DATAWIDTH) {
     case MOVI_DATAWIDTH16:
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       EdbPrintRawIndexData16 (Data16);
       break;
     case MOVI_DATAWIDTH32:
-      EfiCopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
+      CopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
       EdbPrintRawIndexData32 (Data32);
       break;
     case MOVI_DATAWIDTH64:
-      EfiCopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
+      CopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
       EdbPrintRawIndexData64 (Data64);
       break;
     }
@@ -1799,7 +1799,7 @@ EdbDisasmMOVREL (
 Routine Description:
 
   Disasm instruction - MOVREL
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1809,7 +1809,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8   Modifiers;
@@ -1821,7 +1821,7 @@ Returns:
   UINTN   Result;
   EFI_PHYSICAL_ADDRESS      SavedInstructionAddress;
 
-  EFI_DEBUGGER_ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVREL);
+  ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_MOVREL);
   SavedInstructionAddress = InstructionAddress;
 
   Modifiers  = GET_MODIFIERS (InstructionAddress);
@@ -1865,7 +1865,7 @@ Returns:
 
     InstructionAddress += 2;
     if (Operands & MOVI_M_IMMDATA) {
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       InstructionAddress += 2;
       EdbPrintRawIndexData16 (Data16);
     }
@@ -1874,21 +1874,21 @@ Returns:
 
     switch (Modifiers & MOVI_M_DATAWIDTH) {
     case MOVI_DATAWIDTH16:
-      EfiCopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
+      CopyMem (&Data16, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT16));
       Result = EdbFindAndPrintSymbol ((UINTN)(SavedInstructionAddress + Size + (INT16)Data16));
       if (Result == 0) {
         EdbPrintData16 (Data16);
       }
       break;
     case MOVI_DATAWIDTH32:
-      EfiCopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
+      CopyMem (&Data32, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT32));
       Result = EdbFindAndPrintSymbol ((UINTN)(SavedInstructionAddress + Size + (INT32)Data32));
       if (Result == 0) {
         EdbPrintData32 (Data32);
       }
       break;
     case MOVI_DATAWIDTH64:
-      EfiCopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
+      CopyMem (&Data64, (VOID *)(UINTN)(InstructionAddress), sizeof(UINT64));
       if (sizeof(UINTN) == sizeof(UINT64)) {
         Result = EdbFindAndPrintSymbol ((UINTN)(SavedInstructionAddress + Size + (INT64)Data64));
       } else {

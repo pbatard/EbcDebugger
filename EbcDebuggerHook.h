@@ -27,7 +27,7 @@ Abstract:
 #endif
 
 //
-// Hook in EbcInit.c
+// Hook in EbcInt.c
 //
 VOID
 EbcDebuggerHookInit (
@@ -122,4 +122,3 @@ EbcDebuggerHookJMP8End (
   );
 
 #endif
-

@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbCmdHelp.c
-  
+
 Abstract:
 
 
@@ -32,7 +32,7 @@ DebuggerHelp (
 Routine Description:
 
   DebuggerCommand - Help
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -43,7 +43,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   UINTN Index;
@@ -54,7 +54,7 @@ Returns:
   if (CommandArg == NULL) {
     for (Index = 0; DebuggerPrivate->DebuggerCommandSet[Index].CommandName != NULL; Index++) {
       EDBPrint (DebuggerPrivate->DebuggerCommandSet[Index].ClassName);
-      if (EfiStrCmp (DebuggerPrivate->DebuggerCommandSet[Index].CommandTitle, L"") != 0) {
+      if (StrCmp (DebuggerPrivate->DebuggerCommandSet[Index].CommandTitle, L"") != 0) {
         EDBPrint (L"  ");
         EDBPrint (DebuggerPrivate->DebuggerCommandSet[Index].CommandTitle);
       }
@@ -67,7 +67,7 @@ Returns:
   // Find the command and print the detail information.
   //
   for (Index = 0; DebuggerPrivate->DebuggerCommandSet[Index].CommandName != NULL; Index++) {
-    if (EfiStriCmp (CommandArg, DebuggerPrivate->DebuggerCommandSet[Index].CommandName) == 0) {
+    if (StriCmp (CommandArg, DebuggerPrivate->DebuggerCommandSet[Index].CommandName) == 0) {
       EDBPrint (DebuggerPrivate->DebuggerCommandSet[Index].CommandHelp);
       EDBPrint (DebuggerPrivate->DebuggerCommandSet[Index].CommandSyntax);
       return EFI_DEBUG_CONTINUE;

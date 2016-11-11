@@ -1,13 +1,13 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
@@ -55,10 +55,10 @@ Returns:
     } else {
       EDBPrint (L"BOC off\n");
     }
-  } else if (EfiStriCmp (CommandArg, L"on") == 0) {
+  } else if (StriCmp (CommandArg, L"on") == 0) {
     DebuggerPrivate->FeatureFlags |= EFI_DEBUG_FLAG_EBC_BOC;
     EDBPrint (L"BOC on\n");
-  } else if (EfiStriCmp (CommandArg, L"off") == 0) {
+  } else if (StriCmp (CommandArg, L"off") == 0) {
     DebuggerPrivate->FeatureFlags &= ~EFI_DEBUG_FLAG_EBC_B_BOC;
     EDBPrint (L"BOC off\n");
   } else {
@@ -106,10 +106,10 @@ Returns:
     } else {
       EDBPrint (L"BOCX off\n");
     }
-  } else if (EfiStriCmp (CommandArg, L"on") == 0) {
+  } else if (StriCmp (CommandArg, L"on") == 0) {
     DebuggerPrivate->FeatureFlags |= EFI_DEBUG_FLAG_EBC_BOCX;
     EDBPrint (L"BOCX on\n");
-  } else if (EfiStriCmp (CommandArg, L"off") == 0) {
+  } else if (StriCmp (CommandArg, L"off") == 0) {
     DebuggerPrivate->FeatureFlags &= ~EFI_DEBUG_FLAG_EBC_B_BOCX;
     EDBPrint (L"BOCX off\n");
   } else {
@@ -157,10 +157,10 @@ Returns:
     } else {
       EDBPrint (L"BOR off\n");
     }
-  } else if (EfiStriCmp (CommandArg, L"on") == 0) {
+  } else if (StriCmp (CommandArg, L"on") == 0) {
     DebuggerPrivate->FeatureFlags |= EFI_DEBUG_FLAG_EBC_BOR;
     EDBPrint (L"BOR on\n");
-  } else if (EfiStriCmp (CommandArg, L"off") == 0) {
+  } else if (StriCmp (CommandArg, L"off") == 0) {
     DebuggerPrivate->FeatureFlags &= ~EFI_DEBUG_FLAG_EBC_B_BOR;
     EDBPrint (L"BOR off\n");
   } else {
@@ -208,10 +208,10 @@ Returns:
     } else {
       EDBPrint (L"BOE off\n");
     }
-  } else if (EfiStriCmp (CommandArg, L"on") == 0) {
+  } else if (StriCmp (CommandArg, L"on") == 0) {
     DebuggerPrivate->FeatureFlags |= EFI_DEBUG_FLAG_EBC_BOE;
     EDBPrint (L"BOE on\n");
-  } else if (EfiStriCmp (CommandArg, L"off") == 0) {
+  } else if (StriCmp (CommandArg, L"off") == 0) {
     DebuggerPrivate->FeatureFlags &= ~EFI_DEBUG_FLAG_EBC_B_BOE;
     EDBPrint (L"BOE off\n");
   } else {
@@ -259,10 +259,10 @@ Returns:
     } else {
       EDBPrint (L"BOT off\n");
     }
-  } else if (EfiStriCmp (CommandArg, L"on") == 0) {
+  } else if (StriCmp (CommandArg, L"on") == 0) {
     DebuggerPrivate->FeatureFlags |= EFI_DEBUG_FLAG_EBC_BOT;
     EDBPrint (L"BOT on\n");
-  } else if (EfiStriCmp (CommandArg, L"off") == 0) {
+  } else if (StriCmp (CommandArg, L"off") == 0) {
     DebuggerPrivate->FeatureFlags &= ~EFI_DEBUG_FLAG_EBC_B_BOT;
     EDBPrint (L"BOT off\n");
   } else {
@@ -310,10 +310,10 @@ Returns:
     } else {
       EDBPrint (L"BOK off\n");
     }
-  } else if (EfiStriCmp (CommandArg, L"on") == 0) {
+  } else if (StriCmp (CommandArg, L"on") == 0) {
     DebuggerPrivate->FeatureFlags |= EFI_DEBUG_FLAG_EBC_BOK;
     EDBPrint (L"BOK on\n");
-  } else if (EfiStriCmp (CommandArg, L"off") == 0) {
+  } else if (StriCmp (CommandArg, L"off") == 0) {
     DebuggerPrivate->FeatureFlags &= ~EFI_DEBUG_FLAG_EBC_B_BOK;
     EDBPrint (L"BOK off\n");
   } else {
