@@ -226,9 +226,7 @@ EbcInterpret (
   //
   // Begin executing the EBC code
   //
-  EFI_EBC_DEBUGGER_CODE (
-    EbcDebuggerHookEbcInterpret (&VmContext);
-  )
+  EbcDebuggerHookEbcInterpret (&VmContext);
   EbcExecute (&VmContext);
 
   //
@@ -340,9 +338,7 @@ ExecuteEbcImageEntryPoint (
   //
   // Begin executing the EBC code
   //
-  EFI_EBC_DEBUGGER_CODE (
-    EbcDebuggerHookExecuteEbcImageEntryPoint (&VmContext);
-  )
+  EbcDebuggerHookExecuteEbcImageEntryPoint (&VmContext);
   EbcExecute (&VmContext);
 
   //

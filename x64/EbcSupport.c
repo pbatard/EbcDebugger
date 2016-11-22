@@ -203,7 +203,7 @@ EbcInterpret (
   //
   // Adjust the VM's stack pointer down.
   //
-  
+
   Status = GetEBCStack((EFI_HANDLE)(UINTN)-1, &VmContext.StackPool, &StackIndex);
   if (EFI_ERROR(Status)) {
     return Status;
@@ -275,12 +275,11 @@ EbcInterpret (
   // the stack too, so adjust accordingly.
   //  VmContext.HighStackBottom = (UINTN)(Addr + sizeof (VmContext) + sizeof (Addr));
   //
-  EFI_EBC_DEBUGGER_CODE (
-    EbcDebuggerHookEbcInterpret (&VmContext);
-  )
+
   //
   // Begin executing the EBC code
   //
+  EbcDebuggerHookEbcInterpret (&VmContext);
   EbcExecute (&VmContext);
 
   //
@@ -388,12 +387,11 @@ ExecuteEbcImageEntryPoint (
   // Entry function needn't access high stack context, simply
   // put the stack pointer here.
   //
-  EFI_EBC_DEBUGGER_CODE (
-    EbcDebuggerHookExecuteEbcImageEntryPoint (&VmContext);
-  )
+
   //
   // Begin executing the EBC code
   //
+  EbcDebuggerHookExecuteEbcImageEntryPoint (&VmContext);
   EbcExecute (&VmContext);
 
   //
@@ -575,3 +573,4 @@ EbcLLCALLEX (
     VmPtr->Ip += Size;
   }
 }
+

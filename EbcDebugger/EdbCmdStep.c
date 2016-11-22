@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbCmdStep.c
-  
+
 Abstract:
 
 
@@ -29,7 +29,7 @@ IsEBCCALL (
 Routine Description:
 
   Check whether current IP is EBC CALL instruction (NOTE: CALLEX is exclusive)
-  
+
 Arguments:
 
   Address   - EBC IP address.
@@ -38,7 +38,7 @@ Returns:
 
   TRUE  - Current IP is EBC CALL instruction
   FALSE - Current IP is not EBC CALL instruction
-  
+
 --*/
 {
   if (GET_OPCODE(Address) != OPCODE_CALL) {
@@ -61,7 +61,7 @@ IsEBCRET (
 Routine Description:
 
   Check whether current IP is EBC RET instruction
-  
+
 Arguments:
 
   Address   - EBC IP address.
@@ -70,13 +70,13 @@ Returns:
 
   TRUE  - Current IP is EBC RET instruction
   FALSE - Current IP is not EBC RET instruction
-  
+
 --*/
 {
   if (GET_OPCODE(Address) != OPCODE_RET) {
     return FALSE;
   }
-  
+
   if (GET_OPERANDS (Address) != 0) {
     return FALSE;
   } else {
@@ -96,7 +96,7 @@ DebuggerStepInto (
 Routine Description:
 
   DebuggerCommand - StepInto
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -107,7 +107,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   SystemContext.SystemContextEbc->Flags |= VMFLAGS_STEP;
@@ -127,7 +127,7 @@ DebuggerStepOver (
 Routine Description:
 
   DebuggerCommand - StepOver
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -138,7 +138,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   if (IsEBCCALL((UINTN)SystemContext.SystemContextEbc->Ip)) {
@@ -168,7 +168,7 @@ DebuggerStepOut (
 Routine Description:
 
   DebuggerCommand - StepOut
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -179,7 +179,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   if (IsEBCRET((UINTN)SystemContext.SystemContextEbc->Ip)) {

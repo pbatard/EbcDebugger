@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbDisasm.c
-  
+
 Abstract:
 
 
@@ -128,7 +128,7 @@ EdbDisasmBREAK (
 Routine Description:
 
   Disasm instruction - BREAK
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -138,7 +138,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_BREAK);
@@ -175,7 +175,7 @@ EdbDisasmJMP (
 Routine Description:
 
   Disasm instruction - JMP
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -185,7 +185,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8   Modifiers;
@@ -259,7 +259,7 @@ EdbDisasmJMP8 (
 Routine Description:
 
   Disasm instruction - JMP8
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -269,7 +269,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8   Modifiers;
@@ -311,7 +311,7 @@ EdbDisasmCALL (
 Routine Description:
 
   Disasm instruction - CALL
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -321,7 +321,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8   Modifiers;
@@ -421,7 +421,7 @@ EdbDisasmRET (
 Routine Description:
 
   Disasm instruction - RET
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -431,7 +431,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   ASSERT (GET_OPCODE(InstructionAddress) == OPCODE_RET);
@@ -465,7 +465,7 @@ EdbDisasmCMP (
 Routine Description:
 
   Disasm instruction - CMP
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -475,7 +475,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Opcode;
@@ -563,7 +563,7 @@ EdbDisasmUnsignedDataManip (
 Routine Description:
 
   Disasm instruction - Unsigned Data Manipulate
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -573,7 +573,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -687,7 +687,7 @@ EdbDisasmSignedDataManip (
 Routine Description:
 
   Disasm instruction - Signed Data Manipulate
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -697,7 +697,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -791,7 +791,7 @@ EdbDisasmMOVxx (
 Routine Description:
 
   Disasm instruction - MOVxx
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -801,7 +801,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8   Modifiers;
@@ -950,7 +950,7 @@ EdbDisasmMOVsnw (
 Routine Description:
 
   Disasm instruction - MOVsnw
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -960,7 +960,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1026,7 +1026,7 @@ EdbDisasmMOVsnd (
 Routine Description:
 
   Disasm instruction - MOVsnd
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1036,7 +1036,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1102,7 +1102,7 @@ EdbDisasmLOADSP (
 Routine Description:
 
   Disasm instruction - LOADSP
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1112,7 +1112,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Operands;
@@ -1150,7 +1150,7 @@ EdbDisasmSTORESP (
 Routine Description:
 
   Disasm instruction - STORESP
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1160,7 +1160,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Operands;
@@ -1198,7 +1198,7 @@ EdbDisasmPUSH (
 Routine Description:
 
   Disasm instruction - PUSH
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1208,7 +1208,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1268,7 +1268,7 @@ EdbDisasmPOP (
 Routine Description:
 
   Disasm instruction - POP
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1278,7 +1278,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1338,7 +1338,7 @@ EdbDisasmCMPI (
 Routine Description:
 
   Disasm instruction - CMPI
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1348,7 +1348,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1455,7 +1455,7 @@ EdbDisasmPUSHn (
 Routine Description:
 
   Disasm instruction - PUSHn
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1465,7 +1465,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1520,7 +1520,7 @@ EdbDisasmPOPn (
 Routine Description:
 
   Disasm instruction - POPn
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1530,7 +1530,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1585,7 +1585,7 @@ EdbDisasmMOVI (
 Routine Description:
 
   Disasm instruction - MOVI
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1595,7 +1595,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1699,7 +1699,7 @@ EdbDisasmMOVIn (
 Routine Description:
 
   Disasm instruction - MOVIn
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1709,7 +1709,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8  Modifiers;
@@ -1799,7 +1799,7 @@ EdbDisasmMOVREL (
 Routine Description:
 
   Disasm instruction - MOVREL
-  
+
 Arguments:
 
   InstructionAddress - The instruction address
@@ -1809,7 +1809,7 @@ Arguments:
 Returns:
 
   Instruction length
-  
+
 --*/
 {
   UINT8   Modifiers;

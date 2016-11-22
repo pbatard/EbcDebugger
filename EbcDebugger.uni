@@ -1,12 +1,7 @@
 // /** @file
 // EFI Byte Code (EBC) Debugger.
 //
-// This application can display statistical information about variable usage for SMM variable
-// driver and non-SMM variable driver.
-// Note that if Variable Dxe/Smm driver doesn't enable the feature by setting PcdVariableCollectStatistics
-// as TRUE, the application will not display variable statistical information.
-//
-// Copyright (c) 2007 - 2016, Intel Corporation. All rights reserved.<BR>
+// Copyright (c) 2016, Intel Corporation. All rights reserved.<BR>
 //
 // This program and the accompanying materials
 // are licensed and made available under the terms and conditions of the BSD License
@@ -21,4 +16,3 @@
 #string STR_MODULE_ABSTRACT             #language en-US "EFI Byte Code (EBC) Debugger application"
 
 #string STR_MODULE_DESCRIPTION          #language en-US "This application enables the debugging of EBC runtimes."
-

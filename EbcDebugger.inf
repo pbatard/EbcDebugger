@@ -19,7 +19,7 @@
   MODULE_UNI_FILE                = EbcDebugger.uni
   FILE_GUID                      = 8296AF37-D183-4416-B3B6-19D2A80AD4A8
   MODULE_TYPE                    = DXE_DRIVER
-  VERSION_STRING                 = 2.0
+  VERSION_STRING                 = 1.0
   ENTRY_POINT                    = InitializeEbcDriver
 
 #
@@ -29,66 +29,62 @@
 #
 
 [Sources]
-  ../EbcDebuggerHook.h
-  ../EbcInt.c
-  ../EbcInt.h
-  ../EbcExecute.c
-  ../EbcExecute.h
-  Edb.c
-  Edb.h
-  EdbCommon.h
-  EdbCmdBranch.c
-  EdbCmdBreak.c
-  EdbCmdBreakpoint.c
-  EdbCmdGo.c
-  EdbCmdHelp.c
-  EdbCmdMemory.c
-  EdbCmdRegister.c
-  EdbCmdQuit.c
-  EdbCmdScope.c
-  EdbCmdStep.c
-  EdbCmdSymbol.c
-  EdbCmdExtIo.c
-  EdbCmdExtPci.c
-  EdbCommand.c
-  EdbCommand.h
-  EdbDisasm.c
-  EdbDisasm.h
-  EdbDisasmSupport.c
-  EdbDisasmSupport.h
-  EdbSymbol.c
-  EdbSymbol.h
-  EdbHook.c
-  EdbHook.h
-  EdbSupport.h
-  EdbSupportUI.c
-  EdbSupportString.c
-  EdbSupportFile.c
+  EbcDebuggerHook.h
+  EbcInt.c
+  EbcInt.h
+  EbcExecute.c
+  EbcExecute.h
+  EbcDebugger/Edb.c
+  EbcDebugger/Edb.h
+  EbcDebugger/EdbCommon.h
+  EbcDebugger/EdbCmdBranch.c
+  EbcDebugger/EdbCmdBreak.c
+  EbcDebugger/EdbCmdBreakpoint.c
+  EbcDebugger/EdbCmdGo.c
+  EbcDebugger/EdbCmdHelp.c
+  EbcDebugger/EdbCmdMemory.c
+  EbcDebugger/EdbCmdRegister.c
+  EbcDebugger/EdbCmdQuit.c
+  EbcDebugger/EdbCmdScope.c
+  EbcDebugger/EdbCmdStep.c
+  EbcDebugger/EdbCmdSymbol.c
+  EbcDebugger/EdbCmdExtIo.c
+  EbcDebugger/EdbCmdExtPci.c
+  EbcDebugger/EdbCommand.c
+  EbcDebugger/EdbCommand.h
+  EbcDebugger/EdbDisasm.c
+  EbcDebugger/EdbDisasm.h
+  EbcDebugger/EdbDisasmSupport.c
+  EbcDebugger/EdbDisasmSupport.h
+  EbcDebugger/EdbSymbol.c
+  EbcDebugger/EdbSymbol.h
+  EbcDebugger/EdbHook.c
+  EbcDebugger/EdbHook.h
+  EbcDebugger/EdbSupport.h
+  EbcDebugger/EdbSupportUI.c
+  EbcDebugger/EdbSupportString.c
+  EbcDebugger/EdbSupportFile.c
 
 [Sources.Ia32]
-  ../Ia32/EbcSupport.c
-  ../Ia32/EbcLowLevel.nasm
-  ../Ia32/EbcLowLevel.S
-  ../Ia32/EbcLowLevel.asm
+  Ia32/EbcSupport.c
+  Ia32/EbcLowLevel.nasm
+  Ia32/EbcLowLevel.S
+  Ia32/EbcLowLevel.asm
 
 [Sources.X64]
-  ../X64/EbcSupport.c
-  ../X64/EbcLowLevel.nasm
-  ../X64/EbcLowLevel.S
-  ../X64/EbcLowLevel.asm
+  X64/EbcSupport.c
+  X64/EbcLowLevel.nasm
+  X64/EbcLowLevel.S
+  X64/EbcLowLevel.asm
 
 [Sources.IPF]
-  ../Ipf/EbcSupport.h
-  ../Ipf/EbcSupport.c
-  ../Ipf/EbcLowLevel.s
-
-[Sources.ARM]
-  ../Arm/EbcSupport.c
-  ../Arm/EbcLowLevel.S
+  Ipf/EbcSupport.h
+  Ipf/EbcSupport.c
+  Ipf/EbcLowLevel.s
 
 [Sources.AARCH64]
-  ../AArch64/EbcSupport.c
-  ../AArch64/EbcLowLevel.S
+  AArch64/EbcSupport.c
+  AArch64/EbcLowLevel.S
 
 [Packages]
   MdePkg/MdePkg.dec
@@ -102,7 +98,6 @@
   BaseMemoryLib
   DebugLib
   BaseLib
-  PrintLib
 
 [Protocols]
   gEfiDebugSupportProtocolGuid                  ## PRODUCES
@@ -120,9 +115,6 @@
 
 [Depex]
   TRUE
-
-[BuildOptions]
-  *_*_*_CC_FLAGS = -D EFI_EBC_DEBUGGER_ENABLED
 
 [UserExtensions.TianoCore."ExtraFiles"]
   EbcDebuggerExtra.uni

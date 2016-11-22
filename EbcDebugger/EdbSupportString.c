@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbSupportString.c
-  
+
 Abstract:
 
 
@@ -21,6 +21,7 @@ Abstract:
 #include "Edb.h"
 
 UINTN
+EFIAPI
 Xtoi (
   CHAR16  *str
   )
@@ -33,7 +34,7 @@ Routine Description:
 Arguments:
 
   Str  -  The string
-  
+
 Returns:
 
 --*/
@@ -41,9 +42,9 @@ Returns:
   UINTN   u;
   CHAR16  c;
   UINTN   m;
-  
+
   ASSERT (str != NULL);
-  
+
   m = (UINTN) -1 >> 4;
   //
   // skip preceeding white space
@@ -90,6 +91,7 @@ Returns:
 }
 
 UINT64
+EFIAPI
 LXtoi (
   CHAR16  *str
   )
@@ -102,7 +104,7 @@ Routine Description:
 Arguments:
 
   Str  -  The string
-  
+
 Returns:
 
 --*/
@@ -110,9 +112,9 @@ Returns:
   UINT64  u;
   CHAR16  c;
   UINT64  m;
-  
+
   ASSERT (str != NULL);
-  
+
   m = RShiftU64 ((UINT64) -1, 4);
   //
   // skip preceeding white space
@@ -161,6 +163,7 @@ Returns:
 
 #ifndef _GNU_EFI
 UINTN
+EFIAPI
 Atoi (
   CHAR16  *str
   )
@@ -173,7 +176,7 @@ Routine Description:
 Arguments:
 
   Str  -  The string
-  
+
 Returns:
 
 --*/
@@ -182,9 +185,9 @@ Returns:
   CHAR16  c;
   UINTN   m;
   UINTN   n;
-  
+
   ASSERT (str != NULL);
-  
+
   m = (UINTN) -1 / 10;
   n = (UINTN) -1 % 10;
   //
@@ -217,6 +220,7 @@ Returns:
 #endif
 
 UINTN
+EFIAPI
 AsciiXtoi (
   CHAR8  *str
   )
@@ -229,7 +233,7 @@ Routine Description:
 Arguments:
 
   Str  -  The string
-  
+
 Returns:
 
 --*/
@@ -237,9 +241,9 @@ Returns:
   UINTN   u;
   CHAR8   c;
   UINTN   m;
-  
+
   ASSERT (str != NULL);
-  
+
   m = (UINTN) -1 >> 4;
   //
   // skip preceeding white space
@@ -286,6 +290,7 @@ Returns:
 }
 
 UINTN
+EFIAPI
 AsciiAtoi (
   CHAR8  *str
   )
@@ -298,7 +303,7 @@ Routine Description:
 Arguments:
 
   Str  -  The string
-  
+
 Returns:
 
 --*/
@@ -307,9 +312,9 @@ Returns:
   CHAR8   c;
   UINTN   m;
   UINTN   n;
-  
+
   ASSERT (str != NULL);
-  
+
   m = (UINTN) -1 / 10;
   n = (UINTN) -1 % 10;
   //
@@ -359,6 +364,7 @@ AsciiToUpper (
 }
 
 INTN
+EFIAPI
 StrCmpUnicodeAndAscii (
   IN CHAR16   *String,
   IN CHAR8    *String2
@@ -374,8 +380,8 @@ Arguments:
   String2 - Ascii string to process
 
 Returns:
-  Return a positive integer if String is lexicall greater than String2; Zero if 
-  the two strings are identical; and a negative interger if String is lexically 
+  Return a positive integer if String is lexicall greater than String2; Zero if
+  the two strings are identical; and a negative interger if String is lexically
   less than String2.
 
 --*/
@@ -394,6 +400,7 @@ Returns:
 
 #ifndef _GNU_EFI
 INTN
+EFIAPI
 StriCmp (
   IN CHAR16   *String,
   IN CHAR16   *String2
@@ -408,8 +415,8 @@ Arguments:
   String2 - Unicode string to process
 
 Returns:
-  Return a positive integer if String is lexically greater than String2; Zero if 
-  the two strings are identical; and a negative integer if String is lexically 
+  Return a positive integer if String is lexically greater than String2; Zero if
+  the two strings are identical; and a negative integer if String is lexically
   less than String2.
 
 --*/
@@ -425,6 +432,7 @@ Returns:
 #endif
 
 INTN
+EFIAPI
 StriCmpUnicodeAndAscii (
   IN CHAR16   *String,
   IN CHAR8    *String2
@@ -440,8 +448,8 @@ Arguments:
   String2 - Ascii string to process
 
 Returns:
-  Return a positive integer if String is lexically greater than String2; Zero if 
-  the two strings are identical; and a negative integer if String is lexically 
+  Return a positive integer if String is lexically greater than String2; Zero if
+  the two strings are identical; and a negative integer if String is lexically
   less than String2.
 
 --*/
@@ -456,6 +464,7 @@ Returns:
 }
 
 BOOLEAN
+EFIAPI
 StrEndWith (
   IN CHAR16                       *Str,
   IN CHAR16                       *SubStr
@@ -488,6 +497,7 @@ Routine Description:
 
 #ifndef _GNU_EFI
 CHAR16 *
+EFIAPI
 StrDuplicate (
   IN CHAR16   *Src
   )
@@ -509,6 +519,7 @@ CHAR16  *mLineBuffer          = NULL;
 CHAR16  *mFieldBuffer         = NULL;
 
 UINTN
+EFIAPI
 StrSpn (
   IN CHAR16                       *String,
   IN CHAR16                       *CharSet
@@ -546,6 +557,7 @@ Routine Description:
 
 
 CHAR16 *
+EFIAPI
 StrBrk (
   IN CHAR16                       *String,
   IN CHAR16                       *CharSet
@@ -574,6 +586,7 @@ Routine Description:
 }
 
 CHAR16 *
+EFIAPI
 StrTokenLine (
   IN CHAR16                       *String OPTIONAL,
   IN CHAR16                       *CharSet
@@ -612,6 +625,7 @@ Routine Description:
 
 
 CHAR16 *
+EFIAPI
 StrTokenField (
   IN CHAR16                       *String OPTIONAL,
   IN CHAR16                       *CharSet
@@ -649,6 +663,7 @@ Routine Description:
 }
 
 CHAR16 *
+EFIAPI
 StrGetNewTokenLine (
   IN CHAR16                       *String,
   IN CHAR16                       *CharSet
@@ -658,6 +673,7 @@ StrGetNewTokenLine (
 }
 
 CHAR16 *
+EFIAPI
 StrGetNextTokenLine (
   IN CHAR16                       *CharSet
   )
@@ -666,6 +682,7 @@ StrGetNextTokenLine (
 }
 
 CHAR16 *
+EFIAPI
 StrGetNewTokenField (
   IN CHAR16                       *String,
   IN CHAR16                       *CharSet
@@ -675,6 +692,7 @@ StrGetNewTokenField (
 }
 
 CHAR16 *
+EFIAPI
 StrGetNextTokenField (
   IN CHAR16                       *CharSet
   )
@@ -683,6 +701,7 @@ StrGetNextTokenField (
 }
 
 VOID
+EFIAPI
 PatchForStrTokenAfter (
   IN CHAR16    *Buffer,
   IN CHAR16    Patch
@@ -712,6 +731,7 @@ PatchForStrTokenAfter (
 }
 
 VOID
+EFIAPI
 PatchForStrTokenBefore (
   IN CHAR16    *Buffer,
   IN CHAR16    Patch
@@ -739,6 +759,7 @@ CHAR8  *mAsciiLineBuffer          = NULL;
 CHAR8  *mAsciiFieldBuffer         = NULL;
 
 UINTN
+EFIAPI
 AsciiStrSpn (
   IN CHAR8                       *String,
   IN CHAR8                       *CharSet
@@ -776,6 +797,7 @@ Routine Description:
 
 
 CHAR8 *
+EFIAPI
 AsciiStrBrk (
   IN CHAR8                       *String,
   IN CHAR8                       *CharSet
@@ -804,6 +826,7 @@ Routine Description:
 }
 
 CHAR8 *
+EFIAPI
 AsciiStrTokenLine (
   IN CHAR8                       *String OPTIONAL,
   IN CHAR8                       *CharSet
@@ -842,6 +865,7 @@ Routine Description:
 
 
 CHAR8 *
+EFIAPI
 AsciiStrTokenField (
   IN CHAR8                       *String OPTIONAL,
   IN CHAR8                       *CharSet
@@ -879,6 +903,7 @@ Routine Description:
 }
 
 CHAR8 *
+EFIAPI
 AsciiStrGetNewTokenLine (
   IN CHAR8                       *String,
   IN CHAR8                       *CharSet
@@ -888,6 +913,7 @@ AsciiStrGetNewTokenLine (
 }
 
 CHAR8 *
+EFIAPI
 AsciiStrGetNextTokenLine (
   IN CHAR8                       *CharSet
   )
@@ -896,6 +922,7 @@ AsciiStrGetNextTokenLine (
 }
 
 CHAR8 *
+EFIAPI
 AsciiStrGetNewTokenField (
   IN CHAR8                       *String,
   IN CHAR8                       *CharSet
@@ -905,6 +932,7 @@ AsciiStrGetNewTokenField (
 }
 
 CHAR8 *
+EFIAPI
 AsciiStrGetNextTokenField (
   IN CHAR8                       *CharSet
   )
@@ -913,6 +941,7 @@ AsciiStrGetNextTokenField (
 }
 
 VOID
+EFIAPI
 PatchForAsciiStrTokenAfter (
   IN CHAR8    *Buffer,
   IN CHAR8    Patch
@@ -942,6 +971,7 @@ PatchForAsciiStrTokenAfter (
 }
 
 VOID
+EFIAPI
 PatchForAsciiStrTokenBefore (
   IN CHAR8    *Buffer,
   IN CHAR8    Patch

@@ -329,16 +329,15 @@ EbcInterpret (
   // the stack too, so adjust accordingly.
   //  VmContext.HighStackBottom = (UINTN)(Addr + sizeof (VmContext) + sizeof (Addr));
   //
-  EFI_EBC_DEBUGGER_CODE (
-    EbcDebuggerHookEbcInterpret (&VmContext);
-  )
+
   //
   // Begin executing the EBC code
   //
+  EbcDebuggerHookEbcInterpret (&VmContext);
   EbcExecute (&VmContext);
 
   //
-  // Return the value in R[7] unless there was an error
+  // Return the value in Gpr[7] unless there was an error
   //
   ReturnEBCStack(StackIndex);
   return (UINT64) VmContext.Gpr[7];
@@ -431,16 +430,15 @@ ExecuteEbcImageEntryPoint (
   //
   // VM pushes 16-bytes for return address. Simulate that here.
   //
-  EFI_EBC_DEBUGGER_CODE (
-    EbcDebuggerHookExecuteEbcImageEntryPoint (&VmContext);
-  )
+
   //
   // Begin executing the EBC code
   //
+  EbcDebuggerHookExecuteEbcImageEntryPoint (&VmContext);
   EbcExecute (&VmContext);
 
   //
-  // Return the value in R[7] unless there was an error
+  // Return the value in Gpr[7] unless there was an error
   //
   ReturnEBCStack(StackIndex);
   return (UINT64) VmContext.Gpr[7];

@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbSupportUI.c
-  
+
 Abstract:
 
 
@@ -21,6 +21,7 @@ Abstract:
 #include "Edb.h"
 
 VOID
+EFIAPI
 SetCursorPosition (
   IN EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL  *ConOut,
   IN  UINTN                           Column,
@@ -33,6 +34,7 @@ SetCursorPosition (
   );
 
 EFI_STATUS
+EFIAPI
 WaitForSingleEvent (
   IN EFI_EVENT                  Event,
   IN UINT64                     Timeout OPTIONAL
@@ -102,6 +104,7 @@ Returns:
 }
 
 VOID
+EFIAPI
 ConMoveCursorBackward (
   IN     UINTN                   LineLength,
   IN OUT UINTN                   *Column,
@@ -142,6 +145,7 @@ Returns:
 }
 
 VOID
+EFIAPI
 ConMoveCursorForward (
   IN     UINTN                   LineLength,
   IN     UINTN                   TotalRow,
@@ -182,6 +186,7 @@ CHAR16 mBackupSpace[EFI_DEBUG_INPUS_BUFFER_SIZE];
 CHAR16 mInputBufferHistory[EFI_DEBUG_INPUS_BUFFER_SIZE];
 
 VOID
+EFIAPI
 Input (
   IN CHAR16    *Prompt OPTIONAL,
   OUT CHAR16   *InStr,
@@ -210,10 +215,10 @@ Input (
   BOOLEAN       NeedAdjust;
   UINTN         SubIndex;
   CHAR16        *CommandStr;
-  
+
   ConOut = gST->ConOut;
   ConIn = gST->ConIn;
- 
+
   ASSERT (ConOut != NULL);
   ASSERT (ConIn != NULL);
   ASSERT (InStr != NULL);
@@ -529,6 +534,7 @@ Input (
 }
 
 VOID
+EFIAPI
 SetCursorPosition (
   IN  EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *ConOut,
   IN  UINTN                           Column,
@@ -565,6 +571,7 @@ SetCursorPosition (
 }
 
 BOOLEAN
+EFIAPI
 SetPageBreak (
   VOID
   )

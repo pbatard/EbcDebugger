@@ -502,9 +502,7 @@ InitializeEbcDriver (
     InitEbcVmTestProtocol (&ImageHandle);
   DEBUG_CODE_END ();
 
-  EFI_EBC_DEBUGGER_CODE (
-    EbcDebuggerHookInit (ImageHandle, EbcDebugProtocol);
-  )
+  EbcDebuggerHookInit (ImageHandle, EbcDebugProtocol);
 
   return EFI_SUCCESS;
 
@@ -1103,6 +1101,9 @@ EbcUnloadImage (
   // Now free up the image list element
   //
   FreePool (ImageList);
+
+  EbcDebuggerHookEbcUnloadImage (ImageHandle);
+
   return EFI_SUCCESS;
 }
 

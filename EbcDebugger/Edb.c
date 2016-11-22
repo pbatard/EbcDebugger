@@ -559,7 +559,7 @@ Returns:
   EFI_DEBUG_STATUS        DebugStatus;
   STATIC BOOLEAN          mInitialized = FALSE;
 
-  DEBUG ((EFI_D_ERROR, "Hello EBC Debugger!\n"));
+  DEBUG ((DEBUG_ERROR, "Hello EBC Debugger!\n"));
 
   if (!mInitialized) {
     //
@@ -620,8 +620,8 @@ Returns:
     //
     // Check PageBreak;
     //
-    if ((CommandArg != NULL) && (StrLen(CommandArg) == 2) && (CommandArg[0] == L'-')) {
-      if ((CommandArg[1] == L'b') || (CommandArg[1] == L'B')) {
+    if (CommandArg != NULL) {
+      if (StriCmp (CommandArg, L"-b") == 0) {
         CommandArg = StrGetNextTokenLine (L" ");
         mDebuggerPrivate.EnablePageBreak = TRUE;
       }
@@ -653,8 +653,7 @@ Returns:
   //
   DeinitDebuggerPrivateData (&mDebuggerPrivate, ExceptionType, SystemContext, mInitialized);
 
-  DEBUG ((EFI_D_ERROR, "Goodbye EBC Debugger!\n"));
+  DEBUG ((DEBUG_ERROR, "Goodbye EBC Debugger!\n"));
 
   return;
 }
-

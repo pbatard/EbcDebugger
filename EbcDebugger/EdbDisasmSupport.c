@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbDisasmSupport.c
-  
+
 Abstract:
 
 
@@ -42,7 +42,7 @@ EdbSetOffset (
 Routine Description:
 
   Set offset for Instruction name and content
-  
+
 Arguments:
 
   InstructionNameOffset     - Instruction name offset
@@ -51,7 +51,7 @@ Arguments:
 Returns:
 
   None
-  
+
 --*/
 {
   mInstructionNameOffset = InstructionNameOffset;
@@ -69,7 +69,7 @@ EdbPreInstructionString (
 Routine Description:
 
   Pre instruction string construction
-  
+
 Arguments:
 
   None
@@ -77,7 +77,7 @@ Arguments:
 Returns:
 
   Instruction string
-  
+
 --*/
 {
   ZeroMem (&mInstructionString, sizeof(mInstructionString));
@@ -96,7 +96,7 @@ EdbPostInstructionString (
 Routine Description:
 
   Post instruction string construction
-  
+
 Arguments:
 
   None
@@ -104,7 +104,7 @@ Arguments:
 Returns:
 
   Instruction string
-  
+
 --*/
 {
   CHAR16 *Char;
@@ -133,7 +133,7 @@ EdbGetNaturalIndex16 (
 Routine Description:
 
   Get Sign, NaturalUnits, and ConstantUnits of the WORD data
-  
+
 Arguments:
 
   Data16        - WORD data
@@ -143,7 +143,7 @@ Arguments:
 Returns:
 
   Sign value of WORD
-  
+
 --*/
 {
   BOOLEAN Sign;
@@ -170,7 +170,7 @@ EdbGetNaturalIndex32 (
 Routine Description:
 
   Get Sign, NaturalUnits, and ConstantUnits of the DWORD data
-  
+
 Arguments:
 
   Data32        - DWORD data
@@ -180,7 +180,7 @@ Arguments:
 Returns:
 
   Sign value of DWORD
-  
+
 --*/
 {
   BOOLEAN Sign;
@@ -207,7 +207,7 @@ EdbGetNaturalIndex64 (
 Routine Description:
 
   Get Sign, NaturalUnits, and ConstantUnits of the QWORD data
-  
+
 Arguments:
 
   Data64        - QWORD data
@@ -217,7 +217,7 @@ Arguments:
 Returns:
 
   Sign value of QWORD
-  
+
 --*/
 {
   BOOLEAN Sign;
@@ -242,7 +242,7 @@ EdbGetBitWidth (
 Routine Description:
 
   Get Bit Width of the value
-  
+
 Arguments:
 
   Value - data
@@ -250,7 +250,7 @@ Arguments:
 Returns:
 
   Bit width
-  
+
 --*/
 {
   if (Value >= 10000000000000) {
@@ -293,7 +293,7 @@ EdbPrintInstructionName (
 Routine Description:
 
   Print the instruction name
-  
+
 Arguments:
 
   Name - instruction name
@@ -301,7 +301,7 @@ Arguments:
 Returns:
 
   Instruction name offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -325,7 +325,7 @@ EdbPrintRegister1 (
 Routine Description:
 
   Print register 1 in operands
-  
+
 Arguments:
 
   Operands - instruction operands
@@ -333,7 +333,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   if (Operands & OPERAND_M_INDIRECT1) {
@@ -366,7 +366,7 @@ EdbPrintRegister2 (
 Routine Description:
 
   Print register 2 in operands
-  
+
 Arguments:
 
   Operands - instruction operands
@@ -374,7 +374,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   if (Operands & OPERAND_M_INDIRECT2) {
@@ -407,7 +407,7 @@ EdbPrintDedicatedRegister1 (
 Routine Description:
 
   Print dedicated register 1 in operands
-  
+
 Arguments:
 
   Operands - instruction operands
@@ -415,7 +415,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   switch (Operands & OPERAND_M_OP1) {
@@ -451,7 +451,7 @@ EdbPrintDedicatedRegister2 (
 Routine Description:
 
   Print dedicated register 2 in operands
-  
+
 Arguments:
 
   Operands - instruction operands
@@ -459,7 +459,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   switch ((Operands & OPERAND_M_OP2) >> 4) {
@@ -497,7 +497,7 @@ EdbPrintIndexData (
 Routine Description:
 
   Print the hexical UINTN index data to instruction content
-  
+
 Arguments:
 
   Sign          - Signed bit of UINTN data
@@ -507,7 +507,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -536,7 +536,7 @@ EdbPrintIndexData64 (
 Routine Description:
 
   Print the hexical QWORD index data to instruction content
-  
+
 Arguments:
 
   Sign          - Signed bit of QWORD data
@@ -546,7 +546,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -573,7 +573,7 @@ EdbPrintRawIndexData16 (
 Routine Description:
 
   Print the hexical WORD raw index data to instruction content
-  
+
 Arguments:
 
   Data16 - WORD data
@@ -581,7 +581,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   BOOLEAN Sign;
@@ -604,7 +604,7 @@ EdbPrintRawIndexData32 (
 Routine Description:
 
   Print the hexical DWORD raw index data to instruction content
-  
+
 Arguments:
 
   Data32 - DWORD data
@@ -612,7 +612,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   BOOLEAN Sign;
@@ -635,7 +635,7 @@ EdbPrintRawIndexData64 (
 Routine Description:
 
   Print the hexical QWORD raw index data to instruction content
-  
+
 Arguments:
 
   Data64 - QWORD data
@@ -643,7 +643,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   BOOLEAN Sign;
@@ -666,7 +666,7 @@ EdbPrintImmData8 (
 Routine Description:
 
   Print the hexical BYTE immediate data to instruction content
-  
+
 Arguments:
 
   Data - BYTE data
@@ -674,7 +674,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -698,7 +698,7 @@ EdbPrintImmData16 (
 Routine Description:
 
   Print the hexical WORD immediate data to instruction content
-  
+
 Arguments:
 
   Data - WORD data
@@ -706,7 +706,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -730,7 +730,7 @@ EdbPrintImmData32 (
 Routine Description:
 
   Print the hexical DWORD immediate data to instruction content
-  
+
 Arguments:
 
   Data - DWORD data
@@ -738,7 +738,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -762,7 +762,7 @@ EdbPrintImmData64 (
 Routine Description:
 
   Print the hexical QWORD immediate data to instruction content
-  
+
 Arguments:
 
   Data - QWORD data
@@ -770,7 +770,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -794,7 +794,7 @@ EdbPrintImmDatan (
 Routine Description:
 
   Print the decimal UINTN immediate data to instruction content
-  
+
 Arguments:
 
   Data - UINTN data
@@ -802,7 +802,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -826,7 +826,7 @@ EdbPrintImmData64n (
 Routine Description:
 
   Print the decimal QWORD immediate data to instruction content
-  
+
 Arguments:
 
   Data64 - QWORD data
@@ -834,7 +834,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -858,7 +858,7 @@ EdbPrintData8 (
 Routine Description:
 
   Print the hexical BYTE to instruction content
-  
+
 Arguments:
 
   Data8 - BYTE data
@@ -866,7 +866,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -890,7 +890,7 @@ EdbPrintData16 (
 Routine Description:
 
   Print the hexical WORD to instruction content
-  
+
 Arguments:
 
   Data16 - WORD data
@@ -898,7 +898,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -922,7 +922,7 @@ EdbPrintData32 (
 Routine Description:
 
   Print the hexical DWORD to instruction content
-  
+
 Arguments:
 
   Data32 - DWORD data
@@ -930,7 +930,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -954,7 +954,7 @@ EdbPrintData64 (
 Routine Description:
 
   Print the hexical QWORD to instruction content
-  
+
 Arguments:
 
   Data64 - QWORD data
@@ -962,7 +962,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -986,7 +986,7 @@ EdbPrintDatan (
 Routine Description:
 
   Print the decimal unsigned UINTN to instruction content
-  
+
 Arguments:
 
   Data - unsigned UINTN data
@@ -994,7 +994,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -1018,7 +1018,7 @@ EdbPrintData64n (
 Routine Description:
 
   Print the decimal unsigned QWORD to instruction content
-  
+
 Arguments:
 
   Data64 - unsigned QWORD data
@@ -1026,7 +1026,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -1050,7 +1050,7 @@ EdbPrintData8s (
 Routine Description:
 
   Print the decimal signed BYTE to instruction content
-  
+
 Arguments:
 
   Data8 - signed BYTE data
@@ -1058,7 +1058,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   BOOLEAN Sign;
@@ -1087,7 +1087,7 @@ EdbPrintData16s (
 Routine Description:
 
   Print the decimal signed WORD to instruction content
-  
+
 Arguments:
 
   Data16 - signed WORD data
@@ -1095,7 +1095,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   BOOLEAN Sign;
@@ -1124,7 +1124,7 @@ EdbPrintData32s (
 Routine Description:
 
   Print the decimal signed DWORD to instruction content
-  
+
 Arguments:
 
   Data32 - signed DWORD data
@@ -1132,7 +1132,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   BOOLEAN Sign;
@@ -1161,7 +1161,7 @@ EdbPrintData64s (
 Routine Description:
 
   Print the decimal signed QWORD to instruction content
-  
+
 Arguments:
 
   Data64 - signed QWORD data
@@ -1169,7 +1169,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   BOOLEAN Sign;
@@ -1200,7 +1200,7 @@ EdbPrintComma (
 Routine Description:
 
   Print the comma to instruction content
-  
+
 Arguments:
 
   None
@@ -1208,7 +1208,7 @@ Arguments:
 Returns:
 
   Instruction content offset
-  
+
 --*/
 {
   EDBSPrintWithOffset (
@@ -1231,7 +1231,7 @@ EdbFindAndPrintSymbol (
 Routine Description:
 
   Find the symbol string according to address, then print it
-  
+
 Arguments:
 
   Address - instruction address
@@ -1240,7 +1240,7 @@ Returns:
 
   1 - symbol string is found and printed
   0 - symbol string not found
-  
+
 --*/
 {
   CHAR8 *SymbolStr;
@@ -1270,7 +1270,7 @@ EdbPrintRaw (
 Routine Description:
 
   Print the EBC byte code
-  
+
 Arguments:
 
   InstructionAddress - instruction address
@@ -1279,7 +1279,7 @@ Arguments:
 Returns:
 
   None
-  
+
 --*/
 {
   UINTN  LineNumber;
@@ -1338,7 +1338,7 @@ EdbShowDisasm (
 Routine Description:
 
   Print the EBC asm code
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -1347,7 +1347,7 @@ Arguments:
 Returns:
 
   EFI_SUCCESS - show disasm successfully
-  
+
 --*/
 {
   EFI_PHYSICAL_ADDRESS    InstructionAddress;
@@ -1424,7 +1424,7 @@ GetRegisterValue (
 Routine Description:
 
   Get register value accroding to the system context, and register index
-  
+
 Arguments:
 
   SystemContext   - EBC system context.
@@ -1433,7 +1433,7 @@ Arguments:
 Returns:
 
   register value
-  
+
 --*/
 {
   switch (Index) {

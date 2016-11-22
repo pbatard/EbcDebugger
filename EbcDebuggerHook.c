@@ -1,5 +1,9 @@
 /** @file
-  Prototypes for the EBC Debugger hooks.
+  Contains the empty version of the EBC Debugger hooks, to be used when
+  compiling the regular EBC VM module.
+  As debugging is not needed for the standard EBC VM, all calls are left empty.
+
+  The EBC Debugger defines its own version for these calls in EbdHooks.c.
 
   Copyright (c) 2006 - 2016, Intel Corporation. All rights reserved.<BR>
   This program and the accompanying materials
@@ -12,125 +16,141 @@
 
 **/
 
-#ifndef _EFI_EBC_DEBUGGER_HOOK_H_
-#define _EFI_EBC_DEBUGGER_HOOK_H_
+#include "EbcDebuggerHook.h"
 
-#include <Uefi.h>
-
-#include <Protocol/DebugSupport.h>
-#include <Protocol/EbcVmTest.h>
-
-/**
-  The VM interpreter calls this function when an exception is detected.
-
-  @param  ExceptionType          Specifies the processor exception detected.
-  @param  ExceptionFlags         Specifies the exception context.
-  @param  VmPtr                  Pointer to a VM context for passing info to the
-                                 EFI debugger.
-
-  @retval EFI_SUCCESS            This function completed successfully.
-
-**/
-EFI_STATUS
-EbcDebugSignalException (
-  IN EFI_EXCEPTION_TYPE                   ExceptionType,
-  IN EXCEPTION_FLAGS                      ExceptionFlags,
-  IN VM_CONTEXT                           *VmPtr
-  );
-
-//
-// Hooks in EbcInt.c
-//
 VOID
 EbcDebuggerHookInit (
   IN EFI_HANDLE                  Handle,
   IN EFI_DEBUG_SUPPORT_PROTOCOL  *EbcDebugProtocol
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookUnload (
   VOID
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookEbcUnloadImage (
   IN EFI_HANDLE                  Handle
-  );
+  )
+{
+  return;
+}
 
-//
-// Hooks in EbcSupport.c
-//
 VOID
 EbcDebuggerHookExecuteEbcImageEntryPoint (
   IN VM_CONTEXT *VmPtr
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookEbcInterpret (
   IN VM_CONTEXT *VmPtr
-  );
+  )
+{
+  return;
+}
 
-//
-// Hooks in EbcExecute.c
-//
 VOID
 EbcDebuggerHookExecuteStart (
   IN VM_CONTEXT *VmPtr
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookExecuteEnd (
   IN VM_CONTEXT *VmPtr
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookCALLStart (
   IN VM_CONTEXT *VmPtr
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookCALLEnd (
   IN VM_CONTEXT *VmPtr
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookCALLEXStart (
   IN VM_CONTEXT *VmPtr
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookCALLEXEnd (
   IN VM_CONTEXT *VmPtr
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookRETStart (
   IN VM_CONTEXT *VmPtr
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookRETEnd (
   IN VM_CONTEXT *VmPtr
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookJMPStart (
   IN VM_CONTEXT *VmPtr
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookJMPEnd (
   IN VM_CONTEXT *VmPtr
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookJMP8Start (
   IN VM_CONTEXT *VmPtr
-  );
+  )
+{
+  return;
+}
 
 VOID
 EbcDebuggerHookJMP8End (
   IN VM_CONTEXT *VmPtr
-  );
-
-#endif
+  )
+{
+  return;
+}

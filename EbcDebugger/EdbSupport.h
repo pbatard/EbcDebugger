@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbSupport.h
-  
+
 Abstract:
 
 
@@ -32,33 +32,39 @@ Abstract:
 #define EFI_DEBUG_MAX_PRINT_BUFFER   (80 * 4)
 
 UINTN
+EFIAPI
 Xtoi (
   CHAR16  *str
   );
 
 UINT64
+EFIAPI
 LXtoi (
   CHAR16  *str
   );
 
 #ifndef _GNU_EFI
 UINTN
+EFIAPI
 Atoi (
   CHAR16  *str
   );
 #endif
 
 UINTN
+EFIAPI
 AsciiXtoi (
   CHAR8  *str
   );
 
 UINTN
+EFIAPI
 AsciiAtoi (
   CHAR8  *str
   );
 
 INTN
+EFIAPI
 StrCmpUnicodeAndAscii (
   IN CHAR16   *String,
   IN CHAR8    *String2
@@ -66,6 +72,7 @@ StrCmpUnicodeAndAscii (
 
 #ifndef _GNU_EFI
 INTN
+EFIAPI
 StriCmp (
   IN CHAR16   *String,
   IN CHAR16   *String2
@@ -73,12 +80,14 @@ StriCmp (
 #endif
 
 INTN
+EFIAPI
 StriCmpUnicodeAndAscii (
   IN CHAR16   *String,
   IN CHAR8    *String2
   );
 
 BOOLEAN
+EFIAPI
 StrEndWith (
   IN CHAR16                       *Str,
   IN CHAR16                       *SubStr
@@ -86,74 +95,87 @@ StrEndWith (
 
 #ifndef _GNU_EFI
 CHAR16 *
+EFIAPI
 StrDuplicate (
   IN CHAR16   *Src
   );
 #endif
 
 CHAR16 *
+EFIAPI
 StrGetNewTokenLine (
   IN CHAR16                       *String,
   IN CHAR16                       *CharSet
   );
 
 CHAR16 *
+EFIAPI
 StrGetNextTokenLine (
   IN CHAR16                       *CharSet
   );
 
 CHAR16 *
+EFIAPI
 StrGetNewTokenField (
   IN CHAR16                       *String,
   IN CHAR16                       *CharSet
   );
 
 CHAR16 *
+EFIAPI
 StrGetNextTokenField (
   IN CHAR16                       *CharSet
   );
 
 VOID
+EFIAPI
 PatchForStrTokenAfter (
   IN CHAR16    *Buffer,
   IN CHAR16    Patch
   );
 
 VOID
+EFIAPI
 PatchForStrTokenBefore (
   IN CHAR16    *Buffer,
   IN CHAR16    Patch
   );
 
 CHAR8 *
+EFIAPI
 AsciiStrGetNewTokenLine (
   IN CHAR8                       *String,
   IN CHAR8                       *CharSet
   );
 
 CHAR8 *
+EFIAPI
 AsciiStrGetNextTokenLine (
   IN CHAR8                       *CharSet
   );
 
 CHAR8 *
+EFIAPI
 AsciiStrGetNewTokenField (
   IN CHAR8                       *String,
   IN CHAR8                       *CharSet
   );
 
 CHAR8 *
+EFIAPI
 AsciiStrGetNextTokenField (
   IN CHAR8                       *CharSet
   );
 
 VOID
+EFIAPI
 PatchForAsciiStrTokenAfter (
   IN CHAR8    *Buffer,
   IN CHAR8    Patch
   );
 
 VOID
+EFIAPI
 PatchForAsciiStrTokenBefore (
   IN CHAR8    *Buffer,
   IN CHAR8    Patch
@@ -163,6 +185,7 @@ PatchForAsciiStrTokenBefore (
 // Shell Library
 //
 VOID
+EFIAPI
 Input (
   IN CHAR16    *Prompt OPTIONAL,
   OUT CHAR16   *InStr,
@@ -170,6 +193,7 @@ Input (
   );
 
 BOOLEAN
+EFIAPI
 SetPageBreak (
   VOID
   );
@@ -201,6 +225,7 @@ EDBSPrintWithOffset (
   );
 
 EFI_STATUS
+EFIAPI
 ReadFileToBuffer (
   IN  EFI_DEBUGGER_PRIVATE_DATA   *DebuggerPrivate,
   IN  CHAR16                      *FileName,
@@ -210,6 +235,7 @@ ReadFileToBuffer (
   );
 
 CHAR16 *
+EFIAPI
 GetFileNameUnderDir (
   IN  EFI_DEBUGGER_PRIVATE_DATA   *DebuggerPrivate,
   IN  CHAR16                      *DirName,

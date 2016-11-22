@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbCmdSymbol.c
-  
+
 Abstract:
 
 
@@ -29,7 +29,7 @@ GetFileNameFromFullPath (
 Routine Description:
 
   Get file name from full path
-  
+
 Arguments:
 
   FullPath        - full file path
@@ -37,7 +37,7 @@ Arguments:
 Returns:
 
   file name
-  
+
 --*/
 {
   CHAR16   *FileName;
@@ -64,7 +64,7 @@ GetDirNameFromFullPath (
 Routine Description:
 
   Get dir name from full path
-  
+
 Arguments:
 
   FullPath        - full file path
@@ -72,7 +72,7 @@ Arguments:
 Returns:
 
   dir name
-  
+
 --*/
 {
   CHAR16   *FileName;
@@ -97,7 +97,7 @@ ConstructFullPath (
 Routine Description:
 
   Construct full path accroding to dir and file path
-  
+
 Arguments:
 
   DirPath         - dir path
@@ -107,7 +107,7 @@ Arguments:
 Returns:
 
   Full file name
-  
+
 --*/
 {
   UINTN DirPathSize;
@@ -137,7 +137,7 @@ EdbSymbolTypeToStr (
 Routine Description:
 
   Comvert Symbol Type to string
-  
+
 Arguments:
 
   Type            - Symbol Type
@@ -145,7 +145,7 @@ Arguments:
 Returns:
 
   String
-  
+
 --*/
 {
   if (Type < 0 || Type >= EfiDebuggerSymbolTypeMax) {
@@ -165,7 +165,7 @@ DebuggerDisplaySymbolAccrodingToAddress (
 Routine Description:
 
   Find the symbol accroding to address and display symbol
-  
+
 Arguments:
 
   Address         - SymbolAddress
@@ -174,7 +174,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   EFI_DEBUGGER_SYMBOL_OBJECT *Object;
@@ -235,7 +235,7 @@ DebuggerDisplaySymbolAccrodingToName (
 Routine Description:
 
   Find the symbol accroding to name and display symbol
-  
+
 Arguments:
 
   SymbolFileName  - The Symbol File Name, NULL means for all
@@ -245,7 +245,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   UINTN                      Index;
@@ -350,7 +350,7 @@ DebuggerListSymbol (
 Routine Description:
 
   DebuggerCommand - ListSymbol
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -361,7 +361,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   CHAR16                     *SymbolFileName;
@@ -437,7 +437,7 @@ DebuggerLoadSymbol (
 Routine Description:
 
   DebuggerCommand - LoadSymbol
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -448,7 +448,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   UINTN      BufferSize;
@@ -517,7 +517,7 @@ Returns:
   if (EFI_ERROR(Status)) {
     EDBPrint (L"PatchSymbol RVA  - %r! Using the RVA in symbol file.\n", Status);
   } else {
-    DEBUG ((EFI_D_ERROR, "PatchSymbol RVA successfully!\n"));
+    DEBUG ((DEBUG_ERROR, "PatchSymbol RVA successfully!\n"));
   }
 
   if (!IsLoadCode) {
@@ -602,7 +602,7 @@ DebuggerUnloadSymbol (
 Routine Description:
 
   DebuggerCommand - UnloadSymbol
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -613,7 +613,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   EFI_STATUS Status;
@@ -708,7 +708,7 @@ DebuggerDisplaySymbol (
 Routine Description:
 
   DebuggerCommand - DisplaySymbol
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -719,7 +719,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   if (CommandArg == NULL) {
@@ -750,7 +750,7 @@ DebuggerLoadCode (
 Routine Description:
 
   DebuggerCommand - LoadCode
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -761,7 +761,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   UINTN      BufferSize;
@@ -850,7 +850,7 @@ DebuggerUnloadCode (
 Routine Description:
 
   DebuggerCommand - UnloadCode
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -861,7 +861,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   CHAR16     *CommandArg2;
@@ -869,7 +869,7 @@ Returns:
   CHAR16     *MapFileName;
   EFI_STATUS Status;
   VOID       *BufferPtr;
-  
+
   //
   // Check the argument
   //
@@ -921,7 +921,7 @@ DebuggerDisplayCode (
 Routine Description:
 
   DebuggerCommand - DisplayCode
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -932,7 +932,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   if (CommandArg == NULL) {

@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbCmdBranch.c
-  
+
 Abstract:
 
 
@@ -37,7 +37,7 @@ EdbBranchTypeToStr (
 Routine Description:
 
   Comvert Branch Type to string
-  
+
 Arguments:
 
   Type            - Branch Type
@@ -45,7 +45,7 @@ Arguments:
 Returns:
 
   String
-  
+
 --*/
 {
   if (Type < 0 || Type >= EfiDebuggerBranchTypeEbcMax) {
@@ -67,7 +67,7 @@ DebuggerCallStack (
 Routine Description:
 
   DebuggerCommand - CallStack
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -78,7 +78,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   INTN                           Index;
@@ -268,7 +268,7 @@ DebuggerInstructionBranch (
 Routine Description:
 
   DebuggerCommand - InstructionBranch
-  
+
 Arguments:
 
   CommandArg      - The argument for this command
@@ -279,7 +279,7 @@ Arguments:
 Returns:
 
   EFI_DEBUG_CONTINUE - formal return value
-  
+
 --*/
 {
   UINTN  Index;

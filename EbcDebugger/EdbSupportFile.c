@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbSupportFile.c
-  
+
 Abstract:
 
 
@@ -21,6 +21,7 @@ Abstract:
 #include "Edb.h"
 
 EFI_STATUS
+EFIAPI
 ReadFileFromVol (
   IN  EFI_SIMPLE_FILE_SYSTEM_PROTOCOL   *Vol,
   IN  CHAR16                      *FileName,
@@ -32,7 +33,7 @@ ReadFileFromVol (
 Routine Description:
 
   Read a file.
-  
+
 Arguments:
 
   Vol             - File System Volume
@@ -138,6 +139,7 @@ Returns:
 }
 
 EFI_STATUS
+EFIAPI
 ReadFileToBuffer (
   IN  EFI_DEBUGGER_PRIVATE_DATA   *DebuggerPrivate,
   IN  CHAR16                      *FileName,
@@ -154,7 +156,7 @@ Routine Description:
   If ScanFs is TRUE, it will scan all FS and check the file.
     If there is only one file match the name, it will be read.
     If there is more than one file match the name, it will return Error.
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -216,7 +218,7 @@ Returns:
   if (EFI_ERROR (Status) && (NoHandles == 0)) {
     return EFI_NOT_FOUND;
   }
-  
+
   //
   // Walk through each Vol
   //
@@ -271,6 +273,7 @@ Returns:
 }
 
 CHAR16 *
+EFIAPI
 GetFileNameUnderDir (
   IN  EFI_DEBUGGER_PRIVATE_DATA   *DebuggerPrivate,
   IN  CHAR16                      *DirName,
@@ -282,7 +285,7 @@ GetFileNameUnderDir (
 Routine Description:
 
   Get file name under this dir with index
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure

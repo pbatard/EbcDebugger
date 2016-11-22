@@ -1,18 +1,18 @@
 /*++
 
-Copyright (c) 2007, Intel Corporation                                                         
-All rights reserved. This program and the accompanying materials                          
-are licensed and made available under the terms and conditions of the BSD License         
-which accompanies this distribution.  The full text of the license may be found at        
-http://opensource.org/licenses/bsd-license.php                                            
-                                                                                          
-THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,                     
-WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.             
+Copyright (c) 2007, Intel Corporation
+All rights reserved. This program and the accompanying materials
+are licensed and made available under the terms and conditions of the BSD License
+which accompanies this distribution.  The full text of the license may be found at
+http://opensource.org/licenses/bsd-license.php
+
+THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
+WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 Module Name:
 
   EdbSymbol.c
-  
+
 Abstract:
 
 
@@ -33,7 +33,7 @@ EdbLoadSymbolSingleEntry (
 Routine Description:
 
   Load single symbol entry
-  
+
 Arguments:
 
   Object          - Symbol file object
@@ -45,7 +45,7 @@ Arguments:
 Returns:
 
   EFI_SUCCESS - add single symbol entry successfully
-  
+
 --*/
 {
   EFI_DEBUGGER_SYMBOL_ENTRY  *Entry;
@@ -67,9 +67,9 @@ Returns:
   // Print Debug info
   //
   if (sizeof (UINTN) == sizeof(UINT64)) {
-    DEBUG ((EFI_D_ERROR, "  Symbol: %a, Address: 0x%016lx (%d)\n", Name, (UINT64)Address, (UINTN)Type));
+    DEBUG ((DEBUG_ERROR, "  Symbol: %a, Address: 0x%016lx (%d)\n", Name, (UINT64)Address, (UINTN)Type));
   } else {
-    DEBUG ((EFI_D_ERROR, "  Symbol: %a, Address: 0x%08x (%d)\n", Name, Address, (UINTN)Type));
+    DEBUG ((DEBUG_ERROR, "  Symbol: %a, Address: 0x%08x (%d)\n", Name, Address, (UINTN)Type));
   }
 
   //
@@ -177,7 +177,7 @@ EdbLoadSymbolEntryByIec (
 Routine Description:
 
   Load symbol entry by Iec
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -188,7 +188,7 @@ Arguments:
 Returns:
 
   EFI_SUCCESS - add symbol entry successfully
-  
+
 --*/
 {
   CHAR8                      *LineBuffer;
@@ -420,7 +420,7 @@ EdbLoadSymbolEntry (
 Routine Description:
 
   Load symbol entry
-  
+
 Arguments:
 
   Object          - Symbol file object
@@ -430,7 +430,7 @@ Arguments:
 Returns:
 
   EFI_SUCCESS - add symbol entry successfully
-  
+
 --*/
 {
   //
@@ -453,7 +453,7 @@ EdbFindSymbolFile (
 Routine Description:
 
   Find symbol file by name
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -463,7 +463,7 @@ Arguments:
 Returns:
 
   Object
-  
+
 --*/
 {
   UINTN ObjectIndex;
@@ -501,7 +501,7 @@ EbdFindSymbolAddress (
 Routine Description:
 
   Find symbol by address
-  
+
 Arguments:
 
   Address         - Symbol address
@@ -512,7 +512,7 @@ Arguments:
 Returns:
 
   Nearest symbol address
-  
+
 --*/
 {
   UINTN                      Index;
@@ -584,7 +584,7 @@ Returns:
       *RetEntry = Entry;
       *RetObject = Object;
       return Address;
-    }    
+    }
   }
 
   //
@@ -606,7 +606,7 @@ Returns:
       return CandidateLowerAddress;
     }
   }
-  
+
   if ((CandidateUpperAddress - Address) < EFI_DEBUGGER_MAX_SYMBOL_ADDRESS_DELTA_VALUE) {
     //
     // Check for upper address
@@ -639,7 +639,7 @@ EdbUnloadSymbol (
 Routine Description:
 
   Unload symbol file by name
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -648,7 +648,7 @@ Arguments:
 Returns:
 
   EFI_SUCCESS - unload symbol successfully
-  
+
 --*/
 {
   EFI_DEBUGGER_SYMBOL_OBJECT *Object;
@@ -723,7 +723,7 @@ EdbLoadSymbol (
 Routine Description:
 
   Load symbol file by name
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -734,7 +734,7 @@ Arguments:
 Returns:
 
   EFI_SUCCESS - load symbol successfully
-  
+
 --*/
 {
   EFI_DEBUGGER_SYMBOL_OBJECT *Object;
@@ -747,7 +747,7 @@ Returns:
   if (Object != NULL) {
     Status = EdbUnloadSymbol (DebuggerPrivate, FileName);
     if (EFI_ERROR(Status)) {
-      DEBUG ((EFI_D_ERROR, "Unload Duplicated Symbol File Error!\n"));
+      DEBUG ((DEBUG_ERROR, "Unload Duplicated Symbol File Error!\n"));
       return Status;
     }
   }
@@ -774,7 +774,7 @@ Returns:
   //
   // Load SymbolEntry
   //
-  DEBUG ((EFI_D_ERROR, "Symbol File: %s\n", FileName));
+  DEBUG ((DEBUG_ERROR, "Symbol File: %s\n", FileName));
   Status = EdbLoadSymbolEntry (Object, BufferSize, Buffer);
   if (EFI_ERROR (Status)) {
     return Status;
@@ -942,7 +942,7 @@ Returns:
   //
   PdbNameSize = AsciiStrLen (PdbFileName);
   MapNameSize = StrLen (MapFileName);
-  
+
   if (PdbNameSize != MapNameSize) {
     return FALSE;
   }
@@ -962,7 +962,7 @@ Returns:
 //
 // BUGBUG: work-around start
 //
-typedef struct {  
+typedef struct {
   EFI_DEBUG_IMAGE_INFO  *EfiDebugImageInfoTable;
   volatile UINT32       UpdateStatus;
   UINT32                TableSize;
@@ -1032,7 +1032,7 @@ EdbPatchSymbolRVA (
 Routine Description:
 
   Patch symbol RVA
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -1043,7 +1043,7 @@ Returns:
 
   EFI_SUCCESS   - Patch symbol RVA successfully
   EFI_NOT_FOUND - Symbol RVA base not found
-  
+
 --*/
 {
   EFI_STATUS            Status;
@@ -1079,7 +1079,7 @@ Returns:
       return Status;
     }
   }
-  DEBUG ((EFI_D_ERROR, "DebugImageInfoTableHeader: %x\n", mDebuggerPrivate.DebugImageInfoTableHeader));
+  DEBUG ((DEBUG_ERROR, "DebugImageInfoTableHeader: %x\n", mDebuggerPrivate.DebugImageInfoTableHeader));
 
   //
   // BUGBUG: work-around start
@@ -1112,7 +1112,7 @@ Returns:
     if (!MatchPdbAndMap (PdbPath, FileName)) {
       continue;
     }
-    DEBUG ((EFI_D_ERROR, "ImageBase: %x\n", ImageBase));
+    DEBUG ((DEBUG_ERROR, "ImageBase: %x\n", ImageBase));
 
     //
     // Check SearchType
@@ -1196,7 +1196,7 @@ Returns:
   //
   ObjNameSize = AsciiStrLen (ObjFileName);
   CodNameSize = StrLen (CodFileName);
-  
+
   if (ObjNameSize != CodNameSize) {
     return FALSE;
   }
@@ -1232,31 +1232,30 @@ typedef enum {
 ; mark_description "XXX";
 ;ident "Intel(R) C Compiler for EFI Byte Code, Version 1.2 Build 20040123"
 ;ident "XXX"
-	.686P
- 	.387
-_TEXT	SEGMENT PARA PUBLIC USE32 'CODE'
-_TEXT	ENDS
-_DATA	SEGMENT PARA PUBLIC USE32 'DATA'
-	ALIGN 010H
-_DATA	ENDS
-_BSS	SEGMENT PARA PUBLIC USE32 'BSS'
-	ALIGN 010H
-_BSS	ENDS
-_VARBSS	SEGMENT PARA PUBLIC USE32 'BSS'
-	ALIGN 010H
-_VARBSS	ENDS
-	ASSUME	CS:FLAT,DS:FLAT,SS:FLAT
-;ident "Intel(R) C Compiler for EFI Byte Code, Version 1.2 Build 20040123  : C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c : -I C:\efi_src\TIANO\Edk\Foundation\Efi -I C:\efi_src\TIANO\Edk\Foundation\Efi\EBC -I C:\efi_src\TIANO\Edk\Foundation -I C:\efi_src\TIANO\Edk\Foundation\EBC -I C:\efi_src\TIANO\Edk\Foundation\Framework -I C:\efi_src\TIANO\Edk\Foundation\Framework\EBC -I C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest -I C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EBC -I C:\efi_src\TIANO\Edk\Foundation\Core\Dxe -I C:\efi_src\TIANO\Edk\Foundation\Core\Dxe\EBC -I C:\efi_src\TIANO\Edk\Foundation\Include -I C:\efi_src\TIANO\Edk\Foundation\Include\EBC -I C:\efi_src\TIANO\Edk\Foundation\Efi\Include -I C:\efi_src\TIANO\Edk\Foundation\Efi\Include\EBC -I C:\efi_src\TIANO\Edk\Foundation\Framework\Include -I C:\efi_src\TIANO\Edk\Foundation\Framework\Include\EBC -I C:\efi_src\TIANO\Edk\Foundation\Include\IndustryStandard -I C:\efi_src\TIANO\Edk\Foundation\Include\IndustryStandard\EBC -I C:\efi_src\TIANO\Edk\Foundation\Library\Dxe\Include -I C:\efi_src\TIANO\Edk\Foundation\Library\Dxe\Include\EBC -nologo -W3 -WX -c -FaC:\efi_src\TIANO\Edk\Sample\Platform\Nt32\efi\EBC\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest -FAsc -FoC:\efi_src\TIANO\Edk\Sample\Platform\Nt32\efi\EBC\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.obj -X -D InitializeEbcDriver=EfiMain -Zd -Zi -D EFI_SPECIFICATION_VERSION=0x0001000A -D PI_SPECIFICATION_VERSION=0x00000009 -D TIANO_RELEASE_VERSION=0x00080006 -D EFI_DEBUG"
-_DATA	SEGMENT PARA PUBLIC USE32 'DATA'
-TestVariable2	DD 000000003H,000000000H	; u64
-_DATA	ENDS
-_DATA	SEGMENT PARA PUBLIC USE32 'DATA'
-_DATA	ENDS
-_TEXT	SEGMENT PARA PUBLIC USE32 'CODE'
+    .686P
+    .387
+_TEXT   SEGMENT PARA PUBLIC USE32 'CODE'
+_TEXT   ENDS
+_DATA   SEGMENT PARA PUBLIC USE32 'DATA'
+    ALIGN 010H
+_DATA   ENDS
+_BSS    SEGMENT PARA PUBLIC USE32 'BSS'
+    ALIGN 010H
+_BSS    ENDS
+_VARBSS SEGMENT PARA PUBLIC USE32 'BSS'
+    ALIGN 010H
+_VARBSS ENDS
+    ASSUME  CS:FLAT,DS:FLAT,SS:FLAT
+_DATA   SEGMENT PARA PUBLIC USE32 'DATA'
+TestVariable2   DD 000000003H,000000000H    ; u64
+_DATA   ENDS
+_DATA   SEGMENT PARA PUBLIC USE32 'DATA'
+_DATA   ENDS
+_TEXT   SEGMENT PARA PUBLIC USE32 'CODE'
 ; -- Begin  EfiMain
 ; mark_begin;
-	PUBLIC   EfiMain
-EfiMain	 PROC NEAR
+    PUBLIC   EfiMain
+EfiMain  PROC NEAR
 $B3$1:; 11a
 $LN45:
 
@@ -1267,12 +1266,12 @@ $LN46:
 
 ;118 ;   UINT16 test = 0x1234;
 
-  0011e 77 58 58 00 34 
+  0011e 77 58 58 00 34
         12                  MOVIww    @R0(+0,+88), +4660      ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:118
 $LN47:
 
 ;121 ;   EFI_STATUS  Status;
-;121 ; 
+;121 ;
 ;121 ;   SystemTable->ConOut->OutputString (
 
   00124 72 87 01 12         MOVnw     R7, @R0(+1,+128)        ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:121
@@ -1283,10 +1282,10 @@ $LN48:
 
   0012c 72 84 01 12         MOVnw     R4, @R0(+1,+128)        ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:122
   00130 72 c8 85 21         MOVnw     @R0, @R4(+5,+24)        ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:122
-  00134 b9 34 00 00 00 
+  00134 b9 34 00 00 00
         00                  MOVreld   R4, __STRING$1          ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:122
   0013a b2 48 01 10         MOVnw     @R0(+1,+0), R4          ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:122
-  0013e 83 2f 01 00 00 
+  0013e 83 2f 01 00 00
         10                  CALLEX    @R7(+1,+0)              ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:122
 $B3$2:; 144
 $LN49:
@@ -1301,7 +1300,7 @@ $LN50:
 
 ;126 ;   TestVariable1 = 6;
 
-  00146 b9 37 00 00 00 
+  00146 b9 37 00 00 00
         00                  MOVreld   R7, TestVariable1       ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:126
   0014c 78 0f 06 00         MOVInw    @R7, (0,6)              ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:126
 $LN51:
@@ -1309,14 +1308,14 @@ $LN51:
 ;127 ;   TestSubRoutineSub (1, 5);
 
   00150 78 08 01 00         MOVInw    @R0, (0,1)              ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:127
-  00154 78 48 01 10 05 
+  00154 78 48 01 10 05
         00                  MOVInw    @R0(1,0), (0,5)         ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:127
-  0015a 83 10 00 00 00 
+  0015a 83 10 00 00 00
         00                  CALL      TestSubRoutineSub       ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:127
 $B3$4:; 160
 $LN52:
 
-;129 ; 
+;129 ;
 ;129 ;   SystemTable->ConOut->OutputString (
 
   00160 72 87 01 12         MOVnw     R7, @R0(+1,+128)        ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:129
@@ -1331,58 +1330,58 @@ $LN54:
 
 ;131 ;                          TestStr
 
-  00170 b9 34 00 00 00 
+  00170 b9 34 00 00 00
         00                  MOVreld   R4, TestStr             ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:131
   00176 b2 c8 01 10         MOVnw     @R0(+1, +0), @R4        ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:131
-  0017a 83 2f 01 00 00 
+  0017a 83 2f 01 00 00
         10                  CALLEX    @R7(+1,+0)              ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:131
 $B3$5:; 180
 $LN55:
 
 ;134 ;                          );
-;134 ; 
+;134 ;
 ;134 ;   test = test & 0xFF;
 
-  00180 de 88 58 00 58 
+  00180 de 88 58 00 58
         00                  MOVww     @R0(+0,+88), @R0(+0,+88) ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:134
 $LN56:
 
 ;139 ;   if (test != 0x34) {
 ;139 ; //    EFI_BREAKPOINT ();
 ;139 ;   }
-;139 ; 
+;139 ;
 ;139 ;   Status = TestSubRoutine (1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
   00186 78 08 01 00         MOVInw    @R0, (0,1)              ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:139
-  0018a 78 48 01 10 02 
+  0018a 78 48 01 10 02
         00                  MOVInw    @R0(1,0), (0,2)         ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:139
-  00190 78 48 02 10 03 
+  00190 78 48 02 10 03
         00                  MOVInw    @R0(2,0), (0,3)         ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:139
-  00196 78 48 03 10 04 
+  00196 78 48 03 10 04
         00                  MOVInw    @R0(3,0), (0,4)         ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:139
-  0019c 78 48 04 20 05 
+  0019c 78 48 04 20 05
         00                  MOVInw    @R0(4,0), (0,5)         ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:139
-  001a2 78 48 05 20 06 
+  001a2 78 48 05 20 06
         00                  MOVInw    @R0(5,0), (0,6)         ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:139
-  001a8 78 48 06 20 07 
+  001a8 78 48 06 20 07
         00                  MOVInw    @R0(6,0), (0,7)         ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:139
-  001ae 78 48 07 20 08 
+  001ae 78 48 07 20 08
         00                  MOVInw    @R0(7,0), (0,8)         ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:139
-  001b4 78 48 08 20 09 
+  001b4 78 48 08 20 09
         00                  MOVInw    @R0(8,0), (0,9)         ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:139
-  001ba 78 48 09 20 0a 
+  001ba 78 48 09 20 0a
         00                  MOVInw    @R0(9,0), (0,10)        ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:139
-  001c0 83 10 00 00 00 
+  001c0 83 10 00 00 00
         00                  CALL      TestSubRoutine          ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:139
 $B3$10:; 1c6
   001c6 b2 78 60 00         MOVnw     @R0(+0,+96), R7         ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:139
 $B3$6:; 1ca
 $LN57:
-  001ca f2 88 50 00 60 
+  001ca f2 88 50 00 60
         00                  MOVnw     @R0(+0,+80), @R0(+0,+96) ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:139
 $LN58:
 
-;141 ; 
+;141 ;
 ;141 ;   SystemTable->ConOut->OutputString (
 
   001d0 72 87 01 12         MOVnw     R7, @R0(+1,+128)        ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:141
@@ -1393,17 +1392,17 @@ $LN59:
 
   001d8 72 84 01 12         MOVnw     R4, @R0(+1,+128)        ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:142
   001dc 72 c8 85 21         MOVnw     @R0, @R4(+5,+24)        ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:142
-  001e0 b9 34 00 00 00 
+  001e0 b9 34 00 00 00
         00                  MOVreld   R4, __STRING$2          ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:142
   001e6 b2 48 01 10         MOVnw     @R0(+1,+0), R4          ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:142
-  001ea 83 2f 01 00 00 
+  001ea 83 2f 01 00 00
         10                  CALLEX    @R7(+1,+0)              ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:142
 $B3$7:; 1f0
 $LN60:
 
 ;146 ;                          L"Goodbye EBC Test!\n\r"
 ;146 ;                          );
-;146 ;   
+;146 ;
 ;146 ;   return Status;
 
   001f0 72 87 50 00         MOVnw     R7, @R0(+0,+80)         ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:146
@@ -1411,90 +1410,90 @@ $LN60:
   001f8 04 00               RET                               ;C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest.c:146
 ; mark_end;
 EfiMain ENDP
-_TEXT	ENDS
-_DATA	SEGMENT PARA PUBLIC USE32 'DATA'
-	DB 3 DUP (0)	; pad
-__STRING$2	DW 71	; u16
-	DW 111	; u16
-	DW 111	; u16
-	DW 100	; u16
-	DW 98	; u16
-	DW 121	; u16
-	DW 101	; u16
-	DW 32	; u16
-	DW 69	; u16
-	DW 66	; u16
-	DW 67	; u16
-	DW 32	; u16
-	DW 84	; u16
-	DW 101	; u16
-	DW 115	; u16
-	DW 116	; u16
-	DW 33	; u16
-	DW 10	; u16
-	DW 13	; u16
-	DW 0	; u16
-__STRING$1	DW 72	; u16
-	DW 101	; u16
-	DW 108	; u16
-	DW 108	; u16
-	DW 111	; u16
-	DW 32	; u16
-	DW 69	; u16
-	DW 66	; u16
-	DW 67	; u16
-	DW 32	; u16
-	DW 84	; u16
-	DW 101	; u16
-	DW 115	; u16
-	DW 116	; u16
-	DW 33	; u16
-	DW 10	; u16
-	DW 13	; u16
-	DW 0	; u16
-_DATA	ENDS
-_DATA	SEGMENT PARA PUBLIC USE32 'DATA'
-_DATA	ENDS
+_TEXT   ENDS
+_DATA   SEGMENT PARA PUBLIC USE32 'DATA'
+    DB 3 DUP (0)    ; pad
+__STRING$2  DW 71   ; u16
+    DW 111  ; u16
+    DW 111  ; u16
+    DW 100  ; u16
+    DW 98   ; u16
+    DW 121  ; u16
+    DW 101  ; u16
+    DW 32   ; u16
+    DW 69   ; u16
+    DW 66   ; u16
+    DW 67   ; u16
+    DW 32   ; u16
+    DW 84   ; u16
+    DW 101  ; u16
+    DW 115  ; u16
+    DW 116  ; u16
+    DW 33   ; u16
+    DW 10   ; u16
+    DW 13   ; u16
+    DW 0    ; u16
+__STRING$1  DW 72   ; u16
+    DW 101  ; u16
+    DW 108  ; u16
+    DW 108  ; u16
+    DW 111  ; u16
+    DW 32   ; u16
+    DW 69   ; u16
+    DW 66   ; u16
+    DW 67   ; u16
+    DW 32   ; u16
+    DW 84   ; u16
+    DW 101  ; u16
+    DW 115  ; u16
+    DW 116  ; u16
+    DW 33   ; u16
+    DW 10   ; u16
+    DW 13   ; u16
+    DW 0    ; u16
+_DATA   ENDS
+_DATA   SEGMENT PARA PUBLIC USE32 'DATA'
+_DATA   ENDS
 ; -- End  EfiMain
-_DATA	SEGMENT PARA PUBLIC USE32 'DATA'
-__STRING$0	DW 55	; u16
-	DW 56	; u16
-	DW 57	; u16
-	DW 52	; u16
-	DW 53	; u16
-	DW 54	; u16
-	DW 49	; u16
-	DW 50	; u16
-	DW 51	; u16
-	DW 13	; u16
-	DW 10	; u16
-	DW 0	; u16
-_DATA	ENDS
-_VARBSS	SEGMENT PARA PUBLIC USE32 'BSS'
-	PUBLIC TestStr
-TestStr	DD 2 DUP (?)	; pad
-	PUBLIC TestVariable1
-TestVariable1	DD 2 DUP (?)	; pad
-_VARBSS	ENDS
-_VARBSS_INIT	SEGMENT DWORD PUBLIC USE32 'CODE'
+_DATA   SEGMENT PARA PUBLIC USE32 'DATA'
+__STRING$0  DW 55   ; u16
+    DW 56   ; u16
+    DW 57   ; u16
+    DW 52   ; u16
+    DW 53   ; u16
+    DW 54   ; u16
+    DW 49   ; u16
+    DW 50   ; u16
+    DW 51   ; u16
+    DW 13   ; u16
+    DW 10   ; u16
+    DW 0    ; u16
+_DATA   ENDS
+_VARBSS SEGMENT PARA PUBLIC USE32 'BSS'
+    PUBLIC TestStr
+TestStr DD 2 DUP (?)    ; pad
+    PUBLIC TestVariable1
+TestVariable1   DD 2 DUP (?)    ; pad
+_VARBSS ENDS
+_VARBSS_INIT    SEGMENT DWORD PUBLIC USE32 'CODE'
 ; -- Begin varbss_init_C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest$c45b815d2
-	PUBLIC    varbss_init_C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest$c45b815d2
-varbss_init_C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest$c45b815d2	PROC NEAR
-  00000 b9 34 00 00 00 
+    PUBLIC    varbss_init_C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest$c45b815d2
+varbss_init_C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest$c45b815d2 PROC NEAR
+  00000 b9 34 00 00 00
         00                  MOVreld   R4, TestStr
-  00006 b9 35 00 00 00 
+  00006 b9 35 00 00 00
         00                  MOVreld   R5, __STRING$0
   0000c 33 5c               MOVnd     @R4, R5
-  0000e b9 34 00 00 00 
+  0000e b9 34 00 00 00
         00                  MOVreld   R4, TestVariable1
   00014 78 0c 04 00         MOVInw    @R4, (0,4)
-  00018 04 00               RET       
+  00018 04 00               RET
 ; -- End varbss_init_C:\efi_src\TIANO\Edk\Sample\Universal\Ebc\Dxe\EbcTest\EbcTest$c45b815d2
-_VARBSS_INIT	ENDS
-_DATA	SEGMENT PARA PUBLIC USE32 'DATA'
-_DATA	ENDS
-EXTRN	TestSubRoutineSub:PROC
-	END
+_VARBSS_INIT    ENDS
+_DATA   SEGMENT PARA PUBLIC USE32 'DATA'
+_DATA   ENDS
+EXTRN   TestSubRoutineSub:PROC
+    END
 
 ===============================================================================
 
@@ -1512,7 +1511,7 @@ EdbLoadCodBySymbolByIec (
 Routine Description:
 
   Load code by symbol by Iec
-  
+
 Arguments:
 
   Name            - Symbol file name
@@ -1524,7 +1523,7 @@ Arguments:
 Returns:
 
   CodeBuffer
-  
+
 --*/
 {
   CHAR8                      *LineBuffer;
@@ -1661,7 +1660,7 @@ EdbLoadCodBySymbol (
 Routine Description:
 
   Load code by symbol
-  
+
 Arguments:
 
   Name            - Symbol file name
@@ -1673,7 +1672,7 @@ Arguments:
 Returns:
 
   CodeBuffer
-  
+
 --*/
 {
   //
@@ -1696,7 +1695,7 @@ EdbFindCodeFromObject (
 Routine Description:
 
   Find code from object
-  
+
 Arguments:
 
   Object          - Symbol object
@@ -1705,7 +1704,7 @@ Arguments:
 Returns:
 
   CodeBuffer
-  
+
 --*/
 {
   UINTN                      EntryIndex;
@@ -1760,7 +1759,7 @@ EdbLoadCode (
 Routine Description:
 
   Load code
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -1772,7 +1771,7 @@ Arguments:
 Returns:
 
   EFI_SUCCESS - Code loaded successfully
-  
+
 --*/
 {
   EFI_DEBUGGER_SYMBOL_OBJECT *Object;
@@ -1799,12 +1798,12 @@ Returns:
       //
       Status = EdbUnloadCode (DebuggerPrivate, MapFileName, FileName, &SourceBuffer);
       if (EFI_ERROR(Status)) {
-        DEBUG ((EFI_D_ERROR, "Unload Duplicated Code File Error!\n"));
+        DEBUG ((DEBUG_ERROR, "Unload Duplicated Code File Error!\n"));
         return Status;
       }
       Status = EdbDeleteCodeBuffer (DebuggerPrivate, MapFileName, FileName, SourceBuffer);
       if (EFI_ERROR(Status)) {
-        DEBUG ((EFI_D_ERROR, "Delete Duplicated Code File Error!\n"));
+        DEBUG ((DEBUG_ERROR, "Delete Duplicated Code File Error!\n"));
         return Status;
       }
     }
@@ -1854,8 +1853,8 @@ Returns:
   for (EntryIndex = 0; EntryIndex < Object->EntryCount; EntryIndex++) {
     if (Object->Entry[EntryIndex].CodBuffer != NULL) {
       *((UINT8 *)Object->Entry[EntryIndex].CodBuffer + Object->Entry[EntryIndex].CodBufferSize) = 0;
-      DEBUG ((EFI_D_ERROR, "  CodeSymbol: %a, FuncOffset: 0x05%x\n", Object->Entry[EntryIndex].Name, Object->Entry[EntryIndex].FuncOffsetBase));
-//      DEBUG ((EFI_D_ERROR, "  [CODE]:\n%a\n", Object->Entry[EntryIndex].CodBuffer));
+      DEBUG ((DEBUG_ERROR, "  CodeSymbol: %a, FuncOffset: 0x05%x\n", Object->Entry[EntryIndex].Name, Object->Entry[EntryIndex].FuncOffsetBase));
+//      DEBUG ((DEBUG_ERROR, "  [CODE]:\n%a\n", Object->Entry[EntryIndex].CodBuffer));
     }
   }
 
@@ -1877,7 +1876,7 @@ EdbUnloadCode (
 Routine Description:
 
   Unload code
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -1888,7 +1887,7 @@ Arguments:
 Returns:
 
   EFI_SUCCESS - Code unloaded successfully
-  
+
 --*/
 {
   EFI_DEBUGGER_SYMBOL_OBJECT *Object;
@@ -1955,7 +1954,7 @@ EdbAddCodeBuffer (
 Routine Description:
 
   Add code buffer
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -1967,7 +1966,7 @@ Arguments:
 Returns:
 
   EFI_SUCCESS - CodeBuffer added successfully
-  
+
 --*/
 {
   UINTN                      Index;
@@ -2005,7 +2004,7 @@ EdbDeleteCodeBuffer (
 Routine Description:
 
   Delete code buffer
-  
+
 Arguments:
 
   DebuggerPrivate - EBC Debugger private data structure
@@ -2016,7 +2015,7 @@ Arguments:
 Returns:
 
   EFI_SUCCESS - CodeBuffer deleted successfully
-  
+
 --*/
 {
   UINTN                      Index;
@@ -2069,7 +2068,7 @@ FindSymbolStr (
 Routine Description:
 
   Find the symbol string according to address
-  
+
 Arguments:
 
   Address         - Symbol address
@@ -2077,7 +2076,7 @@ Arguments:
 Returns:
 
   Symbol string
-  
+
 --*/
 {
   UINTN                       ObjectIndex;
@@ -2124,7 +2123,7 @@ EdbGetLineNumberAndOffsetFromThisLine (
 Routine Description:
 
   Get line number and offset from this line in code file
-  
+
 Arguments:
 
   Line            - Line buffer in code file
@@ -2133,7 +2132,7 @@ Arguments:
 Returns:
 
   Line number
-  
+
 --*/
 {
   UINTN  LineNumber;
@@ -2224,7 +2223,7 @@ EdbGetLineNumberFromCode (
 Routine Description:
 
   Get line number from this code file
-  
+
 Arguments:
 
   Entry           - Symbol entry
@@ -2234,7 +2233,7 @@ Arguments:
 Returns:
 
   Line number
-  
+
 --*/
 {
   CHAR8  *LineBuffer;
@@ -2341,7 +2340,7 @@ EdbGetSourceStrFromCodeByLine (
 Routine Description:
 
   Get the source string from this code file by line
-  
+
 Arguments:
 
   Entry           - Symbol entry
@@ -2351,7 +2350,7 @@ Arguments:
 Returns:
 
   Funtion start
-  
+
 --*/
 {
   CHAR8  *LineBuffer;
@@ -2413,7 +2412,7 @@ EdbGetSourceStrFromCode (
 Routine Description:
 
   Get source string from this code file
-  
+
 Arguments:
 
   Entry           - Symbol entry
@@ -2423,7 +2422,7 @@ Arguments:
 Returns:
 
   Funtion start
-  
+
 --*/
 {
   UINTN  LineNumber;
@@ -2449,7 +2448,7 @@ EdbPrintSource (
 Routine Description:
 
   Print source
-  
+
 Arguments:
 
   Address         - Instruction address
@@ -2459,7 +2458,7 @@ Returns:
 
   1 - find the source
   0 - not find the source
-  
+
 --*/
 {
   UINTN                      SymbolAddress;

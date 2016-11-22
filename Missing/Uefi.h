@@ -25,10 +25,12 @@ EDK definitions that have no match in gnu-efi yet.
 
 #if defined (_M_IX86)
 #define MDE_CPU_IA32
+#define EFI32
 #elif defined (_M_X64)
 #define MDE_CPU_X64
 #elif defined (_M_ARM)
 #define MDE_CPU_ARM
+#define EFI32
 #endif
 
 #define VA_LIST  va_list
@@ -50,6 +52,10 @@ EDK definitions that have no match in gnu-efi yet.
 #define AsciiStrnCmp strncmpa
 #define AsciiStrLen strlena
 #define UnicodeVSPrint VSPrint
+
+#ifndef ARRAY_SIZE
+#define ARRAY_SIZE(A) (sizeof(A)/sizeof((A)[0]))
+#endif
 
 #define EfiGetSystemConfigurationTable LibGetSystemConfigurationTable
 
