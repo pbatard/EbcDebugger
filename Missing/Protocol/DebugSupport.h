@@ -1,6 +1,7 @@
-// Placeholder
-
-
+//
+// Placeholder for definitions that have been moved to ebc.h
+// in the EDK2 and that aren't available yet in gnu-efi.
+//
 
 //
 // Define OPCODES
