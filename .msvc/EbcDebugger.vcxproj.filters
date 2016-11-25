@@ -118,6 +118,9 @@
     <ClCompile Include="..\Missing\Math64.c">
       <Filter>Source Files\Missing</Filter>
     </ClCompile>
+    <ClCompile Include="..\Missing\ProtocolGUIDs.c">
+      <Filter>Source Files\Missing</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\EbcDebugger\Edb.h">

@@ -119,6 +119,3 @@ AsciiStriCmp(
 
 	return AsciiToUpper(*String) - (CHAR16)AsciiToUpper(*String2);
 }
-
-#include <Protocol/EbcVmTest.h>
-EFI_GUID gEfiEbcVmTestProtocolGuid = EFI_EBC_VM_TEST_PROTOCOL_GUID;

@@ -27,8 +27,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{8296AF37-D183-4416-B3B6-19D2A80AD4A8}</ProjectGuid>
-    <RootNamespace>EbcDebugger</RootNamespace>
+    <ProjectGuid>{8CFC5233-23C6-49E3-8A2D-7E581AB305BA}</ProjectGuid>
+    <RootNamespace>EbcDebuggerConfig</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -69,8 +70,6 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-    <Import Project="..\Missing\armasm.props" />
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
   </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -97,7 +96,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)x64\$(Configuration)\</OutDir>
     <IntDir>$(OutDir)$(ProjectName)\</IntDir>
-    <UseMultiToolTask>true</UseMultiToolTask>
+    <TargetName>EdbCfg</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <TargetExt>.efi</TargetExt>
@@ -105,7 +104,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)ia32\$(Configuration)\</OutDir>
     <IntDir>$(OutDir)$(ProjectName)\</IntDir>
-    <UseMultiToolTask>true</UseMultiToolTask>
+    <TargetName>EdbCfg</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <TargetExt>.efi</TargetExt>
@@ -113,7 +112,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)arm\$(Configuration)\</OutDir>
     <IntDir>$(OutDir)$(ProjectName)\</IntDir>
-    <UseMultiToolTask>true</UseMultiToolTask>
+    <TargetName>EdbCfg</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <TargetExt>.efi</TargetExt>
@@ -121,7 +120,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)x64\$(Configuration)\</OutDir>
     <IntDir>$(OutDir)$(ProjectName)\</IntDir>
-    <UseMultiToolTask>true</UseMultiToolTask>
+    <TargetName>EdbCfg</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <TargetExt>.efi</TargetExt>
@@ -129,7 +128,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)ia32\$(Configuration)\</OutDir>
     <IntDir>$(OutDir)$(ProjectName)\</IntDir>
-    <UseMultiToolTask>true</UseMultiToolTask>
+    <TargetName>EdbCfg</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <TargetExt>.efi</TargetExt>
@@ -137,18 +136,19 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)arm\$(Configuration)\</OutDir>
     <IntDir>$(OutDir)$(ProjectName)\</IntDir>
-    <UseMultiToolTask>true</UseMultiToolTask>
+    <TargetName>EdbCfg</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(VCClangInstallDir)\include;$(SolutionDir);$(SolutionDir)\EbcDebugger;$(SolutionDir)\missing;$(SolutionDir)\gnu-efi\inc;$(SolutionDir)\gnu-efi\inc\x86_64</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>EFI_EBC_DEBUGGER_ENABLED;_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>false</ExceptionHandling>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4090</DisableSpecificWarnings>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <MSExtensions>false</MSExtensions>
-      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Lib>
       <SubSystem>EFI Application</SubSystem>
@@ -161,8 +161,8 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>false</DataExecutionPrevention>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <EntryPointSymbol>InitializeEbcDriver</EntryPointSymbol>
-      <SubSystem>EFI Boot Service Driver</SubSystem>
+      <EntryPointSymbol>InitializeEbcDebuggerConfig</EntryPointSymbol>
+      <SubSystem>EFI Application</SubSystem>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
@@ -170,13 +170,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(VCClangInstallDir)\include;$(SolutionDir);$(SolutionDir)\EbcDebugger;$(SolutionDir)\missing;$(SolutionDir)\gnu-efi\inc;$(SolutionDir)\gnu-efi\inc\ia32</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>EFI_EBC_DEBUGGER_ENABLED;_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>false</ExceptionHandling>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4090</DisableSpecificWarnings>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <MSExtensions>false</MSExtensions>
-      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Lib>
       <SubSystem>EFI Application</SubSystem>
@@ -189,8 +190,8 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>false</DataExecutionPrevention>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <EntryPointSymbol>InitializeEbcDriver</EntryPointSymbol>
-      <SubSystem>EFI Boot Service Driver</SubSystem>
+      <EntryPointSymbol>InitializeEbcDebuggerConfig</EntryPointSymbol>
+      <SubSystem>EFI Application</SubSystem>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OptimizeReferences>true</OptimizeReferences>
       <TargetMachine>MachineX86</TargetMachine>
@@ -199,13 +200,14 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(VCClangInstallDir)\include;$(SolutionDir);$(SolutionDir)\EbcDebugger;$(SolutionDir)\missing;$(SolutionDir)\gnu-efi\inc;$(SolutionDir)\gnu-efi\inc\arm</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>EFI_EBC_DEBUGGER_ENABLED;_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ExceptionHandling>false</ExceptionHandling>
       <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4090</DisableSpecificWarnings>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <MSExtensions>false</MSExtensions>
-      <ExceptionHandling>false</ExceptionHandling>
     </ClCompile>
     <Lib>
       <SubSystem>EFI Application</SubSystem>
@@ -217,8 +219,8 @@
       <AdditionalDependencies>gnu-efi.lib;libcmtd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <DataExecutionPrevention>false</DataExecutionPrevention>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <EntryPointSymbol>InitializeEbcDriver</EntryPointSymbol>
-      <SubSystem>EFI Boot Service Driver</SubSystem>
+      <EntryPointSymbol>InitializeEbcDebuggerConfig</EntryPointSymbol>
+      <SubSystem>EFI Application</SubSystem>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OptimizeReferences>true</OptimizeReferences>
       <RandomizedBaseAddress />
@@ -227,12 +229,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(VCClangInstallDir)\include;$(SolutionDir);$(SolutionDir)\EbcDebugger;$(SolutionDir)\missing;$(SolutionDir)\gnu-efi\inc;$(SolutionDir)\gnu-efi\inc\x86_64</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>EFI_EBC_DEBUGGER_ENABLED;_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4090</DisableSpecificWarnings>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <MSExtensions>false</MSExtensions>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
+      <CompileAs>CompileAsC</CompileAs>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Lib>
       <SubSystem>EFI Application</SubSystem>
@@ -246,8 +248,8 @@
     <Link>
       <DataExecutionPrevention>false</DataExecutionPrevention>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <EntryPointSymbol>InitializeEbcDriver</EntryPointSymbol>
-      <SubSystem>EFI Boot Service Driver</SubSystem>
+      <EntryPointSymbol>InitializeEbcDebuggerConfig</EntryPointSymbol>
+      <SubSystem>EFI Application</SubSystem>
       <AdditionalDependencies>gnu-efi.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OptimizeReferences>true</OptimizeReferences>
@@ -256,12 +258,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(VCClangInstallDir)\include;$(SolutionDir);$(SolutionDir)\EbcDebugger;$(SolutionDir)\missing;$(SolutionDir)\gnu-efi\inc;$(SolutionDir)\gnu-efi\inc\ia32</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>EFI_EBC_DEBUGGER_ENABLED;_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4090</DisableSpecificWarnings>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <MSExtensions>false</MSExtensions>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
+      <CompileAs>CompileAsC</CompileAs>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Lib>
       <SubSystem>EFI Application</SubSystem>
@@ -275,8 +277,8 @@
     <Link>
       <DataExecutionPrevention>false</DataExecutionPrevention>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <EntryPointSymbol>InitializeEbcDriver</EntryPointSymbol>
-      <SubSystem>EFI Boot Service Driver</SubSystem>
+      <EntryPointSymbol>InitializeEbcDebuggerConfig</EntryPointSymbol>
+      <SubSystem>EFI Application</SubSystem>
       <AdditionalDependencies>gnu-efi.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OptimizeReferences>true</OptimizeReferences>
@@ -285,12 +287,12 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
     <ClCompile>
       <AdditionalIncludeDirectories>$(VCClangInstallDir)\include;$(SolutionDir);$(SolutionDir)\EbcDebugger;$(SolutionDir)\missing;$(SolutionDir)\gnu-efi\inc;$(SolutionDir)\gnu-efi\inc\arm</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>EFI_EBC_DEBUGGER_ENABLED;_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <CompileAs>CompileAsC</CompileAs>
-      <DisableSpecificWarnings>4090</DisableSpecificWarnings>
-      <BufferSecurityCheck>false</BufferSecurityCheck>
-      <MSExtensions>false</MSExtensions>
+      <PreprocessorDefinitions>_UNICODE;UNICODE;HAVE_USE_MS_ABI;GNU_EFI_USE_EXTERNAL_STDARG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ExceptionHandling>false</ExceptionHandling>
+      <CompileAs>CompileAsC</CompileAs>
+      <WarningLevel>Level3</WarningLevel>
+      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
     </ClCompile>
     <Lib>
       <SubSystem>EFI Application</SubSystem>
@@ -302,8 +304,8 @@
     <Link>
       <DataExecutionPrevention>false</DataExecutionPrevention>
       <IgnoreAllDefaultLibraries>true</IgnoreAllDefaultLibraries>
-      <EntryPointSymbol>InitializeEbcDriver</EntryPointSymbol>
-      <SubSystem>EFI Boot Service Driver</SubSystem>
+      <EntryPointSymbol>InitializeEbcDebuggerConfig</EntryPointSymbol>
+      <SubSystem>EFI Application</SubSystem>
       <AdditionalDependencies>gnu-efi.lib;libcmt.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <OptimizeReferences>true</OptimizeReferences>
@@ -311,109 +313,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\debug.vbs" />
-    <ARMASM Include="..\Arm\EbcLowLevel.asm">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <FileType>Document</FileType>
-    </ARMASM>
-    <MASM Include="..\Ia32\EbcLowLevel.asm">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</UseSafeExceptionHandlers>
-      <UseSafeExceptionHandlers Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</UseSafeExceptionHandlers>
-    </MASM>
-    <MASM Include="..\x64\EbcLowLevel.asm">
-      <FileType>Document</FileType>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </MASM>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\Arm\EbcSupport.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\EbcExecute.c" />
-    <ClCompile Include="..\EbcInt.c" />
-    <ClCompile Include="..\EbcDebugger\Edb.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCmdBranch.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCmdBreak.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCmdBreakpoint.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCmdExtIo.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCmdExtPci.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCmdGo.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCmdHelp.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCmdMemory.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCmdQuit.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCmdRegister.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCmdScope.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCmdStep.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCmdSymbol.c" />
-    <ClCompile Include="..\EbcDebugger\EdbCommand.c" />
-    <ClCompile Include="..\EbcDebugger\EdbDisasm.c" />
-    <ClCompile Include="..\EbcDebugger\EdbDisasmSupport.c" />
-    <ClCompile Include="..\EbcDebugger\EdbHook.c" />
-    <ClCompile Include="..\EbcDebugger\EdbSupportFile.c" />
-    <ClCompile Include="..\EbcDebugger\EdbSupportString.c" />
-    <ClCompile Include="..\EbcDebugger\EdbSupportUI.c" />
-    <ClCompile Include="..\EbcDebugger\EdbSymbol.c" />
-    <ClCompile Include="..\Ia32\EbcSupport.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\Missing\Math64.c" />
+    <ClCompile Include="..\EbcDebugger\EbcDebuggerConfig.c" />
     <ClCompile Include="..\Missing\ProtocolGUIDs.c" />
-    <ClCompile Include="..\Missing\String.c" />
-    <ClCompile Include="..\x64\EbcSupport.c">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\EbcDebuggerHook.h" />
-    <ClInclude Include="..\EbcExecute.h" />
-    <ClInclude Include="..\EbcInt.h" />
-    <ClInclude Include="..\EbcDebugger\Edb.h" />
-    <ClInclude Include="..\EbcDebugger\EdbCommand.h" />
+    <None Include="..\debug.vbs" />
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="..\EbcDebugger\EdbCommon.h" />
-    <ClInclude Include="..\EbcDebugger\EdbDisasm.h" />
-    <ClInclude Include="..\EbcDebugger\EdbDisasmSupport.h" />
-    <ClInclude Include="..\EbcDebugger\EdbHook.h" />
     <ClInclude Include="..\EbcDebugger\EdbSupport.h" />
-    <ClInclude Include="..\EbcDebugger\EdbSymbol.h" />
     <ClInclude Include="..\Missing\PrintLib.h" />
-    <ClInclude Include="..\Missing\Protocol\EbcVmTest.h" />
+    <ClInclude Include="..\Missing\Protocol\DebuggerConfiguration.h" />
+    <ClInclude Include="..\Missing\Protocol\ShellParameters.h" />
     <ClInclude Include="..\Missing\Uefi.h" />
-    <ClInclude Include="..\Protocol\EbcSimpleDebugger.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\Missing\armasm.targets" />
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
   </ImportGroup>
 </Project>
