@@ -18,6 +18,7 @@
 //
 //**/
 
+    THUMB
     EXPORT EbcLLCALLEXNativeArm
     EXPORT EbcLLEbcInterpret
     EXPORT EbcLLExecuteEbcImageEntryPoint
@@ -180,9 +181,8 @@ EbcLLExecuteEbcImageEntryPoint FUNCTION
 //****************************************************************************
 // mEbcInstructionBufferTemplate
 //****************************************************************************
-;    .section    ".rodata", "a"
-;    .align      2
-;    .arm
+    AREA    .rodata, DATA, READONLY, ALIGN=2
+    ARM
 mEbcInstructionBufferTemplate FUNCTION
     adr     ip, .
     ldr     pc, n11
