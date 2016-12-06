@@ -1,7 +1,7 @@
-/*++
+/** @file
 
-Copyright (c) 2007 - 2016, Intel Corporation
-All rights reserved. This program and the accompanying materials
+Copyright (c) 2007 - 2016, Intel Corporation All rights reserved.<BR>
+This program and the accompanying materials
 are licensed and made available under the terms and conditions of the BSD License
 which accompanies this distribution.  The full text of the license may be found at
 http://opensource.org/licenses/bsd-license.php
@@ -9,342 +9,313 @@ http://opensource.org/licenses/bsd-license.php
 THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
 WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
-Module Name:
 
-  EdbSupportString.c
-
-Abstract:
-
-
---*/
+**/
 
 #include "Edb.h"
 
+/**
+
+  Convert hex string to uint.
+
+  @param  Str  -  The string
+
+**/
 UINTN
 EFIAPI
 Xtoi (
-  CHAR16  *str
+  CHAR16  *Str
   )
-/*++
-
-Routine Description:
-
-  Convert hex string to uint
-
-Arguments:
-
-  Str  -  The string
-
-Returns:
-
---*/
 {
-  UINTN   u;
-  CHAR16  c;
-  UINTN   m;
+  UINTN   RetVal;
+  CHAR16  TempChar;
+  UINTN   MaxVal;
 
-  ASSERT (str != NULL);
+  ASSERT (Str != NULL);
 
-  m = (UINTN) -1 >> 4;
+  MaxVal = (UINTN) -1 >> 4;
   //
   // skip preceeding white space
   //
-  while (*str && *str == ' ') {
-    str += 1;
+  while (*Str != '\0' && *Str == ' ') {
+    Str += 1;
   }
   //
   // skip preceeding zeros
   //
-  while (*str && *str == '0') {
-    str += 1;
+  while (*Str != '\0' && *Str == '0') {
+    Str += 1;
   }
   //
   // skip preceeding white space
   //
-  if (*str && (*str == 'x' || *str == 'X')) {
-    str += 1;
+  if (*Str != '\0' && (*Str == 'x' || *Str == 'X')) {
+    Str += 1;
   }
   //
   // convert hex digits
   //
-  u = 0;
-  c = *(str++);
-  while (c) {
-    if (c >= 'a' && c <= 'f') {
-      c -= 'a' - 'A';
+  RetVal = 0;
+  TempChar = *(Str++);
+  while (TempChar != '\0') {
+    if (TempChar >= 'a' && TempChar <= 'f') {
+      TempChar -= 'a' - 'A';
     }
 
-    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')) {
-      if (u > m) {
+    if ((TempChar >= '0' && TempChar <= '9') || (TempChar >= 'A' && TempChar <= 'F')) {
+      if (RetVal > MaxVal) {
         return (UINTN) -1;
       }
 
-      u = (u << 4) | (c - (c >= 'A' ? 'A' - 10 : '0'));
+      RetVal = (RetVal << 4) | (TempChar - (TempChar >= 'A' ? 'A' - 10 : '0'));
     } else {
       break;
     }
 
-    c = *(str++);
+    TempChar = *(Str++);
   }
 
-  return u;
+  return RetVal;
 }
 
+/**
+
+  Convert hex string to uint.
+
+  @param  Str  -  The string
+
+**/
 UINT64
 EFIAPI
 LXtoi (
-  CHAR16  *str
+  CHAR16  *Str
   )
-/*++
-
-Routine Description:
-
-  Convert hex string to uint
-
-Arguments:
-
-  Str  -  The string
-
-Returns:
-
---*/
 {
-  UINT64  u;
-  CHAR16  c;
-  UINT64  m;
+  UINT64  RetVal;
+  CHAR16  TempChar;
+  UINT64  MaxVal;
 
-  ASSERT (str != NULL);
+  ASSERT (Str != NULL);
 
-  m = RShiftU64 ((UINT64) -1, 4);
+  MaxVal = RShiftU64 ((UINT64) -1, 4);
   //
   // skip preceeding white space
   //
-  while (*str && *str == ' ') {
-    str += 1;
+  while (*Str != '\0' && *Str == ' ') {
+    Str += 1;
   }
   //
   // skip preceeding zeros
   //
-  while (*str && *str == '0') {
-    str += 1;
+  while (*Str != '\0' && *Str == '0') {
+    Str += 1;
   }
   //
   // skip preceeding white space
   //
-  if (*str && (*str == 'x' || *str == 'X')) {
-    str += 1;
+  if (*Str != '\0' && (*Str == 'x' || *Str == 'X')) {
+    Str += 1;
   }
   //
   // convert hex digits
   //
-  u = 0;
-  c = *(str++);
-  while (c) {
-    if (c >= 'a' && c <= 'f') {
-      c -= 'a' - 'A';
+  RetVal = 0;
+  TempChar = *(Str++);
+  while (TempChar != '\0') {
+    if (TempChar >= 'a' && TempChar <= 'f') {
+      TempChar -= 'a' - 'A';
     }
 
-    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')) {
-      if (u > m) {
+    if ((TempChar >= '0' && TempChar <= '9') || (TempChar >= 'A' && TempChar <= 'F')) {
+      if (RetVal > MaxVal) {
         return (UINT64) -1;
       }
 
-      u = LShiftU64 (u, 4);
-      u = u + (c - (c >= 'A' ? 'A' - 10 : '0'));
+      RetVal = LShiftU64 (RetVal, 4);
+      RetVal = RetVal + (TempChar - (TempChar >= 'A' ? 'A' - 10 : '0'));
     } else {
       break;
     }
 
-    c = *(str++);
+    TempChar = *(Str++);
   }
 
-  return u;
+  return RetVal;
 }
 
 #ifndef _GNU_EFI
+/**
+
+  Convert hex string to uint.
+
+  @param Str  -  The string
+
+**/
 UINTN
 EFIAPI
 Atoi (
-  CHAR16  *str
+  CHAR16  *Str
   )
-/*++
-
-Routine Description:
-
-  Convert hex string to uint
-
-Arguments:
-
-  Str  -  The string
-
-Returns:
-
---*/
 {
-  UINTN   u;
-  CHAR16  c;
-  UINTN   m;
-  UINTN   n;
+  UINTN   RetVal;
+  CHAR16  TempChar;
+  UINTN   MaxVal;
+  UINTN   ResteVal;
 
-  ASSERT (str != NULL);
+  ASSERT (Str != NULL);
 
-  m = (UINTN) -1 / 10;
-  n = (UINTN) -1 % 10;
+  MaxVal = (UINTN) -1 / 10;
+  ResteVal = (UINTN) -1 % 10;
   //
   // skip preceeding white space
   //
-  while (*str && *str == ' ') {
-    str += 1;
+  while (*Str != '\0' && *Str == ' ') {
+    Str += 1;
   }
   //
   // convert digits
   //
-  u = 0;
-  c = *(str++);
-  while (c) {
-    if (c >= '0' && c <= '9') {
-      if (u > m || (u == m && c - '0' > (INTN) n)) {
+  RetVal = 0;
+  TempChar = *(Str++);
+  while (TempChar != '\0') {
+    if (TempChar >= '0' && TempChar <= '9') {
+      if (RetVal > MaxVal || (RetVal == MaxVal && TempChar - '0' > (INTN) ResteVal)) {
         return (UINTN) -1;
       }
 
-      u = (u * 10) + c - '0';
+      RetVal = (RetVal * 10) + TempChar - '0';
     } else {
       break;
     }
 
-    c = *(str++);
+    TempChar = *(Str++);
   }
 
-  return u;
+  return RetVal;
 }
 #endif
 
+/**
+
+  Convert hex string to uint.
+
+  @param  Str  -  The string
+
+**/
 UINTN
 EFIAPI
 AsciiXtoi (
-  CHAR8  *str
+  CHAR8  *Str
   )
-/*++
-
-Routine Description:
-
-  Convert hex string to uint
-
-Arguments:
-
-  Str  -  The string
-
-Returns:
-
---*/
 {
-  UINTN   u;
-  CHAR8   c;
-  UINTN   m;
+  UINTN   RetVal;
+  CHAR8   TempChar;
+  UINTN   MaxVal;
 
-  ASSERT (str != NULL);
+  ASSERT (Str != NULL);
 
-  m = (UINTN) -1 >> 4;
+  MaxVal = (UINTN) -1 >> 4;
   //
   // skip preceeding white space
   //
-  while (*str && *str == ' ') {
-    str += 1;
+  while (*Str != '\0' && *Str == ' ') {
+    Str += 1;
   }
   //
   // skip preceeding zeros
   //
-  while (*str && *str == '0') {
-    str += 1;
+  while (*Str != '\0' && *Str == '0') {
+    Str += 1;
   }
   //
   // skip preceeding white space
   //
-  if (*str && (*str == 'x' || *str == 'X')) {
-    str += 1;
+  if (*Str != '\0' && (*Str == 'x' || *Str == 'X')) {
+    Str += 1;
   }
   //
   // convert hex digits
   //
-  u = 0;
-  c = *(str++);
-  while (c) {
-    if (c >= 'a' && c <= 'f') {
-      c -= 'a' - 'A';
+  RetVal = 0;
+  TempChar = *(Str++);
+  while (TempChar != '\0') {
+    if (TempChar >= 'a' && TempChar <= 'f') {
+      TempChar -= 'a' - 'A';
     }
 
-    if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'F')) {
-      if (u > m) {
+    if ((TempChar >= '0' && TempChar <= '9') || (TempChar >= 'A' && TempChar <= 'F')) {
+      if (RetVal > MaxVal) {
         return (UINTN) -1;
       }
 
-      u = (u << 4) | (c - (c >= 'A' ? 'A' - 10 : '0'));
+      RetVal = (RetVal << 4) | (TempChar - (TempChar >= 'A' ? 'A' - 10 : '0'));
     } else {
       break;
     }
 
-    c = *(str++);
+    TempChar = *(Str++);
   }
 
-  return u;
+  return RetVal;
 }
 
+/**
+
+  Convert hex string to uint.
+
+  @param Str  -  The string
+
+**/
 UINTN
 EFIAPI
 AsciiAtoi (
-  CHAR8  *str
+  CHAR8  *Str
   )
-/*++
-
-Routine Description:
-
-  Convert hex string to uint
-
-Arguments:
-
-  Str  -  The string
-
-Returns:
-
---*/
 {
-  UINTN   u;
-  CHAR8   c;
-  UINTN   m;
-  UINTN   n;
+  UINTN   RetVal;
+  CHAR8   TempChar;
+  UINTN   MaxVal;
+  UINTN   ResteVal;
 
-  ASSERT (str != NULL);
+  ASSERT (Str != NULL);
 
-  m = (UINTN) -1 / 10;
-  n = (UINTN) -1 % 10;
+  MaxVal = (UINTN) -1 / 10;
+  ResteVal = (UINTN) -1 % 10;
   //
   // skip preceeding white space
   //
-  while (*str && *str == ' ') {
-    str += 1;
+  while (*Str != '\0' && *Str == ' ') {
+    Str += 1;
   }
   //
   // convert digits
   //
-  u = 0;
-  c = *(str++);
-  while (c) {
-    if (c >= '0' && c <= '9') {
-      if (u > m || (u == m && c - '0' > (INTN) n)) {
+  RetVal = 0;
+  TempChar = *(Str++);
+  while (TempChar != '\0') {
+    if (TempChar >= '0' && TempChar <= '9') {
+      if (RetVal > MaxVal || (RetVal == MaxVal && TempChar - '0' > (INTN) ResteVal)) {
         return (UINTN) -1;
       }
 
-      u = (u * 10) + c - '0';
+      RetVal = (RetVal * 10) + TempChar - '0';
     } else {
       break;
     }
 
-    c = *(str++);
+    TempChar = *(Str++);
   }
 
-  return u;
+  return RetVal;
 }
 
+/**
+
+  Convert the character to upper case.
+
+  @param  Chr    the character to be converted.
+
+**/
 STATIC
 CHAR16
 UnicodeToUpper (
@@ -354,6 +325,13 @@ UnicodeToUpper (
   return (Chr >= L'a' && Chr <= L'z') ? Chr - (L'a' - L'A') : Chr;
 }
 
+/**
+
+  Convert the character to upper case.
+
+  @param  Chr    the character to be converted.
+
+**/
 STATIC
 CHAR8
 AsciiToUpper (
@@ -363,30 +341,26 @@ AsciiToUpper (
   return (Chr >= 'a' && Chr <= 'z') ? Chr - ('a' - 'A') : Chr;
 }
 
+/**
+  Compare the Unicode and Ascii string pointed by String to the string pointed by String2.
+
+  @param String - Unicode String to process
+
+  @param String2 - Ascii string to process
+
+  @return Return a positive integer if String is lexicall greater than String2; Zero if
+  the two strings are identical; and a negative interger if String is lexically
+  less than String2.
+
+**/
 INTN
 EFIAPI
 StrCmpUnicodeAndAscii (
   IN CHAR16   *String,
   IN CHAR8    *String2
   )
-/*++
-
-Routine Description:
-  Compare the Unicode and Ascii string pointed by String to the string pointed by String2.
-
-Arguments:
-  String - Unicode String to process
-
-  String2 - Ascii string to process
-
-Returns:
-  Return a positive integer if String is lexicall greater than String2; Zero if
-  the two strings are identical; and a negative interger if String is lexically
-  less than String2.
-
---*/
 {
-  while (*String) {
+  while (*String != '\0') {
     if (*String != (CHAR16)*String2) {
       break;
     }
@@ -399,27 +373,24 @@ Returns:
 }
 
 #ifndef _GNU_EFI
+/**
+
+  Compare the Unicode string pointed by String to the string pointed by String2.
+
+  @param  String - Unicode String to process
+  @param  String2 - Unicode string to process
+
+  @return Return a positive integer if String is lexically greater than String2; Zero if
+  the two strings are identical; and a negative integer if String is lexically
+  less than String2.
+
+**/
 INTN
 EFIAPI
 StriCmp (
   IN CHAR16   *String,
   IN CHAR16   *String2
   )
-/*++
-
-Routine Description:
-  Compare the Unicode string pointed by String to the string pointed by String2.
-
-Arguments:
-  String - Unicode String to process
-  String2 - Unicode string to process
-
-Returns:
-  Return a positive integer if String is lexically greater than String2; Zero if
-  the two strings are identical; and a negative integer if String is lexically
-  less than String2.
-
---*/
 {
   while ((*String != L'\0') &&
          (UnicodeToUpper (*String) == UnicodeToUpper (*String2))) {
@@ -431,28 +402,24 @@ Returns:
 }
 #endif
 
+/**
+
+  Compare the Unicode and Ascii string pointed by String to the string pointed by String2.
+
+  @param  String - Unicode String to process
+  @param  String2 - Ascii string to process
+
+  @return Return a positive integer if String is lexically greater than String2; Zero if
+  the two strings are identical; and a negative integer if String is lexically
+  less than String2.
+
+**/
 INTN
 EFIAPI
 StriCmpUnicodeAndAscii (
   IN CHAR16   *String,
   IN CHAR8    *String2
   )
-/*++
-
-Routine Description:
-  Compare the Unicode and Ascii string pointed by String to the string pointed by String2.
-
-Arguments:
-  String - Unicode String to process
-
-  String2 - Ascii string to process
-
-Returns:
-  Return a positive integer if String is lexically greater than String2; Zero if
-  the two strings are identical; and a negative integer if String is lexically
-  less than String2.
-
---*/
 {
   while ((*String != L'\0') &&
          (UnicodeToUpper (*String) == (CHAR16)AsciiToUpper (*String2))) {
@@ -463,19 +430,20 @@ Returns:
   return UnicodeToUpper (*String) - (CHAR16)AsciiToUpper (*String2);
 }
 
+/**
+
+  Verify if the string is end with the sub string.
+
+  @param  Str - The string where to search the sub string
+  @param  SubStr - The substring.
+
+**/
 BOOLEAN
 EFIAPI
 StrEndWith (
   IN CHAR16                       *Str,
   IN CHAR16                       *SubStr
   )
-/*++
-
-Routine Description:
-
-  Verify if the string is end with the sub string.
-
---*/
 {
   CHAR16  *Temp;
 
@@ -496,19 +464,24 @@ Routine Description:
 }
 
 #ifndef _GNU_EFI
+/**
+  Duplicate a string.
+
+  @param  Src  The string to be duplicated.
+
+**/
 CHAR16 *
 EFIAPI
 StrDuplicate (
   IN CHAR16   *Src
   )
-// duplicate a string
 {
   CHAR16      *Dest;
   UINTN       Size;
 
   Size = (StrLen(Src) + 1) * sizeof(CHAR16);
   Dest = AllocateZeroPool (Size);
-  if (Dest) {
+  if (Dest != NULL) {
     CopyMem (Dest, Src, Size);
   }
   return Dest;
@@ -518,19 +491,20 @@ StrDuplicate (
 CHAR16  *mLineBuffer          = NULL;
 CHAR16  *mFieldBuffer         = NULL;
 
+/**
+
+  Find the first substring.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 UINTN
 EFIAPI
 StrSpn (
   IN CHAR16                       *String,
   IN CHAR16                       *CharSet
   )
-/*++
-
-Routine Description:
-
-  Find the first substring.
-
---*/
 {
   UINTN   Count;
   CHAR16  *Str1;
@@ -555,21 +529,21 @@ Routine Description:
   return Count;
 }
 
+/**
 
+  Searches a string for the first occurrence of a character contained in a
+  specified buffer.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR16 *
 EFIAPI
 StrBrk (
   IN CHAR16                       *String,
   IN CHAR16                       *CharSet
   )
-/*++
-
-Routine Description:
-
-  Searches a string for the first occurrence of a character contained in a
-  specified buffer.
-
---*/
 {
   CHAR16  *Str1;
   CHAR16  *Str2;
@@ -585,19 +559,20 @@ Routine Description:
   return NULL;
 }
 
+/**
+
+  Find the next token after one or more specified characters.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR16 *
 EFIAPI
 StrTokenLine (
   IN CHAR16                       *String OPTIONAL,
   IN CHAR16                       *CharSet
   )
-/*++
-
-Routine Description:
-
-  Find the next token after one or more specified characters.
-
---*/
 {
   CHAR16  *Begin;
   CHAR16  *End;
@@ -623,20 +598,20 @@ Routine Description:
   return Begin;
 }
 
+/**
 
+  Find the next token after one specificed characters.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR16 *
 EFIAPI
 StrTokenField (
   IN CHAR16                       *String OPTIONAL,
   IN CHAR16                       *CharSet
   )
-/*++
-
-Routine Description:
-
-  Find the next token after one specificed characters.
-
---*/
 {
   CHAR16  *Begin;
   CHAR16  *End;
@@ -662,6 +637,14 @@ Routine Description:
   return Begin;
 }
 
+/**
+
+  Find the next token after one or more specified characters.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR16 *
 EFIAPI
 StrGetNewTokenLine (
@@ -672,6 +655,13 @@ StrGetNewTokenLine (
   return StrTokenLine (String, CharSet);
 }
 
+/**
+
+  Find the next token after one or more specified characters.
+
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR16 *
 EFIAPI
 StrGetNextTokenLine (
@@ -681,6 +671,14 @@ StrGetNextTokenLine (
   return StrTokenLine (NULL, CharSet);
 }
 
+/**
+
+  Find the next token after one specificed characters.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR16 *
 EFIAPI
 StrGetNewTokenField (
@@ -691,6 +689,13 @@ StrGetNewTokenField (
   return StrTokenField (String, CharSet);
 }
 
+/**
+
+  Find the next token after one specificed characters.
+
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR16 *
 EFIAPI
 StrGetNextTokenField (
@@ -700,6 +705,14 @@ StrGetNextTokenField (
   return StrTokenField (NULL, CharSet);
 }
 
+/**
+
+  Patch a character to the end of a string.
+
+  @param  Buffer   The string to be patched.
+  @param  Patch    The patch character.
+
+**/
 VOID
 EFIAPI
 PatchForStrTokenAfter (
@@ -719,7 +732,7 @@ PatchForStrTokenAfter (
   }
   *Str = Patch;
 
-  while (*(Str ++)) {
+  while (*(Str ++) != '\0') {
     if (*Str == 0) {
       *Str = Patch;
     } else {
@@ -730,6 +743,13 @@ PatchForStrTokenAfter (
   return ;
 }
 
+/**
+  Patch a character at the beginning of a string.
+
+  @param  Buffer   The string to be patched.
+  @param  Patch    The patch character.
+
+**/
 VOID
 EFIAPI
 PatchForStrTokenBefore (
@@ -744,7 +764,7 @@ PatchForStrTokenBefore (
   }
 
   Str = Buffer;
-  while (*(Str --)) {
+  while (*(Str --) != '\0') {
     if ((*Str == 0) || (*Str == Patch)) {
       *Str = Patch;
     } else {
@@ -758,19 +778,20 @@ PatchForStrTokenBefore (
 CHAR8  *mAsciiLineBuffer          = NULL;
 CHAR8  *mAsciiFieldBuffer         = NULL;
 
+/**
+
+  Find the first substring.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 UINTN
 EFIAPI
 AsciiStrSpn (
   IN CHAR8                       *String,
   IN CHAR8                       *CharSet
   )
-/*++
-
-Routine Description:
-
-  Find the first substring.
-
---*/
 {
   UINTN   Count;
   CHAR8  *Str1;
@@ -795,21 +816,20 @@ Routine Description:
   return Count;
 }
 
+/**
+  Searches a string for the first occurrence of a character contained in a
+  specified buffer.
 
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR8 *
 EFIAPI
 AsciiStrBrk (
   IN CHAR8                       *String,
   IN CHAR8                       *CharSet
   )
-/*++
-
-Routine Description:
-
-  Searches a string for the first occurrence of a character contained in a
-  specified buffer.
-
---*/
 {
   CHAR8  *Str1;
   CHAR8  *Str2;
@@ -825,19 +845,20 @@ Routine Description:
   return NULL;
 }
 
+/**
+
+  Find the next token after one or more specified characters.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR8 *
 EFIAPI
 AsciiStrTokenLine (
   IN CHAR8                       *String OPTIONAL,
   IN CHAR8                       *CharSet
   )
-/*++
-
-Routine Description:
-
-  Find the next token after one or more specified characters.
-
---*/
 {
   CHAR8  *Begin;
   CHAR8  *End;
@@ -863,20 +884,20 @@ Routine Description:
   return Begin;
 }
 
+/**
 
+  Find the next token after one specificed characters.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR8 *
 EFIAPI
 AsciiStrTokenField (
   IN CHAR8                       *String OPTIONAL,
   IN CHAR8                       *CharSet
   )
-/*++
-
-Routine Description:
-
-  Find the next token after one specificed characters.
-
---*/
 {
   CHAR8  *Begin;
   CHAR8  *End;
@@ -902,6 +923,14 @@ Routine Description:
   return Begin;
 }
 
+/**
+
+  Find the next token after one or more specified characters.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR8 *
 EFIAPI
 AsciiStrGetNewTokenLine (
@@ -912,6 +941,13 @@ AsciiStrGetNewTokenLine (
   return AsciiStrTokenLine (String, CharSet);
 }
 
+/**
+
+  Find the next token after one or more specified characters.
+
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR8 *
 EFIAPI
 AsciiStrGetNextTokenLine (
@@ -921,6 +957,14 @@ AsciiStrGetNextTokenLine (
   return AsciiStrTokenLine (NULL, CharSet);
 }
 
+/**
+
+  Find the next token after one specificed characters.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR8 *
 EFIAPI
 AsciiStrGetNewTokenField (
@@ -931,6 +975,13 @@ AsciiStrGetNewTokenField (
   return AsciiStrTokenField (String, CharSet);
 }
 
+/**
+
+  Find the next token after one specificed characters.
+
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR8 *
 EFIAPI
 AsciiStrGetNextTokenField (
@@ -940,6 +991,14 @@ AsciiStrGetNextTokenField (
   return AsciiStrTokenField (NULL, CharSet);
 }
 
+/**
+
+  Patch a character to the end of a string.
+
+  @param  Buffer   The string to be patched.
+  @param  Patch    The patch character.
+
+**/
 VOID
 EFIAPI
 PatchForAsciiStrTokenAfter (
@@ -959,7 +1018,7 @@ PatchForAsciiStrTokenAfter (
   }
   *Str = Patch;
 
-  while (*(Str ++)) {
+  while (*(Str ++) != '\0') {
     if (*Str == 0) {
       *Str = Patch;
     } else {
@@ -970,6 +1029,13 @@ PatchForAsciiStrTokenAfter (
   return ;
 }
 
+/**
+  Patch a character at the beginning of a string.
+
+  @param  Buffer   The string to be patched.
+  @param  Patch    The patch character.
+
+**/
 VOID
 EFIAPI
 PatchForAsciiStrTokenBefore (
@@ -984,7 +1050,7 @@ PatchForAsciiStrTokenBefore (
   }
 
   Str = Buffer;
-  while (*(Str --)) {
+  while (*(Str --) != '\0') {
     if ((*Str == 0) || (*Str == Patch)) {
       *Str = Patch;
     } else {

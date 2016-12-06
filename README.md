@@ -1,14 +1,13 @@
-EbcDebugger - The updated EDK EBC Debugger
-==========================================
+EbcDebugger - A standalone EBC Debugger
+=======================================
 
-This is an updated version of the original [EDK EBC Debugger](https://github.com/tianocore/edk/tree/master/Sample/Universal/Ebc/Dxe)
+This is a standalone version of the [EDK2's EBC Debugger](https://github.com/tianocore/edk2/tree/master/MdeModulePkg/Universal/EbcDxe/EbcDebugger)
 that:
-* Can be compiled without the cumbersome annoyance of having to use the EDK/EDK2, through the convenience of
+* Can be compiled without the cumbersome annoyance of having to use the EDK2, through the convenience of
   a Visual Studio 2015 project and [gnu-efi](https://sourceforge.net/projects/gnu-efi/)
 * Can be compiled for x86_32, x86_64 and ARM targets
 * Can be tested on the fly, through a [QEMU](http://www.qemu.org)+[OVMF](http://tianocore.github.io/ovmf/)
   UEFI virtual machine.
-* Fixes some notorious __bugs__ with the original EDK debugger, such as not displaying 32/64 bit indexes properly.
 
 ## Prerequisites
 

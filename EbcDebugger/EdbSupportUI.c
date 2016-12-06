@@ -1,7 +1,7 @@
-/*++
+/** @file
 
-Copyright (c) 2007, Intel Corporation
-All rights reserved. This program and the accompanying materials
+Copyright (c) 2007, Intel Corporation. All rights reserved.<BR>
+This program and the accompanying materials
 are licensed and made available under the terms and conditions of the BSD License
 which accompanies this distribution.  The full text of the license may be found at
 http://opensource.org/licenses/bsd-license.php
@@ -9,17 +9,24 @@ http://opensource.org/licenses/bsd-license.php
 THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
 WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
-Module Name:
 
-  EdbSupportUI.c
-
-Abstract:
-
-
---*/
+**/
 
 #include "Edb.h"
 
+/**
+  Set the current coordinates of the cursor position.
+
+  @param  ConOut        Point to EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.
+  @param  Column        The position to set the cursor to.
+  @param  Row           The position to set the cursor to.
+  @param  LineLength    Length of a line.
+  @param  TotalRow      Total row of a screen.
+  @param  Str           Point to the string.
+  @param  StrPos        The position of the string.
+  @param  Len           The length of the string.
+
+**/
 VOID
 EFIAPI
 SetCursorPosition (
@@ -33,35 +40,30 @@ SetCursorPosition (
   IN  UINTN                           Len
   );
 
+/**
+
+  Function waits for a given event to fire, or for an optional timeout to expire.
+
+  @param  Event            - The event to wait for
+  @param  Timeout          - An optional timeout value in 100 ns units.
+
+  @retval EFI_SUCCESS       - Event fired before Timeout expired.
+  @retval EFI_TIME_OUT     - Timout expired before Event fired..
+
+**/
 EFI_STATUS
 EFIAPI
 WaitForSingleEvent (
   IN EFI_EVENT                  Event,
   IN UINT64                     Timeout OPTIONAL
   )
-/*++
-
-Routine Description:
-  Function waits for a given event to fire, or for an optional timeout to expire.
-
-Arguments:
-  Event            - The event to wait for
-
-  Timeout          - An optional timeout value in 100 ns units.
-
-Returns:
-
-  EFI_SUCCESS       - Event fired before Timeout expired.
-  EFI_TIME_OUT     - Timout expired before Event fired..
-
---*/
 {
   EFI_STATUS  Status;
   UINTN       Index;
   EFI_EVENT   TimerEvent;
   EFI_EVENT   WaitList[2];
 
-  if (Timeout) {
+  if (Timeout != 0) {
     //
     // Create a timer event
     //
@@ -103,6 +105,15 @@ Returns:
   return Status;
 }
 
+/**
+
+  Move the cursor position one character backward.
+
+  @param  LineLength       Length of a line. Get it by calling QueryMode
+  @param  Column           Current column of the cursor position
+  @param  Row              Current row of the cursor position
+
+**/
 VOID
 EFIAPI
 ConMoveCursorBackward (
@@ -110,19 +121,6 @@ ConMoveCursorBackward (
   IN OUT UINTN                   *Column,
   IN OUT UINTN                   *Row
   )
-/*++
-
-Routine Description:
-  Move the cursor position one character backward.
-
-Arguments:
-  LineLength       Length of a line. Get it by calling QueryMode
-  Column           Current column of the cursor position
-  Row              Current row of the cursor position
-
-Returns:
-
---*/
 {
   ASSERT (Column != NULL);
   ASSERT (Row != NULL);
@@ -144,6 +142,16 @@ Returns:
   }
 }
 
+/**
+
+  Move the cursor position one character backward.
+
+  @param  LineLength       Length of a line. Get it by calling QueryMode
+  @param  TotalRow         Total row of a screen, get by calling QueryMode
+  @param  Column           Current column of the cursor position
+  @param  Row              Current row of the cursor position
+
+**/
 VOID
 EFIAPI
 ConMoveCursorForward (
@@ -152,20 +160,6 @@ ConMoveCursorForward (
   IN OUT UINTN                   *Column,
   IN OUT UINTN                   *Row
   )
-/*++
-
-Routine Description:
-  Move the cursor position one character backward.
-
-Arguments:
-  LineLength       Length of a line. Get it by calling QueryMode
-  TotalRow         Total row of a screen, get by calling QueryMode
-  Column           Current column of the cursor position
-  Row              Current row of the cursor position
-
-Returns:
-
---*/
 {
   ASSERT (Column != NULL);
   ASSERT (Row != NULL);
@@ -185,6 +179,15 @@ Returns:
 CHAR16 mBackupSpace[EFI_DEBUG_INPUS_BUFFER_SIZE];
 CHAR16 mInputBufferHistory[EFI_DEBUG_INPUS_BUFFER_SIZE];
 
+/**
+
+  Get user input.
+
+  @param  Prompt       The prompt string.
+  @param  InStr        Point to the input string.
+  @param  StrLength    The max length of string user can input.
+
+**/
 VOID
 EFIAPI
 Input (
@@ -223,7 +226,7 @@ Input (
   ASSERT (ConIn != NULL);
   ASSERT (InStr != NULL);
 
-  if (Prompt) {
+  if (Prompt != NULL) {
     ConOut->OutputString (ConOut, Prompt);
   }
   //
@@ -274,7 +277,7 @@ Input (
       break;
 
     case CHAR_BACKSPACE:
-      if (StrPos) {
+      if (StrPos != 0) {
         //
         // If not move back beyond string beginning, move all characters behind
         // the current position one character forward
@@ -326,7 +329,7 @@ Input (
         //
         // Move characters behind current position one character forward
         //
-        if (Len) {
+        if (Len != 0) {
           Update  = StrPos;
           Delete  = 1;
           CopyMem (InStr + StrPos, InStr + StrPos + 1, sizeof (CHAR16) * (Len - StrPos));
@@ -339,7 +342,7 @@ Input (
         //
         // Adjust current cursor position
         //
-        if (StrPos) {
+        if (StrPos != 0) {
           StrPos -= 1;
           ConMoveCursorBackward (LineLength, &Column, &Row);
         }
@@ -466,7 +469,7 @@ Input (
       EDBPrint (InStr + Update);
       Len = StrLen (InStr);
 
-      if (Delete) {
+      if (Delete != 0) {
         SetMem (InStr + Len, Delete * sizeof (CHAR16), 0x00);
       }
 
@@ -533,6 +536,19 @@ Input (
   return ;
 }
 
+/**
+  Set the current coordinates of the cursor position.
+
+  @param  ConOut        Point to EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL.
+  @param  Column        The position to set the cursor to.
+  @param  Row           The position to set the cursor to.
+  @param  LineLength    Length of a line.
+  @param  TotalRow      Total row of a screen.
+  @param  Str           Point to the string.
+  @param  StrPos        The position of the string.
+  @param  Len           The length of the string.
+
+**/
 VOID
 EFIAPI
 SetCursorPosition (
@@ -570,6 +586,11 @@ SetCursorPosition (
   ConOut->SetCursorPosition (ConOut, 0, 0);
 }
 
+/**
+
+  SetPageBreak.
+
+**/
 BOOLEAN
 EFIAPI
 SetPageBreak (
@@ -639,6 +660,14 @@ SetPageBreak (
   return OmitPrint;
 }
 
+/**
+  Print a Unicode string to the output device.
+
+  @param  Format    A Null-terminated Unicode format string.
+  @param  ...       The variable argument list that contains pointers to Null-
+                    terminated Unicode strings to be printed
+
+**/
 UINTN
 EFIAPI
 EDBPrint (
@@ -664,6 +693,17 @@ EDBPrint (
   return Return;
 }
 
+/**
+  Print a Unicode string to the output buffer.
+
+  @param  Buffer          A pointer to the output buffer for the produced Null-terminated
+                          Unicode string.
+  @param  BufferSize      The size, in bytes, of the output buffer specified by StartOfBuffer.
+  @param  Format          A Null-terminated Unicode format string.
+  @param  ...             The variable argument list that contains pointers to Null-
+                          terminated Unicode strings to be printed
+
+**/
 UINTN
 EFIAPI
 EDBSPrint (
@@ -685,6 +725,18 @@ EDBSPrint (
   return Return;
 }
 
+/**
+  Print a Unicode string to the output buffer with specified offset..
+
+  @param  Buffer          A pointer to the output buffer for the produced Null-terminated
+                          Unicode string.
+  @param  BufferSize      The size, in bytes, of the output buffer specified by StartOfBuffer.
+  @param  Offset          The offset of the buffer.
+  @param  Format          A Null-terminated Unicode format string.
+  @param  ...             The variable argument list that contains pointers to Null-
+                          terminated Unicode strings to be printed
+
+**/
 UINTN
 EFIAPI
 EDBSPrintWithOffset (

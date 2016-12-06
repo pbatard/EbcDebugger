@@ -1,7 +1,7 @@
-/*++
+/** @file
 
-Copyright (c) 2007, Intel Corporation
-All rights reserved. This program and the accompanying materials
+Copyright (c) 2007, Intel Corporation All rights reserved.<BR>
+This program and the accompanying materials
 are licensed and made available under the terms and conditions of the BSD License
 which accompanies this distribution.  The full text of the license may be found at
 http://opensource.org/licenses/bsd-license.php
@@ -9,14 +9,8 @@ http://opensource.org/licenses/bsd-license.php
 THE PROGRAM IS DISTRIBUTED UNDER THE BSD LICENSE ON AN "AS IS" BASIS,
 WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
-Module Name:
 
-  EdbSupport.h
-
-Abstract:
-
-
---*/
+**/
 
 #ifndef _EFI_EDB_SUPPORT_H_
 #define _EFI_EDB_SUPPORT_H_
@@ -31,38 +25,85 @@ Abstract:
 
 #define EFI_DEBUG_MAX_PRINT_BUFFER   (80 * 4)
 
+/**
+
+  Convert hex string to uint.
+
+  @param  Str  -  The string
+
+**/
 UINTN
 EFIAPI
 Xtoi (
-  CHAR16  *str
+  CHAR16  *Str
   );
 
+/**
+
+  Convert hex string to uint.
+
+  @param  Str  -  The string
+
+**/
 UINT64
 EFIAPI
 LXtoi (
-  CHAR16  *str
+  CHAR16  *Str
   );
 
 #ifndef _GNU_EFI
+/**
+
+  Convert hex string to uint.
+
+  @param Str  -  The string
+
+**/
 UINTN
 EFIAPI
 Atoi (
-  CHAR16  *str
+  CHAR16  *Str
   );
 #endif
 
+/**
+
+  Convert hex string to uint.
+
+  @param  Str  -  The string
+
+**/
 UINTN
 EFIAPI
 AsciiXtoi (
-  CHAR8  *str
+  CHAR8  *Str
   );
 
+/**
+
+  Convert hex string to uint.
+
+  @param Str  -  The string
+
+**/
 UINTN
 EFIAPI
 AsciiAtoi (
-  CHAR8  *str
+  CHAR8  *Str
   );
 
+/**
+  Compare the Unicode and Ascii string pointed by String to the string pointed by String2.
+
+  @param String - Unicode String to process
+
+  @param String2 - Ascii string to process
+
+  @return Return a positive integer if String is lexicall greater than String2; Zero if
+  the two strings are identical; and a negative interger if String is lexically
+  less than String2.
+
+**/
 INTN
 EFIAPI
 StrCmpUnicodeAndAscii (
@@ -71,6 +112,18 @@ StrCmpUnicodeAndAscii (
   );
 
 #ifndef _GNU_EFI
+/**
+
+  Compare the Unicode string pointed by String to the string pointed by String2.
+
+  @param  String - Unicode String to process
+  @param  String2 - Unicode string to process
+
+  @return Return a positive integer if String is lexically greater than String2; Zero if
+  the two strings are identical; and a negative integer if String is lexically
+  less than String2.
+
+**/
 INTN
 EFIAPI
 StriCmp (
@@ -79,6 +132,18 @@ StriCmp (
   );
 #endif
 
+/**
+
+  Compare the Unicode and Ascii string pointed by String to the string pointed by String2.
+
+  @param  String - Unicode String to process
+  @param  String2 - Ascii string to process
+
+  @return Return a positive integer if String is lexically greater than String2; Zero if
+  the two strings are identical; and a negative integer if String is lexically
+  less than String2.
+
+**/
 INTN
 EFIAPI
 StriCmpUnicodeAndAscii (
@@ -86,6 +151,14 @@ StriCmpUnicodeAndAscii (
   IN CHAR8    *String2
   );
 
+/**
+
+  Verify if the string is end with the sub string.
+
+  @param  Str - The string where to search the sub string
+  @param  SubStr - The substring.
+
+**/
 BOOLEAN
 EFIAPI
 StrEndWith (
@@ -94,6 +167,12 @@ StrEndWith (
   );
 
 #ifndef _GNU_EFI
+/**
+  Duplicate a string.
+
+  @param  Src  The string to be duplicated.
+
+**/
 CHAR16 *
 EFIAPI
 StrDuplicate (
@@ -101,6 +180,14 @@ StrDuplicate (
   );
 #endif
 
+/**
+
+  Find the next token after one or more specified characters.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR16 *
 EFIAPI
 StrGetNewTokenLine (
@@ -108,12 +195,27 @@ StrGetNewTokenLine (
   IN CHAR16                       *CharSet
   );
 
+/**
+
+  Find the next token after one or more specified characters.
+
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR16 *
 EFIAPI
 StrGetNextTokenLine (
   IN CHAR16                       *CharSet
   );
 
+/**
+
+  Find the next token after one specificed characters.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR16 *
 EFIAPI
 StrGetNewTokenField (
@@ -121,12 +223,27 @@ StrGetNewTokenField (
   IN CHAR16                       *CharSet
   );
 
+/**
+
+  Find the next token after one specificed characters.
+
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR16 *
 EFIAPI
 StrGetNextTokenField (
   IN CHAR16                       *CharSet
   );
 
+/**
+
+  Patch a character to the end of a string.
+
+  @param  Buffer   The string to be patched.
+  @param  Patch    The patch character.
+
+**/
 VOID
 EFIAPI
 PatchForStrTokenAfter (
@@ -134,6 +251,13 @@ PatchForStrTokenAfter (
   IN CHAR16    Patch
   );
 
+/**
+  Patch a character at the beginning of a string.
+
+  @param  Buffer   The string to be patched.
+  @param  Patch    The patch character.
+
+**/
 VOID
 EFIAPI
 PatchForStrTokenBefore (
@@ -141,6 +265,14 @@ PatchForStrTokenBefore (
   IN CHAR16    Patch
   );
 
+/**
+
+  Find the next token after one or more specified characters.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR8 *
 EFIAPI
 AsciiStrGetNewTokenLine (
@@ -148,12 +280,27 @@ AsciiStrGetNewTokenLine (
   IN CHAR8                       *CharSet
   );
 
+/**
+
+  Find the next token after one or more specified characters.
+
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR8 *
 EFIAPI
 AsciiStrGetNextTokenLine (
   IN CHAR8                       *CharSet
   );
 
+/**
+
+  Find the next token after one specificed characters.
+
+  @param  String    Point to the string where to find the substring.
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR8 *
 EFIAPI
 AsciiStrGetNewTokenField (
@@ -161,12 +308,27 @@ AsciiStrGetNewTokenField (
   IN CHAR8                       *CharSet
   );
 
+/**
+
+  Find the next token after one specificed characters.
+
+  @param  CharSet   Point to the string to be found.
+
+**/
 CHAR8 *
 EFIAPI
 AsciiStrGetNextTokenField (
   IN CHAR8                       *CharSet
   );
 
+/**
+
+  Patch a character to the end of a string.
+
+  @param  Buffer   The string to be patched.
+  @param  Patch    The patch character.
+
+**/
 VOID
 EFIAPI
 PatchForAsciiStrTokenAfter (
@@ -174,6 +336,13 @@ PatchForAsciiStrTokenAfter (
   IN CHAR8    Patch
   );
 
+/**
+  Patch a character at the beginning of a string.
+
+  @param  Buffer   The string to be patched.
+  @param  Patch    The patch character.
+
+**/
 VOID
 EFIAPI
 PatchForAsciiStrTokenBefore (
@@ -181,9 +350,16 @@ PatchForAsciiStrTokenBefore (
   IN CHAR8    Patch
   );
 
-//
-// Shell Library
-//
+/**
+
+  Shell Library.
+  Get user input.
+
+  @param  Prompt    The prompt string.
+  @param  InStr     Point to the input string.
+  @param  StrLen    The max length of string user can input.
+
+**/
 VOID
 EFIAPI
 Input (
@@ -192,12 +368,25 @@ Input (
   IN UINTN     StrLen
   );
 
+/**
+
+  SetPageBreak.
+
+**/
 BOOLEAN
 EFIAPI
 SetPageBreak (
   VOID
   );
 
+/**
+  Print a Unicode string to the output device.
+
+  @param  Format    A Null-terminated Unicode format string.
+  @param  ...       The variable argument list that contains pointers to Null-
+                    terminated Unicode strings to be printed
+
+**/
 UINTN
 EFIAPI
 EDBPrint (
@@ -205,6 +394,17 @@ EDBPrint (
   ...
   );
 
+/**
+  Print a Unicode string to the output buffer.
+
+  @param  Buffer          A pointer to the output buffer for the produced Null-terminated
+                          Unicode string.
+  @param  BufferSize      The size, in bytes, of the output buffer specified by StartOfBuffer.
+  @param  Format          A Null-terminated Unicode format string.
+  @param  ...             The variable argument list that contains pointers to Null-
+                          terminated Unicode strings to be printed
+
+**/
 UINTN
 EFIAPI
 EDBSPrint (
@@ -214,6 +414,18 @@ EDBSPrint (
   ...
   );
 
+/**
+  Print a Unicode string to the output buffer with specified offset..
+
+  @param  Buffer          A pointer to the output buffer for the produced Null-terminated
+                          Unicode string.
+  @param  BufferSize      The size, in bytes, of the output buffer specified by StartOfBuffer.
+  @param  Offset          The offset of the buffer.
+  @param  Format          A Null-terminated Unicode format string.
+  @param  ...             The variable argument list that contains pointers to Null-
+                          terminated Unicode strings to be printed
+
+**/
 UINTN
 EFIAPI
 EDBSPrintWithOffset (
@@ -224,6 +436,25 @@ EDBSPrintWithOffset (
   ...
   );
 
+/**
+
+  Read a file.
+  If ScanFs is FLASE, it will use DebuggerPrivate->Vol as default Fs.
+  If ScanFs is TRUE, it will scan all FS and check the file.
+  If there is only one file match the name, it will be read.
+  If there is more than one file match the name, it will return Error.
+
+  @param  DebuggerPrivate - EBC Debugger private data structure
+  @param  FileName        - The file to be read.
+  @param  BufferSize      - The file buffer size
+  @param  Buffer          - The file buffer
+  @param  ScanFs          - Need Scan all FS
+
+  @retval EFI_SUCCESS    - read file successfully
+  @retval EFI_NOT_FOUND  - file not found
+  @retval EFI_NO_MAPPING - there is duplicated files found
+
+**/
 EFI_STATUS
 EFIAPI
 ReadFileToBuffer (
@@ -234,6 +465,18 @@ ReadFileToBuffer (
   IN  BOOLEAN                     ScanFs
   );
 
+/**
+
+  Get file name under this dir with index
+
+  @param  DebuggerPrivate - EBC Debugger private data structure
+  @param  DirName         - The dir to be read.
+  @param  FileName        - The file name pattern under this dir
+  @param  Index           - The file index under this dir
+
+  @return File Name which match the pattern and index.
+
+**/
 CHAR16 *
 EFIAPI
 GetFileNameUnderDir (

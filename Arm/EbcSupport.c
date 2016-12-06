@@ -608,12 +608,6 @@ EbcInterpret (
   )
 {
   //
-  // Sanity checks for the stack tracker
-  //
-  ASSERT (sizeof (UINT64) == 8);
-  ASSERT (sizeof (UINT32) == 4);
-
-  //
   // Create a new VM context on the stack
   //
   VM_CONTEXT  VmContext;
@@ -628,10 +622,10 @@ EbcInterpret (
   //
   // Isolate the call signature from the instruction buffer data.
   // If the call signature is missing (high 16-bits are not set to
-  // EBC_CALL_SIGNATURE), return an error as we can't properly
-  // reconstruct the EBC VM parameter stack.
+  // EBC_CALL_SIGNATURE), return an error as we aren't able to
+  // properly reconstruct the EBC VM parameter stack.
   //
-  if ((InstructionBuffer->EbcCallSignature >> 16) != EBC_CALL_SIGNATURE) {
+  if ((InstructionBuffer->EbcCallSignature & 0xFFFF0000) != EBC_CALL_SIGNATURE) {
     return EFI_INCOMPATIBLE_VERSION;
   }
   CallSignature = (UINT16) InstructionBuffer->EbcCallSignature;
@@ -779,7 +773,7 @@ EbcInterpret (
   EbcExecute (&VmContext);
 
   //
-  // Return the value in R[7] unless there was an error
+  // Return the value in Gpr[7] unless there was an error
   //
   ReturnEBCStack(StackIndex);
   FreePool(VmContext.StackTracker);
@@ -806,12 +800,6 @@ ExecuteEbcImageEntryPoint (
   IN UINTN                EntryPoint
   )
 {
-  //
-  // Sanity checks for the stack tracker
-  //
-  ASSERT (sizeof (UINT64) == 8);
-  ASSERT (sizeof (UINT32) == 4);
-
   //
   // Create a new VM context on the stack
   //
@@ -902,7 +890,7 @@ ExecuteEbcImageEntryPoint (
   EbcExecute (&VmContext);
 
   //
-  // Return the value in R[7] unless there was an error
+  // Return the value in Gpr[7] unless there was an error
   //
   ReturnEBCStack(StackIndex);
   FreePool(VmContext.StackTracker);

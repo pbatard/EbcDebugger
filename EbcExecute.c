@@ -1939,6 +1939,7 @@ ExecuteBREAK (
   UINT64      U64EbcEntryPoint;
   INT32       Offset;
   UINT32      Flags;
+  UINT32      CallSignature;
 
   Thunk = NULL;
   Operands = GETOPERANDS (VmPtr);
@@ -1985,42 +1986,38 @@ ExecuteBREAK (
     break;
 
   //
-  // Create a thunk for EBC code. R7 points to a 32-bit (in a 64-bit slot)
-  // "offset from self" pointer to the EBC entry point.
+  // Create a thunk for EBC code. R7 points to a 64-bit longword, with the
+  // the lower 32 bits being an "offset from self" pointer to the EBC entry
+  // point and the higher 32 bits being the call signature.
   // After we're done, *(UINT64 *)R7 will be the address of the new thunk.
   //
   case 5:
     Offset            = (INT32) VmReadMem32 (VmPtr, (UINTN) VmPtr->Gpr[7]);
+    CallSignature     = VmReadMem32 (VmPtr, (UINTN) VmPtr->Gpr[7] + 4);
     U64EbcEntryPoint  = (UINT64) (VmPtr->Gpr[7] + Offset + 4);
     EbcEntryPoint     = (VOID *) (UINTN) U64EbcEntryPoint;
 
     //
-    // A call signature is needed on ARM systems to properly reconstruct
-    // the EBC call parameter stack. It is stored in the lower 16-bits of
-    // R6, with the higher 16-bit of R6 being set to 0xEBCC to confirm
-    // the presence of a valid call signature.
-    // The signature is passed to EbcCreateThunks() as the high 16-bits
-    // of the Flags parameter, with FLAG_THUNK_SIGNATURE also set.
-    // Note that, on ARM, we do allow execution of code where call
-    // signatures are missing (e.g. existing EBC code that has not been
-    // updated to follow the new BREAK 5 requirements) as long as there
-    // aren't any native -> EBC thunk invocations during runtime.
-    // On the other hand, if a native -> EBC thunk invocation is triggered
-    // on an EBC application running on ARM, and a call signature wasn't
-    // registered, the the application will exit with an error (but ONLY
-    // on ARM as it's the only platform that requires signatures for the
-    // time being).
+    // A call signature is needed (notably on ARM systems) to properly
+    // reconstruct the EBC call parameter stack. When BREAK 5 is invoked,
+    // this signature is expected to be provided after the "offset from
+    // self", as another 32-bit word.
+    // Within this word, the upper 16-bits are set to EBC_CALL_SIGNATURE
+    // and the lower 16 bits contain the actual call signature (up to 16
+    // arguments, with bits set to 1 for 64-bit args, 0 otherwise).
+    // This 16-bit signature, if present, is then passed to EbcCreateThunks()
+    // as the high 16-bits of the Flags parameter, along with the
+    // FLAG_THUNK_SIGNATURE bit set.
     //
     Flags = 0;
-    if (((VmPtr->Gpr[6] >> 48) & 0xFFFF) == EBC_CALL_SIGNATURE) {
-      Flags = (((UINT16) VmPtr->Gpr[6]) << 16) | FLAG_THUNK_SIGNATURE;
+    if ((CallSignature & 0xFFFF0000) == EBC_CALL_SIGNATURE) {
+      Flags = (CallSignature << 16) | FLAG_THUNK_SIGNATURE;
     }
 
     //
     // Now create a new thunk
     //
-    Status = EbcCreateThunks (VmPtr->ImageHandle, EbcEntryPoint, &Thunk,
-      Flags);
+    Status = EbcCreateThunks (VmPtr->ImageHandle, EbcEntryPoint, &Thunk, Flags);
     if (EFI_ERROR (Status)) {
       return Status;
     }
@@ -3172,7 +3169,7 @@ ExecuteCALL (
   Opcode    = GETOPCODE (VmPtr);
   Operands  = GETOPERANDS (VmPtr);
 
-  if (Operands & OPERAND_M_NATIVE_CALL) {
+  if ((Operands & OPERAND_M_NATIVE_CALL) != 0) {
     EbcDebuggerHookCALLEXStart (VmPtr);
   } else {
     EbcDebuggerHookCALLStart (VmPtr);
@@ -3279,7 +3276,7 @@ ExecuteCALL (
     }
   }
 
-  if (Operands & OPERAND_M_NATIVE_CALL) {
+  if ((Operands & OPERAND_M_NATIVE_CALL) != 0) {
     EbcDebuggerHookCALLEXEnd (VmPtr);
   } else {
     EbcDebuggerHookCALLEnd (VmPtr);
