@@ -19,7 +19,7 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 #define EDB_BYTECODE_NUMBER_IN_LINE     5
 
-#ifdef EFI32
+#if defined (MDE_CPU_IA32) || defined (MDE_CPU_ARM)
 #define EDB_PRINT_ADDRESS_FORMAT    L"%08x: "
 #else
 // To use 012l instead of 016l because space is not enough
