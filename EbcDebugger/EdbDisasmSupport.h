@@ -1,6 +1,6 @@
 /** @file
 
-Copyright (c) 2007, Intel Corporation All rights reserved.<BR>
+Copyright (c) 2007, Intel Corporation. All rights reserved.<BR>
 This program and the accompanying materials
 are licensed and made available under the terms and conditions of the BSD License
 which accompanies this distribution.  The full text of the license may be found at
@@ -22,7 +22,7 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 #if defined (MDE_CPU_IA32) || defined (MDE_CPU_ARM)
 #define EDB_PRINT_ADDRESS_FORMAT    L"%08x: "
 #else
-// To use 012l instead of 016l because space is not enough
+// We use 012l instead of 016l due to space constraints
 #define EDB_PRINT_ADDRESS_FORMAT    L"%012lx: "
 #endif
 

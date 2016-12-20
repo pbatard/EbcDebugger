@@ -61,10 +61,8 @@ UINT64
   @param  VmPtr             A pointer to VM context.
   @param  CodeOffset        Offset from IP of the location of the 16-bit index
                             to decode.
-  @param  NaturalUnitsPtr   An optional pointer to a 64 bit integer that
-                            should receive the decoded natural index value
-  @param  ConstUnitsPtr     An optional pointer to a 64 bit integer that
-                            should receive the decoded const index value
+  @param  IndexPtr          An optional pointer where the decoded index pair
+                            values can be written.
 
   @return The decoded offset.
 
@@ -73,8 +71,7 @@ INT16
 VmReadIndex16 (
   IN VM_CONTEXT     *VmPtr,
   IN UINT32         CodeOffset,
-  OUT INT64         *NaturalUnitsPtr,
-  OUT INT64         *ConstUnitsPtr
+  OUT EBC_INDEX     *IndexPtr OPTIONAL
   );
 
 /**
@@ -83,10 +80,8 @@ VmReadIndex16 (
   @param  VmPtr             A pointer to VM context.
   @param  CodeOffset        Offset from IP of the location of the 32-bit index
                             to decode.
-  @param  NaturalUnitsPtr   An optional pointer to a 64 bit integer that
-                            should receive the decoded natural index value
-  @param  ConstUnitsPtr     An optional pointer to a 64 bit integer that
-                            should receive the decoded const index value
+  @param  IndexPtr          An optional pointer where the decoded index pair
+                            values can be written.
 
   @return Converted index per EBC VM specification.
 
@@ -95,8 +90,7 @@ INT32
 VmReadIndex32 (
   IN VM_CONTEXT     *VmPtr,
   IN UINT32         CodeOffset,
-  OUT INT64         *NaturalUnitsPtr,
-  OUT INT64         *ConstUnitsPtr
+  OUT EBC_INDEX     *IndexPtr OPTIONAL
   );
 
 /**
@@ -105,10 +99,8 @@ VmReadIndex32 (
   @param  VmPtr             A pointer to VM context.s
   @param  CodeOffset        Offset from IP of the location of the 64-bit index
                             to decode.
-  @param  NaturalUnitsPtr   An optional pointer to a 64 bit integer that
-                            should receive the decoded natural index value.
-  @param  ConstUnitsPtr     An optional pointer to a 64 bit integer that
-                            should receive the decoded const index value.
+  @param  IndexPtr          An optional pointer where the decoded index pair
+                            values can be written.
 
   @return Converted index per EBC VM specification
 
@@ -117,11 +109,9 @@ INT64
 VmReadIndex64 (
   IN VM_CONTEXT     *VmPtr,
   IN UINT32         CodeOffset,
-  OUT INT64         *NaturalUnitsPtr,
-  OUT INT64         *ConstUnitsPtr
+  OUT EBC_INDEX     *IndexPtr OPTIONAL
   );
 
-#ifdef MDE_CPU_ARM
 /**
   Update the stack tracker according to the latest natural and constant
   value stack manipulation operations.
@@ -162,7 +152,6 @@ UpdateStackTrackerFromDelta (
   IN VM_CONTEXT *VmPtr,
   IN UINTN      NewR0
   );
-#endif
 
 /**
   Reads 8-bit data form the memory address.
@@ -1630,14 +1619,13 @@ ExecuteMOVxx (
   UINT64  Data64;
   UINT64  DataMask;
   UINTN   Source;
-#ifdef MDE_CPU_ARM
-  INT64   NaturalUnitsOp2;
-  INT64   ConstUnitsOp2;
+  EBC_INDEX Index;
+  EBC_INDEX *IndexPtr;
   EFI_STATUS Status;
-#endif
 
   Opcode    = GETOPCODE (VmPtr);
   OpcMasked = (UINT8) (Opcode & OPCODE_M_OPCODE);
+  IndexPtr    = (VmPtr->StackTracker != NULL) ? &Index : NULL;
 
   //
   // Get the operands byte so we can get R1 and R2
@@ -1666,17 +1654,13 @@ ExecuteMOVxx (
       // Get one or both index values.
       //
       if ((Opcode & OPCODE_M_IMMED_OP1) != 0) {
-        Index16     = VmReadIndex16 (VmPtr, 2, NULL, NULL);
+        Index16     = VmReadIndex16 (VmPtr, 2, NULL);
         Index64Op1  = (INT64) Index16;
         Size += sizeof (UINT16);
       }
 
       if ((Opcode & OPCODE_M_IMMED_OP2) != 0) {
-#ifdef MDE_CPU_ARM
-        Index16     = VmReadIndex16 (VmPtr, Size, &NaturalUnitsOp2, &ConstUnitsOp2);
-#else
-        Index16     = VmReadIndex16 (VmPtr, Size, NULL, NULL);
-#endif
+        Index16     = VmReadIndex16 (VmPtr, Size, IndexPtr);
         Index64Op2  = (INT64) Index16;
         Size += sizeof (UINT16);
       }
@@ -1685,17 +1669,13 @@ ExecuteMOVxx (
       // MOVBD, MOVWD, MOVDD, MOVQD, and MOVND have 32-bit immediate index
       //
       if ((Opcode & OPCODE_M_IMMED_OP1) != 0) {
-        Index32     = VmReadIndex32 (VmPtr, 2, NULL, NULL);
+        Index32     = VmReadIndex32 (VmPtr, 2, NULL);
         Index64Op1  = (INT64) Index32;
         Size += sizeof (UINT32);
       }
 
       if ((Opcode & OPCODE_M_IMMED_OP2) != 0) {
-#ifdef MDE_CPU_ARM
-        Index32     = VmReadIndex32 (VmPtr, Size, &NaturalUnitsOp2, &ConstUnitsOp2);
-#else
-        Index32     = VmReadIndex32 (VmPtr, Size, NULL, NULL);
-#endif
+        Index32     = VmReadIndex32 (VmPtr, Size, IndexPtr);
         Index64Op2  = (INT64) Index32;
         Size += sizeof (UINT32);
       }
@@ -1704,16 +1684,12 @@ ExecuteMOVxx (
       // MOVqq -- only form with a 64-bit index
       //
       if ((Opcode & OPCODE_M_IMMED_OP1) != 0) {
-        Index64Op1 = VmReadIndex64 (VmPtr, 2, NULL, NULL);
+        Index64Op1 = VmReadIndex64 (VmPtr, 2, NULL);
         Size += sizeof (UINT64);
       }
 
       if ((Opcode & OPCODE_M_IMMED_OP2) != 0) {
-#ifdef MDE_CPU_ARM
-        Index64Op2 = VmReadIndex64 (VmPtr, Size, &NaturalUnitsOp2, &ConstUnitsOp2);
-#else
-        Index64Op2 = VmReadIndex64 (VmPtr, Size, NULL, NULL);
-#endif
+        Index64Op2 = VmReadIndex64 (VmPtr, Size, IndexPtr);
         Size += sizeof (UINT64);
       }
     } else {
@@ -1827,32 +1803,32 @@ ExecuteMOVxx (
     }
   }
 
-#ifdef MDE_CPU_ARM
-  if ((OPERAND1_REGNUM(Operands) == 0) && (!OPERAND1_INDIRECT(Operands))) {
-    //
-    // The stack pointer (R0) is being directly modified - track it
-    //
-    if ((OPERAND2_REGNUM(Operands) == 0) && (!OPERAND2_INDIRECT(Operands))) {
+  if (VmPtr->StackTracker != NULL) {
+    if ((OPERAND1_REGNUM (Operands) == 0) && (!OPERAND1_INDIRECT (Operands))) {
       //
-      // MOV R0, R0(+/-n,+/-c)
+      // The stack pointer (R0) is being directly modified - track it
       //
-      if (Opcode & OPCODE_M_IMMED_OP2) {
-        Status = UpdateStackTracker (VmPtr, (INTN) NaturalUnitsOp2, (INTN) ConstUnitsOp2);
-        if (EFI_ERROR(Status)) {
+      if ((OPERAND2_REGNUM (Operands) == 0) && (!OPERAND2_INDIRECT (Operands))) {
+        //
+        // MOV R0, R0(+/-n,+/-c)
+        //
+        if ((Opcode & OPCODE_M_IMMED_OP2) != 0) {
+          Status = UpdateStackTracker (VmPtr, (INTN) Index.NaturalUnits, (INTN) Index.ConstUnits);
+          if (EFI_ERROR (Status)) {
+            return Status;
+          }
+        }
+      } else {
+        //
+        // Track the R0 delta
+        //
+        Status = UpdateStackTrackerFromDelta (VmPtr, (INTN) (Data64 & DataMask));
+        if (EFI_ERROR (Status)) {
           return Status;
         }
       }
-    } else {
-      //
-      // Track the R0 delta
-      //
-      Status = UpdateStackTrackerFromDelta(VmPtr, (INTN) (Data64 & DataMask));
-      if (EFI_ERROR(Status)) {
-        return Status;
-      }
     }
   }
-#endif
 
   //
   // Now write it back
@@ -1986,9 +1962,9 @@ ExecuteBREAK (
     break;
 
   //
-  // Create a thunk for EBC code. R7 points to a 64-bit longword, with the
-  // the lower 32 bits being an "offset from self" pointer to the EBC entry
-  // point and the higher 32 bits being the call signature.
+  // Create a thunk for EBC code. R7 points to a 64-bit longword, where the
+  // lower 32 bits contain an "offset from self" pointer to the EBC entry
+  // point, and the higher 32 bits contain the call signature.
   // After we're done, *(UINT64 *)R7 will be the address of the new thunk.
   //
   case 5:
@@ -2169,7 +2145,7 @@ ExecuteJMP (
   //
   if ((Opcode & OPCODE_M_IMMDATA) != 0) {
     if (OPERAND1_INDIRECT (Operand)) {
-      Index32 = VmReadIndex32 (VmPtr, 2, NULL, NULL);
+      Index32 = VmReadIndex32 (VmPtr, 2, NULL);
     } else {
       Index32 = VmReadImmed32 (VmPtr, 2);
     }
@@ -2337,7 +2313,7 @@ ExecuteMOVI (
   // Get the index (16-bit) if present
   //
   if ((Operands & MOVI_M_IMMDATA) != 0) {
-    Index16 = VmReadIndex16 (VmPtr, 2, NULL, NULL);
+    Index16 = VmReadIndex16 (VmPtr, 2, NULL);
     Size    = 4;
   } else {
     Index16 = 0;
@@ -2394,14 +2370,14 @@ ExecuteMOVI (
       Mask64 = (UINT64)~0;
     }
 
-#ifdef MDE_CPU_ARM
-    //
-    // Track direct register operations on R0
-    //
-    if (OPERAND1_REGNUM (Operands) == 0) {
-      UpdateStackTrackerFromDelta(VmPtr, (UINTN) ImmData64 & Mask64);
+    if (VmPtr->StackTracker != NULL) {
+      //
+      // Track direct register operations on R0
+      //
+      if (OPERAND1_REGNUM (Operands) == 0) {
+        UpdateStackTrackerFromDelta (VmPtr, (UINTN) ImmData64 & Mask64);
+      }
     }
-#endif
 
     VmPtr->Gpr[OPERAND1_REGNUM (Operands)] = ImmData64 & Mask64;
   } else {
@@ -2465,7 +2441,7 @@ ExecuteMOVIn (
   // Get the operand1 index (16-bit) if present
   //
   if ((Operands & MOVI_M_IMMDATA) != 0) {
-    Index16 = VmReadIndex16 (VmPtr, 2, NULL, NULL);
+    Index16 = VmReadIndex16 (VmPtr, 2, NULL);
     Size    = 4;
   } else {
     Index16 = 0;
@@ -2475,15 +2451,15 @@ ExecuteMOVIn (
   // Extract the immediate data and convert to a 64-bit index.
   //
   if ((Opcode & MOVI_M_DATAWIDTH) == MOVI_DATAWIDTH16) {
-    ImmedIndex16  = VmReadIndex16 (VmPtr, Size, NULL, NULL);
+    ImmedIndex16  = VmReadIndex16 (VmPtr, Size, NULL);
     ImmedIndex64  = (INT64) ImmedIndex16;
     Size += 2;
   } else if ((Opcode & MOVI_M_DATAWIDTH) == MOVI_DATAWIDTH32) {
-    ImmedIndex32  = VmReadIndex32 (VmPtr, Size, NULL, NULL);
+    ImmedIndex32  = VmReadIndex32 (VmPtr, Size, NULL);
     ImmedIndex64  = (INT64) ImmedIndex32;
     Size += 4;
   } else if ((Opcode & MOVI_M_DATAWIDTH) == MOVI_DATAWIDTH64) {
-    ImmedIndex64 = VmReadIndex64 (VmPtr, Size, NULL, NULL);
+    ImmedIndex64 = VmReadIndex64 (VmPtr, Size, NULL);
     Size += 8;
   } else {
     //
@@ -2513,14 +2489,14 @@ ExecuteMOVIn (
       return EFI_UNSUPPORTED;
     }
 
-#ifdef MDE_CPU_ARM
-    //
-    // Track direct register operations on R0
-    //
-    if (OPERAND1_REGNUM (Operands) == 0) {
-      UpdateStackTrackerFromDelta(VmPtr, (UINTN) ImmedIndex64);
+    if (VmPtr->StackTracker != NULL) {
+      //
+      // Track direct register operations on R0
+      //
+      if (OPERAND1_REGNUM (Operands) == 0) {
+        UpdateStackTrackerFromDelta (VmPtr, (UINTN) ImmedIndex64);
+      }
     }
-#endif
 
     VmPtr->Gpr[OPERAND1_REGNUM (Operands)] = ImmedIndex64;
   } else {
@@ -2575,7 +2551,7 @@ ExecuteMOVREL (
   // Get the Operand 1 index (16-bit) if present
   //
   if ((Operands & MOVI_M_IMMDATA) != 0) {
-    Index16 = VmReadIndex16 (VmPtr, 2, NULL, NULL);
+    Index16 = VmReadIndex16 (VmPtr, 2, NULL);
     Size    = 4;
   } else {
     Index16 = 0;
@@ -2621,14 +2597,14 @@ ExecuteMOVREL (
       return EFI_UNSUPPORTED;
     }
 
-#ifdef MDE_CPU_ARM
-    //
-    // Track direct register operations on R0
-    //
-    if (OPERAND1_REGNUM (Operands) == 0) {
-      UpdateStackTrackerFromDelta(VmPtr, (UINTN) Op2);
+    if (VmPtr->StackTracker != NULL) {
+      //
+      // Track direct register operations on R0
+      //
+      if (OPERAND1_REGNUM (Operands) == 0) {
+        UpdateStackTrackerFromDelta (VmPtr, (UINTN) Op2);
+      }
     }
-#endif
 
     VmPtr->Gpr[OPERAND1_REGNUM (Operands)] = (VM_REGISTER) Op2;
   } else {
@@ -2693,7 +2669,7 @@ ExecuteMOVsnw (
   Size = 2;
   if ((Opcode & OPCODE_M_IMMED_OP1) !=0) {
     if (OPERAND1_INDIRECT (Operands)) {
-      Op1Index = VmReadIndex16 (VmPtr, 2, NULL, NULL);
+      Op1Index = VmReadIndex16 (VmPtr, 2, NULL);
     } else {
       //
       // Illegal form operand1 direct with index:  MOVsnw R1 Index16, {@}R2
@@ -2711,7 +2687,7 @@ ExecuteMOVsnw (
 
   if ((Opcode & OPCODE_M_IMMED_OP2) != 0) {
     if (OPERAND2_INDIRECT (Operands)) {
-      Op2Index = VmReadIndex16 (VmPtr, Size, NULL, NULL);
+      Op2Index = VmReadIndex16 (VmPtr, Size, NULL);
     } else {
       Op2Index = VmReadImmed16 (VmPtr, Size);
     }
@@ -2729,14 +2705,14 @@ ExecuteMOVsnw (
   // Now write back the result.
   //
   if (!OPERAND1_INDIRECT (Operands)) {
-#ifdef MDE_CPU_ARM
-    //
-    // Track direct register operations on R0
-    //
-    if (OPERAND1_REGNUM (Operands) == 0) {
-      UpdateStackTrackerFromDelta(VmPtr, (UINTN) Op2);
+    if (VmPtr->StackTracker != NULL) {
+      //
+      // Track direct register operations on R0
+      //
+      if (OPERAND1_REGNUM (Operands) == 0) {
+        UpdateStackTrackerFromDelta (VmPtr, (UINTN) Op2);
+      }
     }
-#endif
     VmPtr->Gpr[OPERAND1_REGNUM (Operands)] = Op2;
   } else {
     VmWriteMemN (VmPtr, (UINTN) (VmPtr->Gpr[OPERAND1_REGNUM (Operands)] + Op1Index), (UINTN) Op2);
@@ -2794,7 +2770,7 @@ ExecuteMOVsnd (
   Size = 2;
   if ((Opcode & OPCODE_M_IMMED_OP1) != 0) {
     if (OPERAND1_INDIRECT (Operands)) {
-      Op1Index = VmReadIndex32 (VmPtr, 2, NULL, NULL);
+      Op1Index = VmReadIndex32 (VmPtr, 2, NULL);
     } else {
       //
       // Illegal form operand1 direct with index:  MOVsnd R1 Index16,..
@@ -2812,7 +2788,7 @@ ExecuteMOVsnd (
 
   if ((Opcode & OPCODE_M_IMMED_OP2) != 0) {
     if (OPERAND2_INDIRECT (Operands)) {
-      Op2Index = VmReadIndex32 (VmPtr, Size, NULL, NULL);
+      Op2Index = VmReadIndex32 (VmPtr, Size, NULL);
     } else {
       Op2Index = VmReadImmed32 (VmPtr, Size);
     }
@@ -2830,14 +2806,14 @@ ExecuteMOVsnd (
   // Now write back the result.
   //
   if (!OPERAND1_INDIRECT (Operands)) {
-#ifdef MDE_CPU_ARM
-    //
-    // Track direct register operations on R0
-    //
-    if (OPERAND1_REGNUM (Operands) == 0) {
-      UpdateStackTrackerFromDelta(VmPtr, (UINTN) Op2);
+    if (VmPtr->StackTracker != NULL) {
+      //
+      // Track direct register operations on R0
+      //
+      if (OPERAND1_REGNUM (Operands) == 0) {
+        UpdateStackTrackerFromDelta (VmPtr, (UINTN) Op2);
+      }
     }
-#endif
     VmPtr->Gpr[OPERAND1_REGNUM (Operands)] = Op2;
   } else {
     VmWriteMemN (VmPtr, (UINTN) (VmPtr->Gpr[OPERAND1_REGNUM (Operands)] + Op1Index), (UINTN) Op2);
@@ -2882,7 +2858,7 @@ ExecutePUSHn (
   //
   if ((Opcode & PUSHPOP_M_IMMDATA) != 0) {
     if (OPERAND1_INDIRECT (Operands)) {
-      Index16 = VmReadIndex16 (VmPtr, 2, NULL, NULL);
+      Index16 = VmReadIndex16 (VmPtr, 2, NULL);
     } else {
       Index16 = VmReadImmed16 (VmPtr, 2);
     }
@@ -2905,10 +2881,11 @@ ExecutePUSHn (
   //
   VmPtr->Gpr[0] -= sizeof (UINTN);
   VmWriteMemN (VmPtr, (UINTN) VmPtr->Gpr[0], DataN);
-#ifdef MDE_CPU_ARM
-  return UpdateStackTracker (VmPtr, -1, 0);
-#endif
-  return EFI_SUCCESS;
+  if (VmPtr->StackTracker != NULL) {
+    return UpdateStackTracker (VmPtr, -1, 0);
+  } else {
+    return EFI_SUCCESS;
+  }
 }
 
 
@@ -2944,7 +2921,7 @@ ExecutePUSH (
   //
   if ((Opcode & PUSHPOP_M_IMMDATA) != 0) {
     if (OPERAND1_INDIRECT (Operands)) {
-      Index16 = VmReadIndex16 (VmPtr, 2, NULL, NULL);
+      Index16 = VmReadIndex16 (VmPtr, 2, NULL);
     } else {
       Index16 = VmReadImmed16 (VmPtr, 2);
     }
@@ -2984,10 +2961,11 @@ ExecutePUSH (
     VmWriteMem32 (VmPtr, (UINTN) VmPtr->Gpr[0], Data32);
   }
 
-#ifdef MDE_CPU_ARM
-  return UpdateStackTracker (VmPtr, 0, (Opcode & PUSHPOP_M_64) ? -8 : -4);
-#endif
-  return EFI_SUCCESS;
+  if (VmPtr->StackTracker != NULL) {
+    return UpdateStackTracker (VmPtr, 0, ((Opcode & PUSHPOP_M_64) != 0) ? -8 : -4);
+  } else {
+    return EFI_SUCCESS;
+  }
 }
 
 
@@ -3022,7 +3000,7 @@ ExecutePOPn (
   //
   if ((Opcode & PUSHPOP_M_IMMDATA) != 0) {
     if (OPERAND1_INDIRECT (Operands)) {
-      Index16 = VmReadIndex16 (VmPtr, 2, NULL, NULL);
+      Index16 = VmReadIndex16 (VmPtr, 2, NULL);
     } else {
       Index16 = VmReadImmed16 (VmPtr, 2);
     }
@@ -3046,10 +3024,11 @@ ExecutePOPn (
     VmPtr->Gpr[OPERAND1_REGNUM (Operands)] = (INT64) (UINT64) ((UINTN) DataN + Index16);
   }
 
-#ifdef MDE_CPU_ARM
-  return UpdateStackTracker (VmPtr, 1, 0);
-#endif
-  return EFI_SUCCESS;
+  if (VmPtr->StackTracker != NULL) {
+    return UpdateStackTracker (VmPtr, 1, 0);
+  } else {
+    return EFI_SUCCESS;
+  }
 }
 
 
@@ -3085,7 +3064,7 @@ ExecutePOP (
   //
   if ((Opcode & PUSHPOP_M_IMMDATA) != 0) {
     if (OPERAND1_INDIRECT (Operands)) {
-      Index16 = VmReadIndex16 (VmPtr, 2, NULL, NULL);
+      Index16 = VmReadIndex16 (VmPtr, 2, NULL);
     } else {
       Index16 = VmReadImmed16 (VmPtr, 2);
     }
@@ -3128,10 +3107,11 @@ ExecutePOP (
     }
   }
 
-#ifdef MDE_CPU_ARM
-  return UpdateStackTracker (VmPtr, 0, (Opcode & PUSHPOP_M_64) ? 8 : 4);
-#endif
-  return EFI_SUCCESS;
+  if (VmPtr->StackTracker != NULL) {
+    return UpdateStackTracker (VmPtr, 0, ((Opcode & PUSHPOP_M_64) != 0) ? 8 : 4);
+  } else {
+    return EFI_SUCCESS;
+  }
 }
 
 
@@ -3194,7 +3174,7 @@ ExecuteCALL (
       // If register operand is indirect, then the immediate data is an index
       //
       if (OPERAND1_INDIRECT (Operands)) {
-        Immed32 = VmReadIndex32 (VmPtr, 2, NULL, NULL);
+        Immed32 = VmReadIndex32 (VmPtr, 2, NULL);
       } else {
         Immed32 = VmReadImmed32 (VmPtr, 2);
       }
@@ -3378,7 +3358,7 @@ ExecuteCMP (
   //
   if ((Opcode & OPCODE_M_IMMDATA) != 0) {
     if (OPERAND2_INDIRECT (Operands)) {
-      Index16 = VmReadIndex16 (VmPtr, 2, NULL, NULL);
+      Index16 = VmReadIndex16 (VmPtr, 2, NULL);
     } else {
       Index16 = VmReadImmed16 (VmPtr, 2);
     }
@@ -3536,7 +3516,7 @@ ExecuteCMPI (
   //
   Size = 2;
   if ((Operands & OPERAND_M_CMPI_INDEX) != 0) {
-    Index16 = VmReadIndex16 (VmPtr, 2, NULL, NULL);
+    Index16 = VmReadIndex16 (VmPtr, 2, NULL);
     Size += 2;
   } else {
     Index16 = 0;
@@ -4369,7 +4349,7 @@ ExecuteDataManip (
     // Index16 if Ry is indirect, or Immed16 if Ry direct.
     //
     if (OPERAND2_INDIRECT (Operands)) {
-      Index16 = VmReadIndex16 (VmPtr, 2, NULL, NULL);
+      Index16 = VmReadIndex16 (VmPtr, 2, NULL);
     } else {
       Index16 = VmReadImmed16 (VmPtr, 2);
     }
@@ -4462,14 +4442,14 @@ ExecuteDataManip (
       VmWriteMem32 (VmPtr, (UINTN) Op1, (UINT32) Op2);
     }
   } else {
-#ifdef MDE_CPU_ARM
-    //
-    // Track direct register operations on R0
-    //
-    if (OPERAND1_REGNUM (Operands) == 0) {
-      UpdateStackTrackerFromDelta(VmPtr, (UINTN) Op2);
+    if (VmPtr->StackTracker != NULL) {
+      //
+      // Track direct register operations on R0
+      //
+      if (OPERAND1_REGNUM (Operands) == 0) {
+        UpdateStackTrackerFromDelta(VmPtr, (UINTN) Op2);
+      }
     }
-#endif
 
     //
     // Storage back to a register. Write back, clearing upper bits (as per
@@ -4621,10 +4601,8 @@ ExecuteSTORESP (
   @param  VmPtr             A pointer to VM context.
   @param  CodeOffset        Offset from IP of the location of the 16-bit index
                             to decode.
-  @param  NaturalUnitsPtr   An optional pointer to a 64 bit integer that
-                            should receive the decoded natural index value.
-  @param  ConstUnitsPtr     An optional pointer to a 64 bit integer that
-                            should receive the decoded const index value.
+  @param  IndexPtr          An optional pointer where the decoded index pair
+                            values can be written.
 
   @return The decoded offset.
 
@@ -4633,8 +4611,7 @@ INT16
 VmReadIndex16 (
   IN VM_CONTEXT     *VmPtr,
   IN UINT32         CodeOffset,
-  OUT INT64         *NaturalUnitsPtr,
-  OUT INT64         *ConstUnitsPtr
+  OUT EBC_INDEX     *IndexPtr OPTIONAL
   )
 {
   UINT16  Index;
@@ -4689,14 +4666,14 @@ VmReadIndex16 (
   }
 
   //
-  // Fill in the optional Natural and Constant values if requested
+  // Copy the decoded index values if requested
   //
-  if ((NaturalUnitsPtr != NULL) && (ConstUnitsPtr != NULL)) {
-    *NaturalUnitsPtr = (INT64) NaturalUnits;
-    *ConstUnitsPtr = (INT64) ConstUnits;
+  if (IndexPtr != NULL) {
+    IndexPtr->NaturalUnits = (INT64) NaturalUnits;
+    IndexPtr->ConstUnits = (INT64) ConstUnits;
     if ((Index & 0x8000) != 0) {
-      *NaturalUnitsPtr = MultS64x64 (*NaturalUnitsPtr, -1);
-      *ConstUnitsPtr   = MultS64x64 (*ConstUnitsPtr, -1);
+      IndexPtr->NaturalUnits = MultS64x64 (IndexPtr->NaturalUnits, -1);
+      IndexPtr->ConstUnits   = MultS64x64 (IndexPtr->ConstUnits, -1);
     }
   }
 
@@ -4710,10 +4687,8 @@ VmReadIndex16 (
   @param  VmPtr             A pointer to VM context.
   @param  CodeOffset        Offset from IP of the location of the 32-bit index
                             to decode.
-  @param  NaturalUnitsPtr   An optional pointer to a 64 bit integer that
-                            should receive the decoded natural index value.
-  @param  ConstUnitsPtr     An optional pointer to a 64 bit integer that
-                            should receive the decoded const index value.
+  @param  IndexPtr          An optional pointer where the decoded index pair
+                            values can be written.
 
   @return Converted index per EBC VM specification.
 
@@ -4722,8 +4697,7 @@ INT32
 VmReadIndex32 (
   IN VM_CONTEXT     *VmPtr,
   IN UINT32         CodeOffset,
-  OUT INT64         *NaturalUnitsPtr,
-  OUT INT64         *ConstUnitsPtr
+  OUT EBC_INDEX     *IndexPtr OPTIONAL
   )
 {
   UINT32  Index;
@@ -4770,14 +4744,14 @@ VmReadIndex32 (
   }
 
   //
-  // Fill in the optional Natural and Constant values if requested
+  // Copy the decoded index values if requested
   //
-  if ((NaturalUnitsPtr != NULL) && (ConstUnitsPtr != NULL)) {
-    *NaturalUnitsPtr = (INT64) NaturalUnits;
-    *ConstUnitsPtr = (INT64) ConstUnits;
+  if (IndexPtr != NULL) {
+    IndexPtr->NaturalUnits = (INT64) NaturalUnits;
+    IndexPtr->ConstUnits = (INT64) ConstUnits;
     if ((Index & 0x80000000) != 0) {
-      *NaturalUnitsPtr = MultS64x64 (*NaturalUnitsPtr, -1);
-      *ConstUnitsPtr   = MultS64x64 (*ConstUnitsPtr, -1);
+      IndexPtr->NaturalUnits = MultS64x64 (IndexPtr->NaturalUnits, -1);
+      IndexPtr->ConstUnits   = MultS64x64 (IndexPtr->ConstUnits, -1);
     }
   }
 
@@ -4791,10 +4765,8 @@ VmReadIndex32 (
   @param  VmPtr             A pointer to VM context.s
   @param  CodeOffset        Offset from IP of the location of the 64-bit index
                             to decode.
-  @param  NaturalUnitsPtr   An optional pointer to a 64 bit integer that
-                            should receive the decoded natural index value.
-  @param  ConstUnitsPtr     An optional pointer to a 64 bit integer that
-                            should receive the decoded const index value.
+  @param  IndexPtr          An optional pointer where the decoded index pair
+                            values can be written.
 
   @return Converted index per EBC VM specification
 
@@ -4803,8 +4775,7 @@ INT64
 VmReadIndex64 (
   IN VM_CONTEXT     *VmPtr,
   IN UINT32         CodeOffset,
-  OUT INT64         *NaturalUnitsPtr,
-  OUT INT64         *ConstUnitsPtr
+  OUT EBC_INDEX     *IndexPtr OPTIONAL
   )
 {
   UINT64  Index;
@@ -4851,14 +4822,14 @@ VmReadIndex64 (
   }
 
   //
-  // Fill in the optional Natural and Constant values if requested
+  // Copy the decoded index values if requested
   //
-  if ((NaturalUnitsPtr != NULL) && (ConstUnitsPtr != NULL)) {
-    *NaturalUnitsPtr = (INT64) NaturalUnits;
-    *ConstUnitsPtr = (INT64) ConstUnits;
+  if (IndexPtr != NULL) {
+    IndexPtr->NaturalUnits = (INT64) NaturalUnits;
+    IndexPtr->ConstUnits = (INT64) ConstUnits;
     if ((Index & 0x8000000000000000ULL) != 0) {
-      *NaturalUnitsPtr = MultS64x64 (*NaturalUnitsPtr, -1);
-      *ConstUnitsPtr   = MultS64x64 (*ConstUnitsPtr, -1);
+      IndexPtr->NaturalUnits = MultS64x64 (IndexPtr->NaturalUnits, -1);
+      IndexPtr->ConstUnits   = MultS64x64 (IndexPtr->ConstUnits, -1);
     }
   }
 

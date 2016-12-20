@@ -121,6 +121,12 @@
     <ClCompile Include="..\Missing\ProtocolGUIDs.c">
       <Filter>Source Files\Missing</Filter>
     </ClCompile>
+    <ClCompile Include="..\EbcStackTracker.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Arm\EbcStackTracker.c">
+      <Filter>Source Files\arm</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\EbcDebugger\Edb.h">

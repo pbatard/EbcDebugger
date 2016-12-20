@@ -42,7 +42,7 @@ extern VM_CONTEXT                    *mVmPtr;
 //
 #define FLAG_THUNK_ENTRY_POINT  0x01  // thunk for an image entry point
 #define FLAG_THUNK_PROTOCOL     0x00  // thunk for an EBC protocol service
-#define FLAG_THUNK_SIGNATURE    0x02  // flags include a 16-bit call signature
+#define FLAG_THUNK_SIGNATURE    0x02  // a 16-bit call signature is present
 //
 // 32-bit call signature marker
 //
