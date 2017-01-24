@@ -25,10 +25,11 @@ WITHOUT WARRANTIES OR REPRESENTATIONS OF ANY KIND, EITHER EXPRESS OR IMPLIED.
 
 //
 // Amount of space to be used by the stack argument tracker
-// Less than 2 bits are needed for every 32 bits of stack data
-// and we can grow our buffer if needed, so start at 1/64th
+// In most cases, less than 2 bits should be used for every 32 bits of
+// stack data and we can grow our buffer if needed, so start at 1/64th
 //
-#define STACK_TRACKER_SIZE (STACK_POOL_SIZE / 64)
+#define STACK_TRACKER_SIZE      (STACK_POOL_SIZE / 64)
+#define STACK_TRACKER_SIZE_MAX  (STACK_POOL_SIZE / 8)
 
 //
 // Stack tracking data structure, used to compute parameter alignment.
@@ -118,6 +119,9 @@ GetArgLayout (
   INTN Index;
 
   StackTracker = (EBC_STACK_TRACKER*) VmPtr->StackTracker;
+
+  ASSERT (StackTracker->Data != NULL);
+  ASSERT (StackTracker->Index >= 0);
 
   // One major issue we have on Arm is that, if a mix of natural and
   // 64-bit arguments are stacked as parameters for a native call, we risk
@@ -259,6 +263,7 @@ AddStackTrackerEntry (
         return EFI_OUT_OF_RESOURCES;
       }
       StackTracker->Size *= 2;
+      ASSERT (StackTracker->Size <= STACK_TRACKER_SIZE_MAX);
     }
 
     //
@@ -317,7 +322,8 @@ AddStackTrackerBytes (
     // Grow the stack tracker buffer
     //
     for (NewSize = StackTracker->Size * 2; NewSize <= UpdatedIndex;
-          NewSize *= 2);
+      NewSize *= 2);
+    ASSERT (NewSize <= STACK_TRACKER_SIZE_MAX);
     StackTracker->Data = _ReallocatePool(StackTracker->Size, NewSize,
           StackTracker->Data);
     if (StackTracker->Data == NULL) {
@@ -326,9 +332,9 @@ AddStackTrackerBytes (
     StackTracker->Size = NewSize;
   }
   for (ByteNum = 0; ByteNum < Count; ByteNum++) {
-    StackTracker->Data[(StackTracker->Index % 4) + ByteNum] = Value;
+    StackTracker->Data[(StackTracker->Index / 4) + ByteNum] = Value;
   }
-  StackTracker->Index += Count * 4;
+  StackTracker->Index = UpdatedIndex;
   return EFI_SUCCESS;
 }
 
@@ -347,6 +353,8 @@ DelStackTrackerEntry (
   )
 {
   UINT8 Index;
+
+  ASSERT (StackTracker->Index > 0);
 
   //
   // Don't care about clearing the used bits, just update the index

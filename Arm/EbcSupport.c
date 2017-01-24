@@ -180,7 +180,6 @@ EbcInterpret (
   //
   VM_CONTEXT  VmContext;
   UINTN       Addr;
-  UINT16      CallSignature;
   UINT32      Mask;
   EFI_STATUS  Status;
   UINTN       StackIndex;
@@ -188,7 +187,6 @@ EbcInterpret (
   BOOLEAN     *SkipArg;
 
   //
-  // Isolate the call signature from the instruction buffer data.
   // If the call signature is missing (high 16-bits are not set to
   // EBC_CALL_SIGNATURE), return an error as we aren't able to
   // properly reconstruct the EBC VM parameter stack.
@@ -196,7 +194,6 @@ EbcInterpret (
   if ((InstructionBuffer->EbcCallSignature & 0xFFFF0000) != EBC_CALL_SIGNATURE) {
     return EFI_INCOMPATIBLE_VERSION;
   }
-  CallSignature = (UINT16) InstructionBuffer->EbcCallSignature;
 
   //
   // Get the EBC entry point and signature
